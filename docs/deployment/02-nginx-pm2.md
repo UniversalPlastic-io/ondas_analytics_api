@@ -40,8 +40,8 @@ sudo npm i -g pm2
 
 # Clon del API
 sudo mkdir -p /home/ubuntu && cd /home/ubuntu
-git clone https://github.com/UniversalPlastic-io/ondas-analytics-api.git
-cd ondas-analytics-api
+git clone https://github.com/UniversalPlastic-io/ondas_analytics_api.git
+cd ondas_analytics_api
 npm ci && npm run build
 
 # Configuración: .env NO se versiona, se crea aquí
@@ -130,7 +130,7 @@ el prefijo `/api` antes de reenviar, que es lo que espera Nest (sirve `/v1` y
 Cuatro comandos en el servidor, por SSH:
 
 ```bash
-cd /home/ubuntu/ondas-analytics-api
+cd /home/ubuntu/ondas_analytics_api
 git pull --ff-only origin main
 npm ci && npm run build
 pm2 restart ondas-analytics-api --update-env && pm2 save
@@ -175,7 +175,7 @@ pm2 logs ondas-analytics-api --lines 100
 ## 5. Reversión
 
 ```bash
-cd /home/ubuntu/ondas-analytics-api
+cd /home/ubuntu/ondas_analytics_api
 git reset --hard <sha-anterior>
 npm ci && npm run build
 pm2 restart ondas-analytics-api --update-env

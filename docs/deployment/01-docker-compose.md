@@ -25,8 +25,8 @@ paso 4.
 ## 2. Configuración
 
 ```bash
-git clone https://github.com/UniversalPlastic-io/ondas-analytics-api.git
-cd ondas-analytics-api
+git clone https://github.com/UniversalPlastic-io/ondas_analytics_api.git
+cd ondas_analytics_api
 cp .env.example .env
 ```
 

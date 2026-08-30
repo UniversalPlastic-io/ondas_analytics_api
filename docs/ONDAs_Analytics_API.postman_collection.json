@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "ONDAs Analytics API v1",
-    "description": "Colecci\u00f3n generada a partir de la especificaci\u00f3n OpenAPI que el API publica en `/docs`.\n\nUso: fijar `baseUrl` y ejecutar primero `POST /v1/auth/login`; su script de test guarda el `access_token` en la variable `token`, que el resto de peticiones usa como Bearer.\n\nRepositorio: https://github.com/UniversalPlastic-io/ondas-analytics-api",
+    "description": "Colecci\u00f3n generada a partir de la especificaci\u00f3n OpenAPI que el API publica en `/docs`.\n\nUso: fijar `baseUrl` y ejecutar primero `POST /v1/auth/login`; su script de test guarda el `access_token` en la variable `token`, que el resto de peticiones usa como Bearer.\n\nRepositorio: https://github.com/UniversalPlastic-io/ondas_analytics_api",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "auth": {

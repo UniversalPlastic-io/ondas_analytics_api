@@ -176,5 +176,5 @@ residuos marinos que antes se calculaban en cuadernos de análisis.
 
 - Publicado bajo **Apache License 2.0** (`LICENSE`, `NOTICE`).
 
-[1.1.0]: https://github.com/UniversalPlastic-io/ondas-analytics-api/releases/tag/v1.1.0
-[1.0.0]: https://github.com/UniversalPlastic-io/ondas-analytics-api/releases/tag/v1.0.0
+[1.1.0]: https://github.com/UniversalPlastic-io/ondas_analytics_api/releases/tag/v1.1.0
+[1.0.0]: https://github.com/UniversalPlastic-io/ondas_analytics_api/releases/tag/v1.0.0

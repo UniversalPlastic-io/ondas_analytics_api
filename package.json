@@ -5,13 +5,13 @@
   "author": "Universal Plastic",
   "private": true,
   "license": "Apache-2.0",
-  "homepage": "https://github.com/UniversalPlastic-io/ondas-analytics-api#readme",
+  "homepage": "https://github.com/UniversalPlastic-io/ondas_analytics_api#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/UniversalPlastic-io/ondas-analytics-api.git"
+    "url": "https://github.com/UniversalPlastic-io/ondas_analytics_api.git"
   },
   "bugs": {
-    "url": "https://github.com/UniversalPlastic-io/ondas-analytics-api/issues"
+    "url": "https://github.com/UniversalPlastic-io/ondas_analytics_api/issues"
   },
   "scripts": {
     "build": "nest build",

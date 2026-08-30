@@ -147,8 +147,8 @@ El SPA de demostración en [frontend/](frontend/) es un proyecto npm aparte
 ## 3. Instalación
 
 ```bash
-git clone https://github.com/UniversalPlastic-io/ondas-analytics-api.git
-cd ondas-analytics-api
+git clone https://github.com/UniversalPlastic-io/ondas_analytics_api.git
+cd ondas_analytics_api
 npm ci
 cp .env.example .env      # editar MONGODB_URI y PORTAL_JWT_SECRET
 ```
