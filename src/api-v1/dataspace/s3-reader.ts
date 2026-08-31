@@ -121,7 +121,7 @@ export async function listKeys(prefix: string): Promise<string[]> {
 }
 
 /**
- * The inventory from docs/s3-dataset-mapping.md. Used when the runtime cannot list
+ * The inventory from docs/dataset-mapping.md. Used when the runtime cannot list
  * the bucket, so a backfill still works without `s3:ListBucket`.
  */
 export const SEED_KEYS: string[] = [

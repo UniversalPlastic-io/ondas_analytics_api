@@ -1,6 +1,6 @@
 # Integrating New Data Sources into `GET /v1/overview`
 
-How to surface a new S3 dataset (from [`s3-dataset-mapping.md`](s3-dataset-mapping.md))
+How to surface a new S3 dataset (from [`dataset-mapping.md`](dataset-mapping.md))
 in the Overview endpoint. Today the overview is derived **only** from
 `recogidas_playa` (coastal cleanups). This guide shows how to add another
 source — biomass buoys, environmental buoys, microplastics buoys, atmospheric /
@@ -38,7 +38,7 @@ nearest entry of a given type by equirectangular distance.
 
 ## 2. Know the dataset before you wire it
 
-From [`s3-dataset-mapping.md`](s3-dataset-mapping.md) — confirm these for the
+From [`dataset-mapping.md`](dataset-mapping.md) — confirm these for the
 source you are adding:
 
 | Property | Why it matters |

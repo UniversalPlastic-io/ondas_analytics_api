@@ -21,9 +21,9 @@ autenticados y documentados con OpenAPI.
 ### Alcance de este repositorio
 
 Contiene el código y la documentación que Universal Plastic ha desarrollado para el
-caso de uso del espacio de datos ONDAs: ingesta de los activos publicados por los
-participantes, analítica de contaminación por geolocalización, cuadro de mando,
-mapa, informes y ejemplos de despliegue.
+caso de uso del espacio de datos ONDAs: consumo de los activos que los participantes
+comparten a través del espacio de datos, analítica de contaminación por
+geolocalización, cuadro de mando, mapa, informes y ejemplos de despliegue.
 
 La capa de espacio de datos propiamente dicha —catálogo federado, conectores,
 proveedor de identidad y registro de transacciones— se opera sobre la plataforma
@@ -36,20 +36,24 @@ proyecto.
 
 ## 1. Arquitectura
 
-El API **no calcula sobre S3 en tiempo de peticion**. Un proceso de
-sincronización explícito lee los activos publicados en el bucket del espacio de
-datos, los normaliza a un modelo común y los deja en MongoDB como *read model*.
-Todos los endpoints analíticos leen sólo de Mongo, lo que hace que la latencia
-de consulta sea independiente del volumen del bucket.
+El API **no consulta el espacio de datos en tiempo de petición**. Un proceso de
+sincronización explícito consume los activos sobre los que Universal Plastic tiene
+contrato, los normaliza a un modelo común y los deja en MongoDB como *read model*.
+Todos los endpoints analíticos leen sólo de Mongo, lo que hace que la latencia de
+consulta sea independiente del número de activos y del coste de negociar su
+transferencia.
 
 ```mermaid
 flowchart LR
-  subgraph DS["Espacio de datos ONDAs"]
-    S3[("Bucket S3<br/>activos JSON por participante<br/>+ metadatos DCAT")]
+  subgraph DS["Espacio de datos ONDAs — D-Spacer (SQS)"]
+    KC["Keycloak<br/>connector-realm"]
+    MW["Conector de UP<br/>middleware EDC"]
+    PROV[("Conectores proveedores<br/>catálogos DCAT<br/>+ ofertas ODRL")]
   end
 
   subgraph API["ondas-analytics-api (NestJS)"]
-    SYNC["dataspace<br/>sync + ingest + normalize"]
+    SRC["dataspace/source<br/>catálogo · transferencia"]
+    SYNC["dataspace<br/>ingest · validación · normalize"]
     MONGO[("MongoDB<br/>read model:<br/>assets · observations · sync_runs<br/>organizations · users")]
     IDENT["identity + auth<br/>JWT · roles · scoping"]
     ANA["analyses"]
@@ -62,7 +66,10 @@ flowchart LR
   SPA["frontend/ (React + Vite + Leaflet)"]
   EXT["Consumidores externos<br/>(portal, conectores, scripts)"]
 
-  S3 -->|"POST /v1/sync/assets · /v1/sync/scan"| SYNC
+  KC -.->|"token de acceso"| SRC
+  PROV --> MW
+  MW <-->|"catalog · transfer"| SRC
+  SRC -->|"POST /v1/sync/assets · /v1/sync/scan"| SYNC
   SYNC --> MONGO
   MONGO --> ANA & OVW & MAP & REP
   IDENT -.->|"Bearer JWT"| ANA & OVW & MAP & REP & SYNC
@@ -70,11 +77,41 @@ flowchart LR
   ANA & OVW & MAP & REP & MKT --> EXT
 ```
 
+### Cómo se consume un activo
+
+El espacio de datos no se lee como un almacén de ficheros: cada activo se obtiene
+negociando su contrato. El conector de UP expone esa negociación como tres
+operaciones, y el módulo `dataspace/source` las encadena.
+
+| # | Operación del conector | Qué devuelve |
+|---|---|---|
+| 1 | `GET /bpn/all` | Los participantes del espacio, con su **BPN** y la dirección de su conector |
+| 2 | `POST /catalog/request` | El **catálogo DCAT** de un proveedor: sus activos y la oferta ODRL de cada uno |
+| 3 | `POST /transfer/request` | El **dato**, devolviendo la oferta del paso 2 como parte de la petición |
+
+Tres consecuencias de diseño que explican cómo está construido el módulo:
+
+- **La oferta no se puede cachear entre ejecuciones.** Su identificador incluye el
+  nombre del activo, así que cambia si el proveedor lo renombra o recrea la
+  política. El catálogo se relee antes de cada transferencia.
+- **El catálogo no expone fecha, versión ni suma de comprobación.** No hay forma de
+  saber si un activo cambió sin traerlo, de modo que la detección de cambios ocurre
+  *después* de la transferencia, comparando el SHA-256 del contenido con el que ya
+  está en el read model. Un activo sin cambios se resuelve como `unchanged` y no se
+  reescribe.
+- **El token de acceso vive 300 segundos**, menos que un escaneo completo. El
+  cliente lo renueva a mitad de proceso; no es una optimización, es requisito de
+  funcionamiento.
+
+El acceso efectivo lo define el contrato que cada proveedor ha creado a favor del
+BPN de Universal Plastic. Un activo sin contrato no aparece en el catálogo y el
+API no puede verlo: **la autorización es del espacio de datos, no del API**.
+
 ### Módulos
 
 | Módulo | Carpeta | Responsabilidad |
 |---|---|---|
-| `dataspace` | [src/api-v1/dataspace/](src/api-v1/dataspace/) | Lectura de activos S3, validación DCAT y de contenedor, normalización de campos, escritura del read model, registro de ejecuciones de sync |
+| `dataspace` | [src/api-v1/dataspace/](src/api-v1/dataspace/) | Consumo de activos del espacio de datos (catálogo y transferencia), validación DCAT y de contenedor, normalización de campos, escritura del read model, registro de ejecuciones de sync |
 | `identity` | [src/api-v1/identity/](src/api-v1/identity/) | Organizaciones, usuarios, roles (`admin` / `provider` / `viewer`), guards y *scoping* de los datos por organización |
 | `auth` | [src/api-v1/auth/](src/api-v1/auth/) | Login del portal, emisión y verificación de JWT |
 | `analyses` | [src/api-v1/analyses/](src/api-v1/analyses/) | Cálculo de índices e indicadores y generación de gráficas (WebP / PDF) |
@@ -84,8 +121,10 @@ flowchart LR
 | `marketplace` | [src/api-v1/marketplace/](src/api-v1/marketplace/) | Passthrough de campañas, limpiezas y organizaciones |
 | `mongo` | [src/mongo/](src/mongo/) | Conexión Mongoose |
 
+Integración con el conector, autenticación y flujo de consumo:
+[docs/dspacer-integration.md](docs/dspacer-integration.md).
 Modelo de datos y contrato de sincronización: [docs/dataspace-sync.md](docs/dataspace-sync.md).
-Correspondencia entre claves S3 y datasets: [docs/s3-dataset-mapping.md](docs/s3-dataset-mapping.md).
+Esquemas y estructura de cada tipo de dataset: [docs/dataset-mapping.md](docs/dataset-mapping.md).
 
 ### Datasets observados y de referencia
 
@@ -93,8 +132,8 @@ Los activos del espacio de datos se leen en dos niveles:
 
 | Nivel | Origen | Quién lo lee |
 |---|---|---|
-| **Observado** | Lo que publica cada participante: `public/{océano}/{proveedor}/…` | Todo: mapa, cuadro de mando, informes y analíticas |
-| **Referencia** | Series de calibración generadas por el propio API en `public/{océano}/ondas_reference/…`, definidas en [src/api-v1/dataspace/reference-datasets.ts](src/api-v1/dataspace/reference-datasets.ts) | Sólo `POST /v1/analyses/run`, y sólo cuando una categoría no tiene ningún dataset observado con datos en el área consultada |
+| **Observado** | Los activos que cada participante comparte con UP en el espacio de datos, identificados por su asset id y el BPN de su proveedor | Todo: mapa, cuadro de mando, informes y analíticas |
+| **Referencia** | Series de calibración generadas por el propio API, publicadas como activos propios de UP y definidas en [src/api-v1/dataspace/reference-datasets.ts](src/api-v1/dataspace/reference-datasets.ts) | Sólo `POST /v1/analyses/run`, y sólo cuando una categoría no tiene ningún dataset observado con datos en el área consultada |
 
 Se ingieren por el mismo pipeline que cualquier otro activo y llevan su
 procedencia declarada en `dct:provenance`, así que el catálogo distingue unas de
@@ -104,8 +143,13 @@ lo es. Regenerarlas y publicarlas:
 
 ```bash
 npm run reference:generate              # escribe en output/reference/
-npm run reference:generate -- --upload  # publica en el bucket (requiere s3:PutObject)
+npm run reference:generate -- --publish # las publica como activos del conector de UP
 ```
+
+> Una serie de referencia es un sustituto declarado, no un dato. A medida que los
+> participantes comparten activos observados de una categoría, esa categoría deja
+> de recurrir a ella. El informe de validación (§7) declara en cada ejecución qué
+> categorías se respondieron con dato observado y cuáles con calibración.
 
 La generación es determinista: el mismo rango produce ficheros byte a byte
 idénticos.
@@ -121,7 +165,7 @@ idénticos.
 | Node.js | ≥ 18 | Probado en 20.x, que es la versión del servidor de producción |
 | npm | ≥ 9 | Se usa `npm ci` con `package-lock.json` |
 | MongoDB | ≥ 6 | Atlas o instancia propia. **Obligatorio**: todo endpoint analítico lee de Mongo |
-| Acceso al bucket del espacio de datos | — | Sólo necesario para ejecutar la sincronización. Los objetos se leen por HTTPS público; `s3:ListBucket` es opcional y, si falta, el escaneo usa el inventario incluido en `s3-reader.ts` y lo advierte en el resultado |
+| Credenciales de conector en el espacio de datos | — | Sólo necesarias para ejecutar la sincronización. Usuario y contraseña del conector de UP en `connector-realm`; el API obtiene y renueva el token de acceso por sí mismo |
 
 ### Runtime
 
@@ -131,7 +175,7 @@ idénticos.
 | `@nestjs/mongoose`, `mongoose` | Read model en MongoDB |
 | `@nestjs/jwt`, `bcryptjs` | Autenticación por JWT y hash de contraseñas |
 | `@nestjs/swagger`, `swagger-ui-express` | OpenAPI 3 en `/docs` |
-| `@aws-sdk/client-s3`, `@aws-sdk/s3-request-presigner` | Lectura de activos del espacio de datos |
+| `@aws-sdk/client-s3`, `@aws-sdk/s3-request-presigner` | Almacenamiento de las **salidas** que genera el API: PDF de análisis, gráficas e informes |
 | `class-validator`, `class-transformer` | Validación de DTOs de entrada |
 | `pdf-lib`, `sharp` | Informes PDF y rasterizado de gráficas |
 | `dotenv` | Carga de configuración |
@@ -164,9 +208,9 @@ documentadas en [.env.example](.env.example)):
 | `MONGODB_DB` | — | Base de datos (por defecto `ondas_dataspace`) |
 | `PORTAL_JWT_SECRET` | ✅ en producción | Secreto de firma del JWT. Cadena aleatoria larga |
 | `PORTAL_JWT_EXPIRES_IN` | — | TTL del token (por defecto `8h`) |
-| `DATASPACE_S3_BUCKET` | para sync | Bucket del espacio de datos |
-| `DATASPACE_S3_REGION` | para sync | Región del bucket |
-| `DATASPACE_S3_ROOT_PREFIX` | para sync | Prefijo raíz de los activos publicados |
+| `DSPACER_BASE_URL` | para sync | URL del conector, incluido el segmento de entidad |
+| `DSPACER_USER` | para sync | Usuario del conector en `connector-realm` |
+| `DSPACER_PASSWORD` | para sync | Contraseña del conector. **Nunca se versiona** |
 | `PORT` | — | Puerto HTTP (por defecto `3000`) |
 | `PUBLIC_API_BASE_PATH` | — | Prefijo público tras un proxy inverso, sólo para los enlaces de Swagger |
 | `PUBLIC_API_DISPLAY_URL` | — | URL pública completa mostrada en la documentación |
@@ -178,7 +222,7 @@ documentadas en [.env.example](.env.example)):
 
 ```bash
 npm run seed          # crea organizaciones y usuarios; imprime las contraseñas una sola vez
-npm run backfill      # rellena Mongo desde el bucket del espacio de datos
+npm run backfill      # rellena Mongo desde el catálogo del espacio de datos
 npm run start:dev     # http://localhost:3000/docs
 ```
 
@@ -196,8 +240,8 @@ vez**. Guárdala antes de cerrar la terminal, o regenérala después con
 | `npm test` · `npm run test:cov` | Tests unitarios / con cobertura |
 | `npm run lint` · `npm run format` | ESLint con `--fix` / Prettier |
 | `npm run seed` | Semilla de organizaciones y usuarios |
-| `npm run backfill` | Carga inicial del read model desde el bucket |
-| `npm run reference:generate` | Regenera las series de referencia (`-- --upload` para publicarlas) |
+| `npm run backfill` | Carga inicial del read model desde el catálogo del espacio de datos |
+| `npm run reference:generate` | Regenera las series de referencia (`-- --publish` para publicarlas como activos) |
 | `npm run validate:precision` | Informe de validación: fidelidad de ingesta, exactitud de agregación, reproducibilidad y cobertura |
 | `npm run users:export` · `npm run users:reset` | Exportar usuarios / restablecer contraseña |
 
@@ -292,6 +336,8 @@ Tres ejemplos completos y reproducibles:
 ```
 ├── src/                  código del API (NestJS)
 │   ├── api-v1/           módulos de dominio (ver §1)
+│   │   └── dataspace/
+│   │       └── source/   cliente del conector: catálogo y transferencia
 │   ├── mongo/            conexión Mongoose
 │   └── main.ts           bootstrap, CORS y configuración de Swagger
 ├── scripts/              seed, backfill, gestión de usuarios, generadores de muestras

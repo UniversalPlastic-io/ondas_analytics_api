@@ -2,7 +2,7 @@
  * Canonical vocabulary of the ONDAs data space.
  *
  * The dataset type ids are the ones the live files carry in `metadata.datasetType`
- * (see docs/s3-dataset-mapping.md). The ids used by the participant-facing spec
+ * (see docs/dataset-mapping.md). The ids used by the participant-facing spec
  * (docs/dataspace-assets copy.md) are accepted as aliases so a file uploaded to
  * either convention ingests without a code change.
  */

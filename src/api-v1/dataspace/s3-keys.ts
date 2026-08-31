@@ -12,7 +12,7 @@ import {
 /**
  * Resolves an S3 object key into everything derivable from the key itself.
  *
- * Live layout (docs/s3-dataset-mapping.md):
+ * Live layout (docs/dataset-mapping.md):
  *   public/{ocean}/{providerFolder}/{file}.json
  */
 
@@ -89,7 +89,7 @@ export function parseKey(key: string): ParsedKey | null {
 }
 
 // ---------------------------------------------------------------------------
-// Known data-quality corrections (docs/s3-dataset-mapping.md § Data Quality Issues)
+// Known data-quality corrections (docs/dataset-mapping.md § Data Quality Issues)
 // ---------------------------------------------------------------------------
 
 export interface Correction {

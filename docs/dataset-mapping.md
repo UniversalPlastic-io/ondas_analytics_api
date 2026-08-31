@@ -1,4 +1,15 @@
-# S3 Dataset Mapping
+# Dataset Mapping
+
+> **Scope.** The dataset types, their schemas, units and known data-quality issues
+> below are **independent of where the data comes from** — they describe what a
+> participant publishes, not how it is fetched. They are the reference for the
+> container validation and the field normalizer.
+>
+> The sections marked *(legacy source layout)* describe the object-storage layout
+> that preceded consumption through the data space connector. They are kept because
+> the read model still carries the corrections derived from them, and because they
+> document the provenance of every dataset currently ingested. The current flow is
+> in [dspacer-integration.md](dspacer-integration.md).
 
 **Bucket:** `universalplastic-sedia`  
 **Region:** `eu-central-1`  
@@ -6,7 +17,7 @@
 
 ---
 
-## Ocean Mapping Strategy
+## Ocean Mapping Strategy *(legacy source layout)*
 
 When a location is received (lat/lon), the API selects the closest ocean basin and loads data from the corresponding S3 prefix.
 
@@ -355,7 +366,7 @@ Stored under `public/metadatos/`. Describe the expected fields and units for eac
 
 ---
 
-## S3 Folder Structure
+## Folder Structure *(legacy source layout)*
 
 ```
 public/
@@ -461,7 +472,7 @@ Three categories are used below:
 
 ---
 
-### Nearest S3 dataset selected per reference location
+### Nearest dataset selected per reference location
 
 The API uses equirectangular nearest-neighbor matching independently per dataset type. The table below shows which S3 file is selected for each of the six known geographic locations.
 

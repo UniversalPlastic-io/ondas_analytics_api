@@ -1,7 +1,7 @@
 # Map Endpoint Design — `GET /v1/map/points`
 
 A dashboard map that shows **one marker per dataset in S3**
-([`s3-dataset-mapping.md`](s3-dataset-mapping.md)), each with its info
+([`dataset-mapping.md`](dataset-mapping.md)), each with its info
 (type, provider, location, record count, date range, format, links). This is a
 **dataset/station map** — distinct from the Blue Resilience §11 `mapPoints`,
 which is a *cleanup-aggregate* map (kg per cleanup site). See §8 for that variant.
