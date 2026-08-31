@@ -6,27 +6,66 @@ export interface CampaignScope {
   lat: number;
   lon: number;
   /**
-   * S3 key fragments of the cleanup assets in scope. Resolved to assets (and
-   * therefore to observations) at query time — the API no longer holds a static
-   * file list, the `assets` collection is the inventory.
+   * Places whose cleanup assets are in scope, resolved to assets — and therefore
+   * to observations — at query time.
+   *
+   * A campaign is a place. This used to be a list of storage filename fragments
+   * matched by regex against the object key, which tied the report scope to a
+   * naming convention in a bucket; `place` is a field on the asset.
    */
-  fragments: string[];
+  places: string[];
 }
 
 // Per-file site/city labels (recogidas_playa carries no place name of its own).
-const FILE_LABELS: Array<{ fragment: string; site: string; city: string; lat: number; lon: number }> = [
-  { fragment: 'recogidas_playas_barcelona', site: 'Barcelona', city: 'Barcelona', lat: 41.6701792, lon: 2.7895005 },
-  { fragment: 'recogidas_playas_badalona', site: 'Badalona', city: 'Badalona', lat: 41.4377479, lon: 2.2442404 },
-  { fragment: 'recogidas_playas_blanes', site: 'Blanes', city: 'Costa Brava', lat: 41.676, lon: 2.795 },
-  { fragment: 'recogidas_playa_tenerife', site: 'Tenerife', city: 'Canary Islands', lat: 28.1876084, lon: -16.6595858 },
-  { fragment: 'recogidas_playas_gijon', site: 'Gijón', city: 'Asturias', lat: 43.5721291, lon: -5.7212135 },
+const SITE_LABELS: Array<{
+  place: string;
+  site: string;
+  city: string;
+  lat: number;
+  lon: number;
+}> = [
+  {
+    place: 'barcelona',
+    site: 'Barcelona',
+    city: 'Barcelona',
+    lat: 41.6701792,
+    lon: 2.7895005,
+  },
+  {
+    place: 'badalona',
+    site: 'Badalona',
+    city: 'Badalona',
+    lat: 41.4377479,
+    lon: 2.2442404,
+  },
+  {
+    place: 'blanes',
+    site: 'Blanes',
+    city: 'Costa Brava',
+    lat: 41.676,
+    lon: 2.795,
+  },
+  {
+    place: 'tenerife',
+    site: 'Tenerife',
+    city: 'Canary Islands',
+    lat: 28.1876084,
+    lon: -16.6595858,
+  },
+  {
+    place: 'gijon',
+    site: 'Gijón',
+    city: 'Asturias',
+    lat: 43.5721291,
+    lon: -5.7212135,
+  },
 ];
 
-const CAMPAIGN_MAP: Record<string, { name: string; fragment: string }> = {
-  c1: { name: 'Costa Brava Spring Clean 2025', fragment: 'recogidas_playas_blanes' },
-  c2: { name: 'Mediterranean Blue 2024', fragment: 'recogidas_playas_badalona' },
-  c3: { name: 'Barceloneta Urban Impact', fragment: 'recogidas_playas_barcelona' },
-  c4: { name: 'Corporate Wave Q1 2025', fragment: 'recogidas_playa_tenerife' },
+const CAMPAIGN_MAP: Record<string, { name: string; place: string }> = {
+  c1: { name: 'Costa Brava Spring Clean 2025', place: 'blanes' },
+  c2: { name: 'Mediterranean Blue 2024', place: 'badalona' },
+  c3: { name: 'Barceloneta Urban Impact', place: 'barcelona' },
+  c4: { name: 'Corporate Wave Q1 2025', place: 'tenerife' },
 };
 
 function allScope(campaignId: string): CampaignScope {
@@ -37,22 +76,24 @@ function allScope(campaignId: string): CampaignScope {
     city: 'Spain',
     lat: 41.4377,
     lon: 2.2442, // Mediterráneo representative (Badalona)
-    fragments: FILE_LABELS.map((l) => l.fragment),
+    places: SITE_LABELS.map((l) => l.place),
   };
 }
 
-export function resolveCampaignScope(campaignId: string | undefined): CampaignScope {
+export function resolveCampaignScope(
+  campaignId: string | undefined,
+): CampaignScope {
   if (!campaignId || campaignId === 'all') return allScope('all');
   const mapped = CAMPAIGN_MAP[campaignId];
   if (!mapped) return allScope(campaignId);
-  const label = FILE_LABELS.find((l) => l.fragment === mapped.fragment);
+  const label = SITE_LABELS.find((l) => l.place === mapped.place);
   return {
     campaignId,
     campaignName: mapped.name,
-    siteLabel: label?.site ?? mapped.fragment,
+    siteLabel: label?.site ?? mapped.place,
     city: label?.city ?? 'Spain',
     lat: label?.lat ?? 41.4377,
     lon: label?.lon ?? 2.2442,
-    fragments: [mapped.fragment],
+    places: [mapped.place],
   };
 }

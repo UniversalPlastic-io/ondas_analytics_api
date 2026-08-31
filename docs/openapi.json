@@ -924,8 +924,8 @@
     "/v1/sync/assets": {
       "post": {
         "operationId": "SyncController_syncAsset",
-        "summary": "Ingest one asset that was uploaded or updated in the data space",
-        "description": "Fetches the object, validates its container, normalizes it and replaces its observations in one transaction. Idempotent: an unchanged checksum is reported as \"unchanged\" without writing.",
+        "summary": "Ingest one asset that was published or updated in the data space",
+        "description": "Negotiates the contract, transfers the asset, validates its container, normalizes it and replaces its observations. Idempotent: content whose checksum is unchanged is reported as \"unchanged\" without writing.",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -949,10 +949,10 @@
             }
           },
           "404": {
-            "description": "No such object in the bucket"
+            "description": "No provider offers this asset to us"
           },
           "422": {
-            "description": "The object exists but is not a usable asset"
+            "description": "The asset is offered but is not usable"
           }
         },
         "tags": [
@@ -968,8 +968,8 @@
     "/v1/sync/scan": {
       "post": {
         "operationId": "SyncController_scan",
-        "summary": "Reconcile a prefix against the bucket",
-        "description": "Ingests new and changed objects, leaves unchanged ones alone, and flags assets whose object has disappeared (their observations are kept).",
+        "summary": "Reconcile the read model against what the space offers",
+        "description": "Transfers every asset under contract, writes the ones whose content changed, and flags assets no provider offers any more (their observations are kept).",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -1935,7 +1935,13 @@
         "properties": {
           "id": {
             "type": "string",
-            "example": "atlantico/innoceana/recogidas_playa_tenerife"
+            "example": "ddadf21b-0c4d-40c8-97d7-e5cf902a5024",
+            "description": "Id of the asset in the data space"
+          },
+          "sourceId": {
+            "type": "string",
+            "example": "ddadf21b-0c4d-40c8-97d7-e5cf902a5024",
+            "description": "Same value as `id`, named explicitly"
           },
           "name": {
             "type": "string",
@@ -2007,8 +2013,10 @@
             }
           },
           "url": {
-            "type": "string",
-            "example": "https://universalplastic-sedia.s3.eu-central-1.amazonaws.com/public/atlantico/innoceana/recogidas_playa_tenerife.json"
+            "type": "object",
+            "nullable": true,
+            "example": null,
+            "description": "Always null. An asset in the data space is reached by negotiating a contract, not by dereferencing a URL. Retained so existing clients do not break on a missing field."
           },
           "metadataSchemaRef": {
             "type": "object",
@@ -2043,6 +2051,7 @@
         },
         "required": [
           "id",
+          "sourceId",
           "name",
           "datasetType",
           "label",
@@ -2093,20 +2102,6 @@
           "bounds",
           "points"
         ]
-      },
-      "OrganizationS3Dto": {
-        "type": "object",
-        "properties": {
-          "bucket": {
-            "type": "string",
-            "example": "universalplastic-sedia"
-          },
-          "prefix": {
-            "type": "string",
-            "example": "public/mediterraneo/universal_plastic/",
-            "description": "This participant's space in the data space bucket"
-          }
-        }
       },
       "CreateOrganizationDto": {
         "type": "object",
@@ -2168,9 +2163,6 @@
             "items": {
               "type": "string"
             }
-          },
-          "s3": {
-            "$ref": "#/components/schemas/OrganizationS3Dto"
           }
         },
         "required": [
@@ -2326,28 +2318,31 @@
       "SyncAssetDto": {
         "type": "object",
         "properties": {
-          "key": {
+          "sourceId": {
             "type": "string",
-            "example": "public/mediterraneo/port_badalona/boya_biomasa_badalona.json",
-            "description": "S3 object key of the asset that was uploaded or updated"
-          },
-          "url": {
-            "type": "string",
-            "example": "https://universalplastic-sedia.s3.eu-central-1.amazonaws.com/public/…/file.json",
-            "description": "Full object URL — an alternative to `key`"
+            "example": "ddadf21b-0c4d-40c8-97d7-e5cf902a5024",
+            "description": "Id of the asset in the data space, as its catalog entry reports it"
           },
           "force": {
             "type": "boolean",
             "default": false,
-            "description": "Re-ingest even when the object checksum is unchanged"
+            "description": "Re-ingest even when the content is unchanged"
           }
-        }
+        },
+        "required": [
+          "sourceId"
+        ]
       },
       "SyncResultRowDto": {
         "type": "object",
         "properties": {
-          "key": {
-            "type": "string"
+          "sourceId": {
+            "type": "string",
+            "description": "Id of the asset in the data space"
+          },
+          "label": {
+            "type": "string",
+            "description": "Name the provider publishes it under"
           },
           "action": {
             "type": "string",
@@ -2377,7 +2372,7 @@
           }
         },
         "required": [
-          "key",
+          "sourceId",
           "action"
         ]
       },
@@ -2442,10 +2437,10 @@
       "SyncScanDto": {
         "type": "object",
         "properties": {
-          "prefix": {
+          "provider": {
             "type": "string",
-            "example": "public/mediterraneo/",
-            "description": "Prefix to reconcile. Defaults to your organization space, or the whole root for admins."
+            "example": "innoceana",
+            "description": "Reconcile only this provider. Defaults to every provider the space offers us."
           },
           "dryRun": {
             "type": "boolean",

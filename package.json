@@ -28,6 +28,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "seed": "ts-node -r tsconfig-paths/register scripts/seed.ts",
     "backfill": "ts-node -r tsconfig-paths/register scripts/backfill.ts",
+    "openapi:generate": "ts-node -r tsconfig-paths/register scripts/generate-openapi.ts",
     "assets:refresh": "ts-node -r tsconfig-paths/register scripts/refresh-asset-map.ts",
     "reference:generate": "ts-node -r tsconfig-paths/register scripts/generate-reference-datasets.ts",
     "users:export": "ts-node -r tsconfig-paths/register scripts/export-users.ts",

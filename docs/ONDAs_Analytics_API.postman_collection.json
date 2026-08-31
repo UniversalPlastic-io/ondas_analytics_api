@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "ONDAs Analytics API v1",
-    "description": "Colecci\u00f3n generada a partir de la especificaci\u00f3n OpenAPI que el API publica en `/docs`.\n\nUso: fijar `baseUrl` y ejecutar primero `POST /v1/auth/login`; su script de test guarda el `access_token` en la variable `token`, que el resto de peticiones usa como Bearer.\n\nRepositorio: https://github.com/UniversalPlastic-io/ondas_analytics_api",
+    "description": "Colección generada a partir de la especificación OpenAPI que el API publica en `/docs`.\n\nUso: fijar `baseUrl` y ejecutar primero `POST /v1/auth/login`; su script de test guarda el `access_token` en la variable `token`, que el resto de peticiones usa como Bearer.\n\nRepositorio: https://github.com/UniversalPlastic-io/ondas_analytics_api",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "auth": {
@@ -56,7 +56,7 @@
             "description": "Log in with email + password\n\nReturns a JWT for the Authorization: Bearer header. The `username` field also accepts a legacy portal connector username while those accounts are being migrated.\n\nEndpoint abierto: no requiere token.",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"username\": \"admin@universalplastic.io\",\n  \"password\": \"<contrase\u00f1a>\"\n}",
+              "raw": "{\n  \"username\": \"admin@universalplastic.io\",\n  \"password\": \"<contraseña>\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -134,19 +134,19 @@
                 {
                   "key": "campaign",
                   "value": "all",
-                  "description": "'all' | id de campa\u00f1a (c1..c4). Por defecto 'all'",
+                  "description": "'all' | id de campaña (c1..c4). Por defecto 'all'",
                   "disabled": true
                 },
                 {
                   "key": "scope",
                   "value": "all",
-                  "description": "Con token: 'mine' (por defecto) limita a los datasets de tu organizaci\u00f3n, 'all' usa todo el espacio de datos. Sin token siempre es 'all'.",
+                  "description": "Con token: 'mine' (por defecto) limita a los datasets de tu organización, 'all' usa todo el espacio de datos. Sin token siempre es 'all'.",
                   "disabled": true
                 }
               ],
               "variable": []
             },
-            "description": "Resumen del dashboard: KPIs, serie kg, composici\u00f3n de pl\u00e1stico y top localizaciones\n\nEndpoint abierto: no requiere token.",
+            "description": "Resumen del dashboard: KPIs, serie kg, composición de plástico y top localizaciones\n\nEndpoint abierto: no requiere token.",
             "auth": {
               "type": "noauth"
             }
@@ -195,13 +195,13 @@
                 {
                   "key": "format",
                   "value": "geojson",
-                  "description": "geojson \u2192 FeatureCollection [lng,lat]",
+                  "description": "geojson → FeatureCollection [lng,lat]",
                   "disabled": true
                 },
                 {
                   "key": "scope",
                   "value": "all",
-                  "description": "Con token: 'mine' (por defecto) limita a tu organizaci\u00f3n",
+                  "description": "Con token: 'mine' (por defecto) limita a tu organización",
                   "disabled": true
                 }
               ],
@@ -237,7 +237,7 @@
               "query": [],
               "variable": []
             },
-            "description": "Documentaci\u00f3n HTML de \u00edndices/indicadores\n\nEndpoint abierto: no requiere token.",
+            "description": "Documentación HTML de índices/indicadores\n\nEndpoint abierto: no requiere token.",
             "auth": {
               "type": "noauth"
             }
@@ -267,7 +267,7 @@
               "query": [],
               "variable": []
             },
-            "description": "Ejecutar anal\u00edticas y (opcionalmente) generar plots\n\nRequiere `Authorization: Bearer {{token}}`.",
+            "description": "Ejecutar analíticas y (opcionalmente) generar plots\n\nRequiere `Authorization: Bearer {{token}}`.",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"location\": {\n    \"lat\": 41.3874,\n    \"lon\": 2.1686\n  },\n  \"area\": {\n    \"type\": \"radius_km\",\n    \"value\": 25\n  },\n  \"analyses\": [\n    \"all\"\n  ],\n  \"dateRange\": {\n    \"start\": \"2025-01-01\",\n    \"end\": \"2025-12-31\"\n  },\n  \"aggregation\": {\n    \"mode\": \"monthly\"\n  },\n  \"options\": {\n    \"dataFormattedForPlots\": true,\n    \"savePlotsWebp\": false\n  }\n}",
@@ -352,10 +352,10 @@
               "query": [],
               "variable": []
             },
-            "description": "Ingest one asset that was uploaded or updated in the data space\n\nFetches the object, validates its container, normalizes it and replaces its observations in one transaction. Idempotent: an unchanged checksum is reported as \"unchanged\" without writing.\n\nRequiere `Authorization: Bearer {{token}}`.",
+            "description": "Ingesta un activo del espacio de datos por su id de catálogo. Negocia el contrato, transfiere el dato y reemplaza sus observaciones. Idempotente: un contenido cuya suma de comprobación no ha cambiado se reporta como \"unchanged\" sin escribir.",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"key\": \"public/mediterraneo/universal_plastic/boya_biomasa_badalona.json\",\n  \"force\": false\n}",
+              "raw": "{\n  \"sourceId\": \"ddadf21b-0c4d-40c8-97d7-e5cf902a5024\",\n  \"force\": false\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -388,10 +388,10 @@
               "query": [],
               "variable": []
             },
-            "description": "Reconcile a prefix against the bucket\n\nIngests new and changed objects, leaves unchanged ones alone, and flags assets whose object has disappeared (their observations are kept).\n\nRequiere `Authorization: Bearer {{token}}`.",
+            "description": "Reconcilia el read model con lo que el espacio de datos ofrece. Sin \"provider\" recorre todos los proveedores que nos han dado contrato.",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"prefix\": \"public/mediterraneo/\",\n  \"dryRun\": false,\n  \"force\": false\n}",
+              "raw": "{\n  \"provider\": \"innoceana\",\n  \"dryRun\": false,\n  \"force\": false\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -512,7 +512,7 @@
             "description": "Create a data space participant\n\nRequiere `Authorization: Bearer {{token}}`.",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"slug\": \"innoceana\",\n  \"name\": \"Innoceana\",\n  \"type\": \"NGO\",\n  \"territory\": \"Costa Brava, Catalunya, Spain\",\n  \"description\": \"\",\n  \"website\": \"innoceana.org\",\n  \"contact\": \"impact@innoceana.org\",\n  \"publicProfile\": true,\n  \"dataProviderIds\": [\n    \"innoceana\"\n  ],\n  \"providerFolders\": [\n    \"innoceana\"\n  ],\n  \"s3\": {\n    \"bucket\": \"universalplastic-sedia\",\n    \"prefix\": \"public/mediterraneo/universal_plastic/\"\n  }\n}",
+              "raw": "{\n  \"slug\": \"innoceana\",\n  \"name\": \"Innoceana\",\n  \"type\": \"NGO\",\n  \"territory\": \"Costa Brava, Catalunya, Spain\",\n  \"description\": \"\",\n  \"website\": \"innoceana.org\",\n  \"contact\": \"impact@innoceana.org\",\n  \"publicProfile\": true,\n  \"dataProviderIds\": [\n    \"innoceana\"\n  ],\n  \"providerFolders\": [\n    \"innoceana\"\n  ]\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -548,7 +548,7 @@
             "description": "Update a participant (matched by slug)\n\nRequiere `Authorization: Bearer {{token}}`.",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"slug\": \"innoceana\",\n  \"name\": \"Innoceana\",\n  \"type\": \"NGO\",\n  \"territory\": \"Costa Brava, Catalunya, Spain\",\n  \"description\": \"\",\n  \"website\": \"innoceana.org\",\n  \"contact\": \"impact@innoceana.org\",\n  \"publicProfile\": true,\n  \"dataProviderIds\": [\n    \"innoceana\"\n  ],\n  \"providerFolders\": [\n    \"innoceana\"\n  ],\n  \"s3\": {\n    \"bucket\": \"universalplastic-sedia\",\n    \"prefix\": \"public/mediterraneo/universal_plastic/\"\n  }\n}",
+              "raw": "{\n  \"slug\": \"innoceana\",\n  \"name\": \"Innoceana\",\n  \"type\": \"NGO\",\n  \"territory\": \"Costa Brava, Catalunya, Spain\",\n  \"description\": \"\",\n  \"website\": \"innoceana.org\",\n  \"contact\": \"impact@innoceana.org\",\n  \"publicProfile\": true,\n  \"dataProviderIds\": [\n    \"innoceana\"\n  ],\n  \"providerFolders\": [\n    \"innoceana\"\n  ]\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -682,7 +682,7 @@
               ],
               "variable": []
             },
-            "description": "Campa\u00f1as (passthrough de marketplace/home \u2192 campaigns[])\n\nEndpoint abierto: no requiere token.",
+            "description": "Campañas (passthrough de marketplace/home → campaigns[])\n\nEndpoint abierto: no requiere token.",
             "auth": {
               "type": "noauth"
             }
@@ -713,7 +713,7 @@
               ],
               "variable": []
             },
-            "description": "Recogidas (passthrough de marketplace/home \u2192 wasteCollections[])\n\nEndpoint abierto: no requiere token.",
+            "description": "Recogidas (passthrough de marketplace/home → wasteCollections[])\n\nEndpoint abierto: no requiere token.",
             "auth": {
               "type": "noauth"
             }
@@ -737,7 +737,7 @@
               "query": [],
               "variable": []
             },
-            "description": "Organizaciones (passthrough de marketplace/home \u2192 organizations[])\n\nEndpoint abierto: no requiere token.",
+            "description": "Organizaciones (passthrough de marketplace/home → organizations[])\n\nEndpoint abierto: no requiere token.",
             "auth": {
               "type": "noauth"
             }

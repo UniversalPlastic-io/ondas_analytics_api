@@ -1,30 +1,64 @@
 import { Injectable } from '@nestjs/common';
-import { CleanupRow, ResolvedPeriod, SeriesPoint } from '../reports/reports.types';
+import {
+  CleanupRow,
+  ResolvedPeriod,
+  SeriesPoint,
+} from '../reports/reports.types';
 import { resolvePeriod } from '../reports/reports-period';
 import { resolveCampaignScope } from '../reports/reports-campaign-map';
 import { aggregateReportData } from '../reports/reports-data';
-import { OverviewKpis, OverviewPeriod, OverviewResponse, OverviewSource, OverviewTopLocation } from './overview.types';
+import {
+  OverviewKpis,
+  OverviewPeriod,
+  OverviewResponse,
+  OverviewSource,
+  OverviewTopLocation,
+} from './overview.types';
 import { OverviewSources } from './overview-sources';
 import { AssetsRepository } from '../dataspace/assets.repository';
 import { ObservationsRepository } from '../dataspace/observations.repository';
 
-const MONTHS_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const MONTHS_SHORT = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+];
 
-function round(n: number, d = 2): number { const m = 10 ** d; return Math.round(n * m) / m; }
+function round(n: number, d = 2): number {
+  const m = 10 ** d;
+  return Math.round(n * m) / m;
+}
 
-export function bucketSeries(cleanups: CleanupRow[], period: OverviewPeriod): SeriesPoint[] {
-  const totals = new Map<string, { sortKey: string; label: string; kg: number }>();
+export function bucketSeries(
+  cleanups: CleanupRow[],
+  period: OverviewPeriod,
+): SeriesPoint[] {
+  const totals = new Map<
+    string,
+    { sortKey: string; label: string; kg: number }
+  >();
   for (const c of cleanups) {
     const date = c.date; // YYYY-MM-DD
     let sortKey: string;
     let label: string;
     if (period === 'month') {
-      sortKey = date; label = date;
+      sortKey = date;
+      label = date;
     } else if (period === 'year') {
       sortKey = date.slice(0, 7); // YYYY-MM
       label = MONTHS_SHORT[Number(date.slice(5, 7)) - 1] ?? date.slice(0, 7);
     } else {
-      sortKey = date.slice(0, 4); label = date.slice(0, 4); // YYYY
+      sortKey = date.slice(0, 4);
+      label = date.slice(0, 4); // YYYY
     }
     const existing = totals.get(sortKey);
     if (existing) existing.kg += c.kg;
@@ -36,7 +70,19 @@ export function bucketSeries(cleanups: CleanupRow[], period: OverviewPeriod): Se
 }
 
 function zeroKpis(): OverviewKpis {
-  return { kg: 0, cleanups: 0, volunteers: 0, locations: 0, km: 0, hours: 0, ondas: 0, evidence: 0, verified: 0, avgKg: 0, index: 0 };
+  return {
+    kg: 0,
+    cleanups: 0,
+    volunteers: 0,
+    locations: 0,
+    km: 0,
+    hours: 0,
+    ondas: 0,
+    evidence: 0,
+    verified: 0,
+    avgKg: 0,
+    index: 0,
+  };
 }
 
 @Injectable()
@@ -54,13 +100,21 @@ export class OverviewService {
     organizationId: string | null = null,
   ): Promise<OverviewResponse> {
     const periodType = period === 'month' ? 'monthly' : 'annual';
-    const resolved: ResolvedPeriod = resolvePeriod({ preset: period }, periodType, now);
+    const resolved: ResolvedPeriod = resolvePeriod(
+      { preset: period },
+      periodType,
+      now,
+    );
     const scope = resolveCampaignScope(campaign);
     const loc = { lat: scope.lat, lon: scope.lon };
 
     // Cleanup data: the database filters by campaign scope and period.
-    const cleanupAssets = await this.assets.findByFragments(scope.fragments, {
+    const cleanupAssets = await this.assets.findByPlaces(scope.places, {
       category: 'cleanup',
+      // The dashboard reports what participants measured. Excluding the
+      // calibration tier used to happen only by coincidence, because the
+      // campaign allowlist happened not to name the reference file.
+      tier: 'observed',
       organizationId,
     });
     const rows = await this.observations.cleanupRows({
@@ -112,13 +166,28 @@ export class OverviewService {
       series: data ? bucketSeries(data.cleanups, period) : [],
       plasticTypes: data ? data.plasticTypes : [],
       topLocations: data
-        ? data.sites.slice(0, 5).map((s): OverviewTopLocation => ({ name: s.name, kg: s.kg, cleanups: s.cleanups }))
+        ? data.sites.slice(0, 5).map(
+            (s): OverviewTopLocation => ({
+              name: s.name,
+              kg: s.kg,
+              cleanups: s.cleanups,
+            }),
+          )
         : [],
     };
 
-    if (biomass) { res.biomass = biomass; sourcesIncluded.push('boya_biomasa'); }
-    if (microplastics) { res.microplastics = microplastics; sourcesIncluded.push('boya_microplasticos'); }
-    if (environment) { res.environment = environment; sourcesIncluded.push('environmental_boya'); }
+    if (biomass) {
+      res.biomass = biomass;
+      sourcesIncluded.push('boya_biomasa');
+    }
+    if (microplastics) {
+      res.microplastics = microplastics;
+      sourcesIncluded.push('boya_microplasticos');
+    }
+    if (environment) {
+      res.environment = environment;
+      sourcesIncluded.push('environmental_boya');
+    }
 
     return res;
   }

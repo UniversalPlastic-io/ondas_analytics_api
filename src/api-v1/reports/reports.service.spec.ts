@@ -2,7 +2,10 @@ import { BadRequestException } from '@nestjs/common';
 import { ReportsService } from './reports.service';
 import * as reportsS3 from './reports-s3';
 import { AssetsRepository } from '../dataspace/assets.repository';
-import { CleanupObservationRow, ObservationsRepository } from '../dataspace/observations.repository';
+import {
+  CleanupObservationRow,
+  ObservationsRepository,
+} from '../dataspace/observations.repository';
 
 const NOW = new Date('2026-06-18T10:00:00.000Z');
 
@@ -18,7 +21,15 @@ const ROW: CleanupObservationRow = {
   km: 1.2,
   durationSeconds: 2700,
   evidence: 2,
-  polymers: { pct_pet: 50, pct_hdpe: 20, pct_ldpe: 10, pct_pp: 10, pct_ps: 0, pct_pvc: 0, pct_others: 0 },
+  polymers: {
+    pct_pet: 50,
+    pct_hdpe: 20,
+    pct_ldpe: 10,
+    pct_pp: 10,
+    pct_ps: 0,
+    pct_pvc: 0,
+    pct_others: 0,
+  },
 };
 
 describe('ReportsService.generate', () => {
@@ -31,7 +42,7 @@ describe('ReportsService.generate', () => {
     cleanupRows = jest.fn().mockResolvedValue([ROW]);
     oceanFor = jest.fn().mockResolvedValue('mediterraneo');
     const assets = {
-      findByFragments: jest.fn().mockResolvedValue([{ _id: 'a1' }]),
+      findByPlaces: jest.fn().mockResolvedValue([{ _id: 'a1' }]),
       oceanFor,
     } as unknown as AssetsRepository;
     const observations = { cleanupRows } as unknown as ObservationsRepository;
@@ -50,8 +61,13 @@ describe('ReportsService.generate', () => {
     // a storage URL. It comes from the observed assets now.
     oceanFor.mockResolvedValue('catambrico');
     await svc.generate({ type: 'monthly', period: { preset: 'month' } }, NOW);
-    expect(oceanFor).toHaveBeenCalledWith({ lat: expect.any(Number), lon: expect.any(Number) });
-    expect(upload).toHaveBeenCalledWith(expect.objectContaining({ ocean: 'catambrico' }));
+    expect(oceanFor).toHaveBeenCalledWith({
+      lat: expect.any(Number),
+      lon: expect.any(Number),
+    });
+    expect(upload).toHaveBeenCalledWith(
+      expect.objectContaining({ ocean: 'catambrico' }),
+    );
   });
 
   it('files output it cannot place under a basin that is obviously not one', async () => {
@@ -59,11 +75,16 @@ describe('ReportsService.generate', () => {
     // a real basin it does not belong to is indistinguishable from correct output.
     oceanFor.mockResolvedValue(null);
     await svc.generate({ type: 'monthly', period: { preset: 'month' } }, NOW);
-    expect(upload).toHaveBeenCalledWith(expect.objectContaining({ ocean: 'sin-ubicar' }));
+    expect(upload).toHaveBeenCalledWith(
+      expect.objectContaining({ ocean: 'sin-ubicar' }),
+    );
   });
 
   it('returns a ready response with an https downloadUrl', async () => {
-    const res = await svc.generate({ type: 'monthly', period: { preset: 'month' } }, NOW);
+    const res = await svc.generate(
+      { type: 'monthly', period: { preset: 'month' } },
+      NOW,
+    );
     expect(res.status).toBe('ready');
     expect(res.type).toBe('monthly');
     expect(res.period).toBe('June 2026');
@@ -81,23 +102,30 @@ describe('ReportsService.generate', () => {
   });
 
   it('coerces xlsx to pdf', async () => {
-    const res = await svc.generate({ type: 'monthly', period: { preset: 'month' }, format: 'xlsx' }, NOW);
+    const res = await svc.generate(
+      { type: 'monthly', period: { preset: 'month' }, format: 'xlsx' },
+      NOW,
+    );
     expect(res.format).toBe('pdf');
   });
 
   it('rejects a campaign report without an id', async () => {
-    await expect(svc.generate({ type: 'campaign', period: { preset: 'month' } }, NOW)).rejects.toBeInstanceOf(
+    await expect(
+      svc.generate({ type: 'campaign', period: { preset: 'month' } }, NOW),
+    ).rejects.toBeInstanceOf(BadRequestException);
+  });
+
+  it('rejects a custom report without a date range', async () => {
+    await expect(svc.generate({ type: 'custom' }, NOW)).rejects.toBeInstanceOf(
       BadRequestException,
     );
   });
 
-  it('rejects a custom report without a date range', async () => {
-    await expect(svc.generate({ type: 'custom' }, NOW)).rejects.toBeInstanceOf(BadRequestException);
-  });
-
   it('maps an empty period to 422', async () => {
     cleanupRows.mockResolvedValue([]);
-    await expect(svc.generate({ type: 'monthly', period: { preset: 'month' } }, NOW)).rejects.toMatchObject({
+    await expect(
+      svc.generate({ type: 'monthly', period: { preset: 'month' } }, NOW),
+    ).rejects.toMatchObject({
       status: 422,
     });
   });

@@ -93,7 +93,7 @@ export class MapService {
 
     if (asset.status === 'missing') {
       point.warnings.push(
-        'the source object is no longer in the bucket; showing the last ingested data',
+        'no provider in the data space offers this asset any more; showing the last ingested data',
       );
     }
 

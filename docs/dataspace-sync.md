@@ -8,10 +8,10 @@ Design rationale: [`superpowers/specs/2026-08-19-dataspace-sync-and-identity-des
 ## 1. Setup
 
 ```bash
-cp .env.example .env      # set MONGODB_URI and PORTAL_JWT_SECRET
+cp .env.example .env      # set MONGODB_URI, PORTAL_JWT_SECRET and DSPACER_*
 npm ci
 npm run seed              # organizations + users (prints passwords once)
-npm run backfill          # fills Mongo from the bucket
+npm run backfill          # fills Mongo from the data space catalog
 npm run start:dev
 ```
 
@@ -24,44 +24,58 @@ exists, otherwise they are generated and printed **once**.
 `npm run backfill` runs the same scan the API exposes, as an admin:
 
 ```bash
-npm run backfill                       # whole public/ prefix
+npm run backfill                       # every provider that offers us a contract
 npm run backfill -- --dry-run          # report the plan, write nothing
 npm run backfill -- --force            # re-ingest even if unchanged
-npm run backfill -- --prefix public/mediterraneo/
+npm run backfill -- --provider innoceana
 ```
 
 ## 2. Telling the API about a new asset
 
-There is no scheduler. After a participant uploads to S3, call the API.
+There is no scheduler. After a participant publishes an asset and grants a
+contract, call the API. Assets are named by the id their provider's connector
+assigned, which is what the catalog reports.
 
 ```bash
-# one asset, by key
+# one asset, by its id in the space
 curl -X POST https://ondas.universalplastic.io/api/v1/sync/assets \
   -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' \
-  -d '{"key":"public/mediterraneo/port_badalona/boya_biomasa_badalona.json"}'
+  -d '{"sourceId":"ddadf21b-0c4d-40c8-97d7-e5cf902a5024"}'
 
-# or by full object URL
--d '{"url":"https://universalplastic-sedia.s3.eu-central-1.amazonaws.com/public/…/file.json"}'
+# reconcile everything the space offers us
+curl -X POST …/v1/sync/scan -d '{"dryRun":true}'
 
-# reconcile a whole prefix
-curl -X POST …/v1/sync/scan -d '{"prefix":"public/mediterraneo/","dryRun":true}'
+# or one provider only
+curl -X POST …/v1/sync/scan -d '{"provider":"innoceana"}'
 ```
+
+To find an asset id, read the catalog of its provider, or run
+`npm run assets:refresh`, which lists every asset offered to us and flags the ones
+this API does not yet recognise.
 
 Both return a run summary: per-asset `action`
 (`created|updated|unchanged|missing|failed|skipped`), observation counts and
 warnings. History lives at `GET /v1/sync/runs` and `GET /v1/sync/runs/:id`.
 
-**Idempotent.** An object whose checksum has not changed reports `unchanged` and
-writes nothing. Pass `"force": true` to re-ingest anyway (needed after a
-normalizer change).
+**Idempotent, but not free.** The catalog carries no version, date or checksum,
+so an asset is only recognisable as unchanged once its content is in hand. Every
+sync transfers; what `unchanged` saves is the reprocessing and the write. Pass
+`"force": true` to re-ingest anyway (needed after a normalizer change).
 
-**Authorization.** `admin` syncs any key; `provider` only keys under its own
-organization's provider folders. Anything else is `403`.
+**Authorization** happens twice, and the API only ever narrows. The data space
+decides what this connector can see at all, through the contracts each provider
+granted; on top of that, `admin` syncs anything visible and `provider` only its
+own organization's assets. Anything else is `403`.
 
 **Replacing an asset** deletes the previous observations only after the new ones
 are written and the asset has been flipped to them, so a reader never sees a
-half-replaced dataset. **Deleting an asset** from the bucket makes a scan mark it
-`missing`; its observations are kept and the map marker carries a warning.
+half-replaced dataset.
+
+**`missing` versus `failed`** is a distinction worth knowing. An asset no provider
+offers any more is `missing`: its observations are kept and the map marker carries
+a warning. An asset that is offered but unreadable — a lapsed contract, or a
+provider publishing no resolvable data address — is `failed`, not `missing`,
+because it still exists and its observations are still valid.
 
 ## 3. Reading
 
@@ -91,15 +105,22 @@ Roles: `admin` (everything), `provider` (sync its own organization, read),
 `viewer` (read).
 
 An organization is a data space participant: its `slug`, every spelling of its
-`dataProviderId` found in the files, the S3 provider folders it owns, and its
-`s3.prefix` — the reference to its space in the data space.
+`dataProviderId` found in the published assets, and the provider folders it owns —
+the names by which its assets are attributed to it.
 
 ## 5. Operational notes
 
-- **S3 listing.** The runtime currently lacks `s3:ListBucket`, so `sync/scan`
-  falls back to a bundled inventory of the 22 known files and says so in the run
-  warnings. New files are still ingestable by key. Granting the permission makes
-  scans self-updating and enables orphan detection.
+- **Connector credentials.** `DSPACER_*` is only needed to sync. Every analytic
+  endpoint reads from Mongo, so the API boots and serves an already populated read
+  model without them; the failure surfaces on the first sync.
+- **The access token lives 300 seconds**, less than a full scan. The client
+  renews it mid-scan on its own.
+- **A provider that fails is isolated.** Its catalog request is reported as a run
+  warning and the rest of the space still syncs, rather than one unreachable
+  connector emptying the read model.
+- **Assets get republished under new ids.** When that happens, an asset absent
+  from `ASSET_MAP` is classified from its name and the run says so. Run
+  `npm run assets:refresh` to see what changed, and `-- --write` to record it.
 - **Warnings are data.** Each asset stores the corrections and DCAT deviations
   found at ingest; they surface on map markers. A file with warnings is still
   served — read them rather than assuming the data is clean.

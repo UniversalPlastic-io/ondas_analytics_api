@@ -142,8 +142,7 @@ explícitamente: describen mediciones de un sitio, y una serie de calibración n
 lo es. Regenerarlas y publicarlas:
 
 ```bash
-npm run reference:generate              # escribe en output/reference/
-npm run reference:generate -- --publish # las publica como activos del conector de UP
+npm run reference:generate   # escribe en output/reference/
 ```
 
 > Una serie de referencia es un sustituto declarado, no un dato. A medida que los
@@ -208,7 +207,8 @@ documentadas en [.env.example](.env.example)):
 | `MONGODB_DB` | — | Base de datos (por defecto `ondas_dataspace`) |
 | `PORTAL_JWT_SECRET` | ✅ en producción | Secreto de firma del JWT. Cadena aleatoria larga |
 | `PORTAL_JWT_EXPIRES_IN` | — | TTL del token (por defecto `8h`) |
-| `DSPACER_BASE_URL` | para sync | URL del conector, incluido el segmento de entidad |
+| `DSPACER_BASE_URL` | para sync | URL del *middleware* del conector, incluido el segmento de entidad |
+| `DSPACER_LOGIN_URL` | para sync | Endpoint de login del conector |
 | `DSPACER_USER` | para sync | Usuario del conector en `connector-realm` |
 | `DSPACER_PASSWORD` | para sync | Contraseña del conector. **Nunca se versiona** |
 | `PORT` | — | Puerto HTTP (por defecto `3000`) |
@@ -241,7 +241,9 @@ vez**. Guárdala antes de cerrar la terminal, o regenérala después con
 | `npm run lint` · `npm run format` | ESLint con `--fix` / Prettier |
 | `npm run seed` | Semilla de organizaciones y usuarios |
 | `npm run backfill` | Carga inicial del read model desde el catálogo del espacio de datos |
-| `npm run reference:generate` | Regenera las series de referencia (`-- --publish` para publicarlas como activos) |
+| `npm run reference:generate` | Regenera las series de referencia en `output/reference/` |
+| `npm run assets:refresh` | Compara `ASSET_MAP` con el catálogo real (`-- --write` para reescribirla) |
+| `npm run openapi:generate` | Regenera `docs/openapi.json` a partir de los decoradores |
 | `npm run validate:precision` | Informe de validación: fidelidad de ingesta, exactitud de agregación, reproducibilidad y cobertura |
 | `npm run users:export` · `npm run users:reset` | Exportar usuarios / restablecer contraseña |
 

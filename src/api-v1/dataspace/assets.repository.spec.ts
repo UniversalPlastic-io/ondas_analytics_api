@@ -6,12 +6,26 @@ describe('assetQuery', () => {
     expect(assetQuery({ status: 'any' })).toEqual({});
   });
 
-  it('matches a provider by declared id, stored provider, or folder in the key', () => {
+  it('matches a provider by its declared id or by the participant it came from', () => {
+    // Both are stored fields. Matching used to include a regex over the object
+    // key, which stopped working the moment an asset had no path.
     expect(assetQuery({ provider: 'innoceana' }).$or).toEqual([
       { dataProviderIdRaw: 'innoceana' },
       { providerFolder: 'innoceana' },
-      { key: { $regex: '/innoceana/' } },
     ]);
+  });
+
+  it('never queries a field derived from an identifier', () => {
+    const q = JSON.stringify(
+      assetQuery({
+        provider: 'innoceana',
+        excludeProvider: 'bcss',
+        tier: 'observed',
+      }),
+    );
+    expect(q).not.toContain('$regex');
+    expect(q).not.toContain('"key"');
+    expect(q).not.toContain('bucket');
   });
 
   it('excludes a provider with $nor, so it composes with an include', () => {
@@ -19,12 +33,10 @@ describe('assetQuery', () => {
     expect(q.$or).toEqual([
       { dataProviderIdRaw: 'innoceana' },
       { providerFolder: 'innoceana' },
-      { key: { $regex: '/innoceana/' } },
     ]);
     expect(q.$nor).toEqual([
       { dataProviderIdRaw: 'bcss' },
       { providerFolder: 'bcss' },
-      { key: { $regex: '/bcss/' } },
     ]);
   });
 
@@ -66,11 +78,7 @@ describe('assetQuery', () => {
       status: 'active',
       category: 'biomass',
       ocean: 'mediterraneo',
-      $nor: [
-        { dataProviderIdRaw: 'x' },
-        { providerFolder: 'x' },
-        { key: { $regex: '/x/' } },
-      ],
+      $nor: [{ dataProviderIdRaw: 'x' }, { providerFolder: 'x' }],
     });
   });
 });

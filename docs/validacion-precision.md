@@ -139,7 +139,7 @@ npm run validate:precision                       # informe por consola
 npm run validate:precision -- --json informe.json
 ```
 
-El script ([`scripts/validate-precision.ts`](../scripts/validate-precision.ts)) necesita acceso al modelo de lectura en MongoDB y lectura pública del bucket del espacio de datos. Termina con código de salida distinto de cero si alguna comprobación falla o si aparece pérdida de datos inexplicada, de modo que puede ejecutarse como comprobación automatizada.
+El script ([`scripts/validate-precision.ts`](../scripts/validate-precision.ts)) necesita acceso al modelo de lectura en MongoDB y credenciales del conector del espacio de datos, porque relee cada activo desde su catálogo para contrastarlo. Termina con código de salida distinto de cero si alguna comprobación falla o si aparece pérdida de datos inexplicada, de modo que puede ejecutarse como comprobación automatizada.
 
 **Limitaciones declaradas:**
 

@@ -26,19 +26,16 @@ export interface AssetFilter {
 }
 
 /**
- * Matches a provider by its declared id, by the stored provider attribute, or by
- * its folder in the object key.
+ * Matches a provider by the id it declares in its data or by the participant it
+ * was published under.
  *
- * The key clause is kept for assets ingested before `providerFolder` was stored;
- * it matches nothing for an asset that has no path, which is exactly why it can
- * no longer be the only clause.
+ * Both are stored fields. Neither is derived from an identifier at query time,
+ * which is what a third clause here used to do — a regex over the object key —
+ * and what made provider matching silently stop working for any asset that had no
+ * path.
  */
 function providerClauses(provider: string): Array<QueryFilter<Asset>> {
-  return [
-    { dataProviderIdRaw: provider },
-    { providerFolder: provider },
-    { key: { $regex: `/${provider}/` } },
-  ];
+  return [{ dataProviderIdRaw: provider }, { providerFolder: provider }];
 }
 
 /**
@@ -96,23 +93,26 @@ export class AssetsRepository {
   }
 
   /** Assets whose key contains any of these fragments (campaign → files mapping). */
-  findByFragments(
-    fragments: string[],
+  /**
+   * Assets at any of the given places.
+   *
+   * Replaces a regex over the object key with a match on an indexed field. The
+   * old form tied a report's scope to a filename convention in a bucket, so a
+   * renamed file silently emptied a campaign.
+   */
+  findByPlaces(
+    places: string[],
     filter: AssetFilter = {},
   ): Promise<AssetDocument[]> {
-    if (!fragments.length) return Promise.resolve([]);
+    if (!places.length) return Promise.resolve([]);
     return this.assets
-      .find({
-        ...this.queryOf(filter),
-        $or: fragments.map((f) => ({
-          key: { $regex: f.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') },
-        })),
-      })
+      .find({ ...this.queryOf(filter), place: { $in: places } })
       .exec();
   }
 
-  findByKey(key: string): Promise<AssetDocument | null> {
-    return this.assets.findOne({ key }).exec();
+  /** One asset by the id its provider's connector assigned. */
+  findBySourceId(sourceId: string): Promise<AssetDocument | null> {
+    return this.assets.findOne({ sourceId }).exec();
   }
 
   findById(id: string): Promise<AssetDocument | null> {
