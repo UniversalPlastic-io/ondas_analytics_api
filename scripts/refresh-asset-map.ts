@@ -238,11 +238,31 @@ async function main(): Promise<void> {
   const knownReference = new Set(Object.keys(REFERENCE_ASSETS));
   const addedReference = reference.filter((r) => !knownReference.has(r.id));
 
+  // An asset kept its id and changed its name. Invisible in the added/removed
+  // counts, and the one case that needs a human: a rename is usually harmless,
+  // but it is also how an asset silently becomes something else. The table is
+  // keyed by id, so the classification did not move — which is exactly why
+  // nothing else would report it.
+  const renamed = rows
+    .filter((r) => known.has(r.id) && ASSET_MAP[r.id].name !== r.name)
+    .map((r) => ({ row: r, was: ASSET_MAP[r.id].name }));
+
+  // Same id, different meaning. Worse than a rename: the heuristic now reads a
+  // different dataset type or place out of the name than the table records.
+  const reclassified = rows
+    .filter(
+      (r) =>
+        known.has(r.id) &&
+        (ASSET_MAP[r.id].datasetType !== r.datasetType ||
+          ASSET_MAP[r.id].place !== r.place),
+    )
+    .map((r) => ({ row: r, before: ASSET_MAP[r.id] }));
+
   console.log(
     `resolved ${rows.length}  ·  reference ${reference.length}  ·  non-data ${nonData.length}  ·  unresolved ${unresolved.length}`,
   );
   console.log(
-    `new ids ${added.length + addedReference.length}  ·  ids no longer offered ${removed.length}\n`,
+    `new ids ${added.length + addedReference.length}  ·  ids no longer offered ${removed.length}  ·  renamed ${renamed.length}  ·  reclassified ${reclassified.length}\n`,
   );
 
   for (const r of added)
@@ -254,6 +274,18 @@ async function main(): Promise<void> {
       `  + ${r.datasetType.padEnd(28)} ${'reference'.padEnd(10)} ${r.name}`,
     );
   for (const id of removed) console.log(`  - ${ASSET_MAP[id].name} (${id})`);
+  for (const { row, was } of renamed) {
+    console.log(
+      `  ~ ${row.datasetType.padEnd(28)} ${row.place.padEnd(10)} ${was}\n` +
+        `${' '.repeat(43)}→ ${row.name}`,
+    );
+  }
+  for (const { row, before } of reclassified) {
+    console.log(
+      `  ! ${row.id} "${row.name}" cambia de ${before.datasetType} @ ${before.place} ` +
+        `a ${row.datasetType} @ ${row.place} — revísalo antes de escribir`,
+    );
+  }
   for (const u of unresolved) {
     console.log(
       `  ? ${u.provider}: "${u.name}" (${u.id}) — no reliable hint, add it by hand`,
@@ -318,7 +350,9 @@ async function main(): Promise<void> {
   console.log(`\nRewrote ${MAP_FILE}. Review the diff, then run the tests.`);
 
   // Losing an asset silently is the failure this whole table exists to prevent.
-  if (unresolved.length) process.exit(1);
+  // A reclassification counts too: the id stayed and the meaning moved, which is
+  // the shape a corrupted indicator takes.
+  if (unresolved.length || reclassified.length) process.exit(1);
 }
 
 main().catch((e) => {
