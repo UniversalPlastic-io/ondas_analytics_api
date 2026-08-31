@@ -124,6 +124,7 @@ API no puede verlo: **la autorización es del espacio de datos, no del API**.
 Integración con el conector, autenticación y flujo de consumo:
 [docs/dspacer-integration.md](docs/dspacer-integration.md).
 Modelo de datos y contrato de sincronización: [docs/dataspace-sync.md](docs/dataspace-sync.md).
+Publicación de análisis en el espacio de datos (diseño, sin implementar): [docs/report-publishing.md](docs/report-publishing.md).
 Esquemas y estructura de cada tipo de dataset: [docs/dataset-mapping.md](docs/dataset-mapping.md).
 
 ### Datasets observados y de referencia
