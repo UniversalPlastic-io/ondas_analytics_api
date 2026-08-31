@@ -64,7 +64,18 @@ export function assetQuery(filter: AssetFilter = {}): QueryFilter<Asset> {
   return q;
 }
 
-/** Reads the asset inventory. Replaces the hardcoded S3_CATALOGUE / MAP_CATALOGUE. */
+/**
+ * Ocean recorded for output that could not be placed.
+ *
+ * Generated artefacts are filed under the basin they describe. When the read
+ * model cannot place a point — an empty database, or a request far from any
+ * observed asset — the artefact goes here rather than into a real basin. A
+ * wrong-but-plausible folder is worse than an obviously unplaced one: it is
+ * indistinguishable from correct output.
+ */
+export const UNPLACED_OCEAN = 'sin-ubicar';
+
+/** Reads the asset inventory. */
 @Injectable()
 export class AssetsRepository {
   constructor(@InjectModel(Asset.name) private readonly assets: Model<Asset>) {}
@@ -107,6 +118,22 @@ export class AssetsRepository {
   findById(id: string): Promise<AssetDocument | null> {
     if (!Types.ObjectId.isValid(id)) return Promise.resolve(null);
     return this.assets.findById(id).exec();
+  }
+
+  /**
+   * The ocean basin a point belongs to, taken from the nearest observed asset.
+   *
+   * This used to be decided by a table of twelve coordinates with the basin
+   * parsed back out of a hardcoded storage URL, which meant generated output was
+   * filed according to a copy of the inventory that nothing kept in step with
+   * the real one. The read model already knows where every asset is.
+   *
+   * Returns null when nothing can place the point, so the caller decides what to
+   * do rather than being handed a default that looks like an answer.
+   */
+  async oceanFor(loc: { lat: number; lon: number }): Promise<string | null> {
+    const nearest = await this.nearest({ tier: 'observed' }, loc);
+    return nearest?.ocean ?? null;
   }
 
   /**

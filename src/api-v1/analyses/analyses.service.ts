@@ -13,6 +13,10 @@ import { uploadPlotsToS3, uploadAnalysisResultToS3 } from './analyses-s3';
 import { hashString, mulberry32 } from '../deterministic-rng';
 import { S3Scenario, ScenarioLoader } from './analyses-scenario';
 import { MetricsService } from '../../metrics/metrics.service';
+import {
+  AssetsRepository,
+  UNPLACED_OCEAN,
+} from '../dataspace/assets.repository';
 
 type CacheEntry = {
   expiresAtMs: number;
@@ -271,6 +275,7 @@ export class AnalysesService {
   constructor(
     private readonly scenario: ScenarioLoader,
     private readonly metrics: MetricsService,
+    private readonly assets: AssetsRepository,
   ) {}
 
   private readonly cache = new Map<string, CacheEntry>();
@@ -737,11 +742,12 @@ export class AnalysesService {
         response.plotPdfUrl = response.plotPdfPath;
       }
 
-      // Upload PDF + full JSON result to the data bucket under the correct ocean basin folder.
+      // Archive the PDF and the full JSON under the basin the point belongs to,
+      // as the read model reports it.
       try {
         response.analysisArchive = await uploadAnalysisResultToS3({
           requestId,
-          loc: req.location,
+          ocean: (await this.assets.oceanFor(req.location)) ?? UNPLACED_OCEAN,
           pdfPath: absolutePath,
           responseJson: response,
         });

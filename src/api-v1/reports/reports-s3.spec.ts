@@ -1,10 +1,10 @@
-import { resolveReportOcean, reportS3Key, reportPublicUrl } from './reports-s3';
+import { reportS3Key, reportPublicUrl } from './reports-s3';
 
-describe('resolveReportOcean', () => {
-  it('Badalona → mediterraneo', () => expect(resolveReportOcean({ lat: 41.43, lon: 2.24 })).toBe('mediterraneo'));
-  it('Cádiz → atlantico', () => expect(resolveReportOcean({ lat: 36.53, lon: -6.29 })).toBe('atlantico'));
-  it('Gijón → catambrico', () => expect(resolveReportOcean({ lat: 43.57, lon: -5.72 })).toBe('catambrico'));
-});
+/**
+ * Choosing the basin used to live here, over a hardcoded copy of the inventory.
+ * It is now AssetsRepository.oceanFor, and its tests are in
+ * ../dataspace/asset-ocean.spec.ts.
+ */
 
 describe('reportS3Key / reportPublicUrl', () => {
   it('builds the reports key', () => {

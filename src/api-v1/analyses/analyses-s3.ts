@@ -2,26 +2,9 @@ import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { S3_CATALOGUE } from './s3-catalogue';
-
 const DATA_BUCKET = 'universalplastic-sedia';
 const DATA_BUCKET_REGION = 'eu-central-1';
 const DATA_BUCKET_PUBLIC_BASE = `https://${DATA_BUCKET}.s3.${DATA_BUCKET_REGION}.amazonaws.com`;
-
-function resolveOcean(loc: { lat: number; lon: number }): string {
-  const rad = Math.PI / 180;
-  let best = S3_CATALOGUE[0];
-  let bestDist = Infinity;
-  for (const entry of S3_CATALOGUE) {
-    const x = (entry.lon - loc.lon) * rad * Math.cos(((entry.lat + loc.lat) / 2) * rad);
-    const y = (entry.lat - loc.lat) * rad;
-    const dist = Math.sqrt(x * x + y * y);
-    if (dist < bestDist) { bestDist = dist; best = entry; }
-  }
-  // URL format: ...amazonaws.com/public/{ocean}/...
-  const match = best.url.match(/\/public\/([^/]+)\//);
-  return match?.[1] ?? 'mediterraneo';
-}
 
 export type AnalysisUploadResult = {
   pdfUrl: string;
@@ -31,11 +14,12 @@ export type AnalysisUploadResult = {
 
 export async function uploadAnalysisResultToS3(opts: {
   requestId: string;
-  loc: { lat: number; lon: number };
+  /** Basin the archive is filed under, resolved from the read model by the caller. */
+  ocean: string;
   pdfPath: string;
   responseJson: unknown;
 }): Promise<AnalysisUploadResult> {
-  const ocean = resolveOcean(opts.loc);
+  const { ocean } = opts;
   const date = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
   const prefix = `public/${ocean}/universal_plastic/analise-${date}`;
   const client = new S3Client({ region: DATA_BUCKET_REGION });

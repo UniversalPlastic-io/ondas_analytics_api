@@ -15,7 +15,17 @@ class CleanupEventDto {
 }
 
 export class MapPointDto {
-  @ApiProperty({ example: 'atlantico/innoceana/recogidas_playa_tenerife' }) id!: string;
+  @ApiProperty({
+    example: 'ddadf21b-0c4d-40c8-97d7-e5cf902a5024',
+    description: 'Id of the asset in the data space',
+  })
+  id!: string;
+
+  @ApiProperty({
+    example: 'ddadf21b-0c4d-40c8-97d7-e5cf902a5024',
+    description: 'Same value as `id`, named explicitly',
+  })
+  sourceId!: string;
   @ApiProperty({ example: 'Tenerife — Coastal cleanup' }) name!: string;
   @ApiProperty({ example: 'recogidas_playa' }) datasetType!: string;
   @ApiProperty({ example: 'Coastal cleanup' }) label!: string;
@@ -31,8 +41,14 @@ export class MapPointDto {
   @ApiProperty({ example: 'rows' }) format!: string;
   @ApiPropertyOptional({ type: 'object', additionalProperties: { type: 'string' }, example: { 'Biomass depth -3_-5 m': 'Tonnes' } })
   units?: Record<string, string>;
-  @ApiProperty({ example: 'https://universalplastic-sedia.s3.eu-central-1.amazonaws.com/public/atlantico/innoceana/recogidas_playa_tenerife.json' })
-  url!: string;
+  @ApiProperty({
+    nullable: true,
+    example: null,
+    description:
+      'Always null. An asset in the data space is reached by negotiating a contract, ' +
+      'not by dereferencing a URL. Retained so existing clients do not break on a missing field.',
+  })
+  url!: string | null;
   @ApiProperty({ nullable: true }) metadataSchemaRef!: string | null;
   @ApiProperty({ type: [String], example: ['coords corrected 31.483,-11.926 → Tenerife (28.188,-16.660)'] })
   warnings!: string[];

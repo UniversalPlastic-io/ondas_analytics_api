@@ -8,7 +8,7 @@ import { resolvePeriod } from './reports-period';
 import { validateReportRequest } from './reports-validate';
 import { resolveCampaignScope } from './reports-campaign-map';
 import { aggregateReportData } from './reports-data';
-import { AssetsRepository } from '../dataspace/assets.repository';
+import { AssetsRepository, UNPLACED_OCEAN } from '../dataspace/assets.repository';
 import { ObservationsRepository } from '../dataspace/observations.repository';
 import { buildReportPdf } from './reports-pdf';
 import * as reportsS3 from './reports-s3';
@@ -79,7 +79,11 @@ export class ReportsService {
 
     let downloadUrl: string;
     try {
-      const ocean = reportsS3.resolveReportOcean({ lat: campaign.lat, lon: campaign.lon });
+      // The basin comes from the read model, which is the only thing that knows
+      // where the observed assets actually are.
+      const ocean =
+        (await this.assets.oceanFor({ lat: campaign.lat, lon: campaign.lon })) ??
+        UNPLACED_OCEAN;
       ({ downloadUrl } = await reportsS3.uploadReportToS3({ reportId, ocean, pdfBytes }));
     } catch {
       throw new InternalServerErrorException({ error: 'report_generation_failed', message: 'Failed to upload report to storage.' });

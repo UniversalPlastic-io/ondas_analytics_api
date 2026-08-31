@@ -24,13 +24,19 @@ const ROW: CleanupObservationRow = {
 describe('ReportsService.generate', () => {
   let svc: ReportsService;
   let cleanupRows: jest.Mock;
+  let oceanFor: jest.Mock;
+  let upload: jest.SpyInstance;
 
   beforeEach(() => {
     cleanupRows = jest.fn().mockResolvedValue([ROW]);
-    const assets = { findByFragments: jest.fn().mockResolvedValue([{ _id: 'a1' }]) } as unknown as AssetsRepository;
+    oceanFor = jest.fn().mockResolvedValue('mediterraneo');
+    const assets = {
+      findByFragments: jest.fn().mockResolvedValue([{ _id: 'a1' }]),
+      oceanFor,
+    } as unknown as AssetsRepository;
     const observations = { cleanupRows } as unknown as ObservationsRepository;
     svc = new ReportsService(assets, observations);
-    jest.spyOn(reportsS3, 'uploadReportToS3').mockResolvedValue({
+    upload = jest.spyOn(reportsS3, 'uploadReportToS3').mockResolvedValue({
       downloadUrl:
         'https://universalplastic-sedia.s3.eu-central-1.amazonaws.com/public/mediterraneo/universal_plastic/reports/rep_x.pdf',
       s3Key: 'public/mediterraneo/universal_plastic/reports/rep_x.pdf',
@@ -38,6 +44,23 @@ describe('ReportsService.generate', () => {
   });
 
   afterEach(() => jest.restoreAllMocks());
+
+  it('files the report under the basin the read model reports', async () => {
+    // The basin used to come from a hardcoded table of coordinates parsed out of
+    // a storage URL. It comes from the observed assets now.
+    oceanFor.mockResolvedValue('catambrico');
+    await svc.generate({ type: 'monthly', period: { preset: 'month' } }, NOW);
+    expect(oceanFor).toHaveBeenCalledWith({ lat: expect.any(Number), lon: expect.any(Number) });
+    expect(upload).toHaveBeenCalledWith(expect.objectContaining({ ocean: 'catambrico' }));
+  });
+
+  it('files output it cannot place under a basin that is obviously not one', async () => {
+    // Better an unplaced folder than a plausible wrong one: a report filed under
+    // a real basin it does not belong to is indistinguishable from correct output.
+    oceanFor.mockResolvedValue(null);
+    await svc.generate({ type: 'monthly', period: { preset: 'month' } }, NOW);
+    expect(upload).toHaveBeenCalledWith(expect.objectContaining({ ocean: 'sin-ubicar' }));
+  });
 
   it('returns a ready response with an https downloadUrl', async () => {
     const res = await svc.generate({ type: 'monthly', period: { preset: 'month' } }, NOW);
