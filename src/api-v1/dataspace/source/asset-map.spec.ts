@@ -5,6 +5,9 @@ import {
   NON_DATA_ASSETS,
   REFERENCE_ASSETS,
   classifyEntry,
+  dcatAssetIdsByType,
+  dcatIndexOf,
+  dcatTypeFromName,
   isNonDataName,
   suggestMapping,
 } from './asset-map';
@@ -431,5 +434,125 @@ describe('suggestMapping', () => {
       datasetType: null,
       place: null,
     });
+  });
+});
+
+describe('dcatTypeFromName', () => {
+  /**
+   * A published schema document is only useful if we know which type it
+   * describes. Getting it wrong is worse than not knowing: a dataset would be
+   * validated against another type's schema and every column would read as a
+   * deviation, burying the real ones.
+   */
+
+  it('reads the type id the providers name their schemas by', () => {
+    // The convention seen on the connector: the marker, then the type id.
+    expect(dcatTypeFromName('esquema_datos_recogidas_playa')).toBe(
+      'recogidas_playa',
+    );
+    expect(dcatTypeFromName('esquema_datos_boya_biomasa_slx+')).toBe(
+      'boya_biomasa_slx+',
+    );
+    expect(dcatTypeFromName('esquema_datos_boya_microplasticos_seabot')).toBe(
+      'boya_microplasticos_seabot',
+    );
+    expect(dcatTypeFromName('esquema_datos_muestras_de_agua_py_gcms')).toBe(
+      'muestras_de_agua_py_gcms',
+    );
+    expect(dcatTypeFromName('esquema_datos_muestras_de_peces_py_gcms')).toBe(
+      'muestras_de_peces_py_gcms',
+    );
+  });
+
+  it('covers the two types that have no bundled schema', () => {
+    // The whole reason this matters: their columns have never been checked
+    // against anything, because metadata/DCAT has no copy of them.
+    expect(dcatTypeFromName('esquema_datos_atmosfera_previa_evento')).toBe(
+      'atmosfera_previa_evento',
+    );
+    expect(dcatTypeFromName('esquema_datos_oceanografia_previa_evento')).toBe(
+      'oceanografia_previa_evento',
+    );
+  });
+
+  it('accepts the spec-side ids as well as the live ones', () => {
+    expect(dcatTypeFromName('metadatos_meteorologia_cdse_vl')).toBe(
+      'environmental_boya',
+    );
+    expect(dcatTypeFromName('metadatos_meteorología_cdse_vl')).toBe(
+      'environmental_boya',
+    );
+    expect(
+      dcatTypeFromName('esquema_datos_recogidas_plastico_app_up_v700'),
+    ).toBe('recogidas_playa');
+  });
+
+  it('reads a name that states the dataset instead of the type', () => {
+    // The marker has to come off first: the type hints are anchored at the
+    // start of the name, so "Metadatos Boya biomasa…" would match nothing.
+    expect(dcatTypeFromName('Metadatos Boya biomasa Gijón')).toBe(
+      'boya_biomasa_slx+',
+    );
+    expect(dcatTypeFromName('DCAT Recogidas playas Badalona_v1.1')).toBe(
+      'recogidas_playa',
+    );
+    expect(dcatTypeFromName('Esquema de datos - Muestras agua Tenerife')).toBe(
+      'muestras_de_agua_py_gcms',
+    );
+  });
+
+  it('never claims a type for a dataset', () => {
+    // Gated on the name being a schema document at all, so a dataset cannot be
+    // mistaken for its own schema.
+    expect(dcatTypeFromName('Boya biomasa Gijón_v1.1')).toBeNull();
+    expect(dcatTypeFromName('Recogidas playas Badalona_v1.1')).toBeNull();
+  });
+
+  it('says nothing about a metadata document of no recognisable type', () => {
+    expect(dcatTypeFromName('metadatos generales')).toBeNull();
+    expect(dcatTypeFromName('esquema_datos_algo_que_no_existe')).toBeNull();
+  });
+});
+
+describe('dcatIndexOf', () => {
+  it('indexes the entries that declare a type, and ignores the rest', () => {
+    expect(
+      dcatIndexOf({
+        a: {
+          name: 'esquema_datos_recogidas_playa',
+          dcatFor: 'recogidas_playa',
+        },
+        b: { name: 'metadatos generales', dcatFor: null },
+        c: {
+          name: 'esquema_datos_atmosfera_previa_evento',
+          dcatFor: 'atmosfera_previa_evento',
+        },
+      }),
+    ).toEqual({
+      recogidas_playa: 'a',
+      atmosfera_previa_evento: 'c',
+    });
+  });
+
+  it('keeps the first when two providers publish a schema for one type', () => {
+    // The document describes the type, not the provider, so either answers the
+    // same question — but the answer has to be the same on every run.
+    const table = {
+      first: { name: 'esquema A', dcatFor: 'recogidas_playa' as const },
+      second: { name: 'esquema B', dcatFor: 'recogidas_playa' as const },
+    };
+    expect(dcatIndexOf(table)).toEqual({ recogidas_playa: 'first' });
+    expect(dcatIndexOf(table)).toEqual({ recogidas_playa: 'first' });
+  });
+});
+
+describe('dcatAssetIdsByType', () => {
+  it('never points at an entry that does not declare that type', () => {
+    // Vacuous while no schema is mapped yet, and deliberately so: it is the
+    // guard for when the table is filled from the live catalog.
+    for (const [type, id] of Object.entries(dcatAssetIdsByType())) {
+      expect(NON_DATA_ASSETS[id!]).toBeDefined();
+      expect(NON_DATA_ASSETS[id!].dcatFor).toBe(type);
+    }
   });
 });

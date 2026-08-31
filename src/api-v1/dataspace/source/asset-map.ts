@@ -1,5 +1,7 @@
 import {
   CATEGORY_BY_TYPE,
+  DATASET_TYPES,
+  DATASET_TYPE_ALIASES,
   DatasetType,
   Ocean,
   REFERENCE_PROVIDER_FOLDER,
@@ -40,6 +42,35 @@ export interface MappedAsset {
   providerFolder: string;
   /** The name the asset had when the entry was written, to make drift visible. */
   name: string;
+}
+
+export interface NonDataAsset {
+  /** The name it had when the entry was written, to make drift visible. */
+  name: string;
+  /** The dataset type this document is the DCAT schema of, when it is one. */
+  dcatFor: DatasetType | null;
+}
+
+/**
+ * Asset id of the DCAT schema for each dataset type, derived from the table.
+ *
+ * Derived rather than a second table so the two cannot disagree. When more than
+ * one provider publishes a DCAT for the same type the first in table order wins:
+ * the document describes the type, not the provider, so any of them answers the
+ * same question — but the choice has to be the same on every run.
+ */
+export function dcatIndexOf(
+  table: Record<string, NonDataAsset>,
+): Partial<Record<DatasetType, string>> {
+  const out: Partial<Record<DatasetType, string>> = {};
+  for (const [id, entry] of Object.entries(table)) {
+    if (entry.dcatFor && !out[entry.dcatFor]) out[entry.dcatFor] = id;
+  }
+  return out;
+}
+
+export function dcatAssetIdsByType(): Partial<Record<DatasetType, string>> {
+  return dcatIndexOf(NON_DATA_ASSETS);
 }
 
 /** Datasets, by asset id. Regenerate with `npm run assets:refresh -- --write`. */
@@ -269,8 +300,19 @@ export const ASSET_MAP: Record<string, MappedAsset> = {
  * Schema and metadata assets. They are published in the same catalogs as the
  * datasets and are not data: ingesting them would create assets with no
  * observations and no location.
+ *
+ * They are not merely skipped, though. Each provider publishes one DCAT document
+ * per dataset, and that document is the schema the dataset is validated against
+ * — until now read from the bundled copies in `metadata/DCAT/`, which can drift
+ * from what the provider actually published and which do not exist at all for
+ * `atmosfera_previa_evento` and `oceanografia_previa_evento`. So the table
+ * records **which type each one describes**, and the validator prefers the
+ * published document over the bundled one.
+ *
+ * `dcatFor` is null for a metadata document that is not a per-type DCAT: still
+ * skipped, but nothing claims to know what it validates.
  */
-export const NON_DATA_ASSETS: Record<string, string> = {};
+export const NON_DATA_ASSETS: Record<string, NonDataAsset> = {};
 
 /**
  * The calibration series, by asset id. Regenerate with
@@ -389,6 +431,56 @@ export function suggestMapping(name: string): Suggestion {
   const place =
     Object.keys(STATIONS).find((slug) => folded.includes(slug)) ?? null;
   return { datasetType, place };
+}
+
+/** Separator runs collapsed to one underscore, so substrings match either style. */
+function slug(name: string): string {
+  return fold(name).replace(/[\s_-]+/g, '_');
+}
+
+/**
+ * Every spelling of a dataset type id, longest first.
+ *
+ * Longest first because the ids overlap: a document naming
+ * `muestras_de_agua_py_gcms` also contains nothing of `muestras_de_peces_py_gcms`,
+ * but a shorter id that is a prefix of a longer one would otherwise win.
+ */
+const TYPE_ID_SLUGS: Array<[string, DatasetType]> = [
+  ...DATASET_TYPES.map((t) => [slug(t), t] as [string, DatasetType]),
+  ...Object.entries(DATASET_TYPE_ALIASES).map(
+    ([alias, t]) => [slug(alias), t] as [string, DatasetType],
+  ),
+].sort((a, b) => b[0].length - a[0].length);
+
+/** The marker words themselves, so the type hints can read what is left. */
+const NON_DATA_WORDS =
+  /(esquemas?([\s_-]de)?([\s_-]datos?)?|metadatos?|dcat|json-?ld)/gi;
+
+/**
+ * Which dataset type a published schema document describes, from its name.
+ *
+ * Only ever consulted for a name that is already a schema or metadata document,
+ * so a dataset can never be mistaken for its own schema.
+ *
+ * Two rounds of names have been seen. The providers' own convention states the
+ * type id (`esquema_datos_recogidas_playa`), which is matched directly. A name
+ * that instead states the dataset (`metadatos Boya biomasa Gijón`) needs the
+ * marker removed first, because the type hints are anchored at the start of the
+ * name.
+ *
+ * Used to *suggest* an entry for `NON_DATA_ASSETS`, never to classify on its
+ * own: as everywhere else in this file, a name is not a contract.
+ */
+export function dcatTypeFromName(label: string): DatasetType | null {
+  if (!isNonDataName(label)) return null;
+  const asSlug = slug(label);
+  const byId = TYPE_ID_SLUGS.find(([id]) => asSlug.includes(id));
+  if (byId) return byId[1];
+  const stripped = fold(label)
+    .replace(NON_DATA_WORDS, ' ')
+    .replace(/[\s_-]+/g, ' ')
+    .trim();
+  return suggestMapping(stripped).datasetType;
 }
 
 export interface ClassificationResult {

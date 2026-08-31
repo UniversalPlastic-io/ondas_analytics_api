@@ -22,7 +22,7 @@ import {
 } from './source/dataspace-source';
 import { classifyEntry } from './source/asset-map';
 import { validateContainer } from './validate-container';
-import { validateAgainstDcat } from './validate-dcat';
+import { SpaceDcatLoader, validateAgainstDcat } from './validate-dcat';
 import { CanonicalObservation, normalizeDataset } from './normalize';
 import { buildSummary, dateRangeOf } from './asset-summary';
 
@@ -58,6 +58,12 @@ export class NonDataAssetError extends Error {
 export interface IngestOptions {
   force?: boolean;
   syncRunId?: Types.ObjectId | null;
+  /**
+   * Reads the DCAT the provider published for a type, preferred over the copy
+   * bundled in `metadata/DCAT/`. Omitted, only the bundled copies are used —
+   * which is what a caller with no listing to build one from should do.
+   */
+  dcat?: SpaceDcatLoader;
 }
 
 export interface IngestOutcome extends SyncResultRow {
@@ -88,6 +94,8 @@ interface AssetUpsert {
   location: GeoPoint;
   schemaVersion: string | null;
   dcatSchemaRef: string | null;
+  dcatSchemaId: string | null;
+  dcatSchemaSource: 'dataspace' | 'local' | 'remote' | null;
   format: string;
   units: Record<string, string>;
   recordCount: number;
@@ -244,7 +252,12 @@ export class IngestService {
       );
     }
 
-    const dcat = await validateAgainstDcat({ datasetType, dataset, metadata });
+    const dcat = await validateAgainstDcat({
+      datasetType,
+      dataset,
+      metadata,
+      space: options.dcat,
+    });
     warnings.push(...dcat.warnings);
 
     const derivedRange = dateRangeOf(normalized.observations);
@@ -314,6 +327,8 @@ export class IngestService {
         typeof metadata['dcatSchemaRef'] === 'string'
           ? (metadata['dcatSchemaRef'] as string)
           : null,
+      dcatSchemaId: dcat.schemaId,
+      dcatSchemaSource: dcat.schemaSource,
       format: normalized.shape,
       units: unitsOf(metadata),
       recordCount: sourceRecordCount(dataset),

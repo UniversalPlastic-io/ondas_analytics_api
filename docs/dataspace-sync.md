@@ -124,5 +124,10 @@ the names by which its assets are attributed to it.
 - **Warnings are data.** Each asset stores the corrections and DCAT deviations
   found at ingest; they surface on map markers. A file with warnings is still
   served — read them rather than assuming the data is clean.
+- **The DCAT a dataset is validated against comes from the space first**, from
+  the bundled copy in `metadata/DCAT/` when it cannot be read. Which one answered
+  is on the asset, in `dcatSchemaSource` and `dcatSchemaId`; why the published one
+  was not used is in the run's warnings, once per type rather than once per
+  asset. See [dataset-mapping.md](dataset-mapping.md#metadata-schemas-dcatjson-ld).
 - **Re-ingest after changing a normalizer**, otherwise stored observations keep
   the old shape: `npm run backfill -- --force`.

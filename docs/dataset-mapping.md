@@ -290,11 +290,37 @@ High-frequency: hourly readings, 1537–3865 records per file. This is the riche
 
 Each dataset type has a DCAT/JSON-LD schema describing its expected fields and
 units. Six of them are versioned in [`metadata/DCAT/`](../metadata/DCAT/) and
-linked below; the providers also publish them as assets in the space, where the
-sync recognises them by name (`esquema_datos*`, `metadatos*`) and skips them, so
-they never become assets with no observations. The *instance* metadata —
-publisher, license, spatial and temporal coverage — travels inside each dataset's
-own `metadata` block, not in the schema.
+linked below; the providers also publish one per dataset as an asset in the space.
+The *instance* metadata — publisher, license, spatial and temporal coverage —
+travels inside each dataset's own `metadata` block, not in the schema.
+
+**Which copy validates a dataset.** The published one, when it can be read; the
+bundled one otherwise. In order:
+
+| Order | Source | When |
+|---|---|---|
+| 1 | `dataspace` | The document the provider publishes, mapped in `NON_DATA_ASSETS` by `dcatFor` |
+| 2 | `local` | The copy in `metadata/DCAT/`, when the published one cannot be read |
+| 3 | `remote` | The URL the dataset itself declares in `metadata.dcatSchemaRef` |
+
+The published document goes first because it is what the provider is actually
+offering: the bundled copy is a snapshot of it and can drift. The bundled copy
+stays as the fallback rather than being deleted, because reading from the space is
+a contract negotiation that can fail, and losing the column check because a
+connector was slow is worse than validating against a slightly older schema.
+
+Which one answered is recorded on the asset, in `dcatSchemaSource` and
+`dcatSchemaId` — otherwise nothing in the read model would say whether a dataset
+was checked against its provider's schema or against a copy in this repository.
+
+The schema assets themselves are still skipped at ingest: one would become an
+asset with no observations and no location. They are recognised by name
+(`esquema_datos*`, `metadatos*`, `dcat*`) and the type each describes is resolved
+by `dcatTypeFromName`, which reads either convention seen so far — the type id
+(`esquema_datos_recogidas_playa`) or the dataset (`Metadatos Boya biomasa
+Gijón`). As with every other name in this system, the result is a *suggestion*:
+`npm run assets:refresh -- --write` writes it into the table and the diff is
+reviewed.
 
 | Schema | Dataset type | Fields described | Places offered |
 |------|-------------|-----------------|----------------|
@@ -520,8 +546,13 @@ response says which categories were answered with observed data in
 - Two pre-incident assets are still offered alongside their `_v1.1` replacement:
   `Oceanografía Barcelona` (`31f505fb`) and `Recogidas playas Barcelona `
   (`0ac35a36`, Innoceana). Both should be unpublished — see below.
-- The **schema and metadata assets** are being republished, one DCAT document per
-  dataset. The sync recognises them by name and skips them: ingesting one would
-  create an asset with no observations and no location.
+- The **schema and metadata assets** have been republished, one DCAT document per
+  dataset. They are skipped as assets and read as schemas: see
+  [Metadata Schemas](#metadata-schemas-dcatjson-ld) above. `npm run assets:refresh`
+  prints which types have a published schema and which fall back to the bundled
+  copy.
+- `atmosfera_previa_evento` and `oceanografia_previa_evento` have **no bundled
+  schema**, so until their published documents are mapped and readable their
+  columns are checked against nothing at all. That is the gap this closes.
 - `atmosfera_previa_evento` and `oceanografia_previa_evento` contain very few events per location (1–8 cleanup events); they are event-relative snapshots, not continuous time series.
 - The `environmental_boya` files are the only true continuous time-series covering months of hourly data and combining both atmospheric and oceanographic variables.

@@ -11,6 +11,12 @@ import { biomassDepthField, recogidasKey } from './normalize/field-maps';
  * Never blocking — every deviation becomes a warning stored on the asset.
  */
 
+/**
+ * The bundled copies. Two types have none — `atmosfera_previa_evento` and
+ * `oceanografia_previa_evento` — which is why their columns have never been
+ * checked against anything. The data space is where that gap closes: the
+ * providers publish a DCAT document per dataset, and those two are among them.
+ */
 const LOCAL_DCAT: Partial<Record<DatasetType, string>> = {
   recogidas_playa: 'recogidas_plastico_app_up_v700.jsonld',
   'boya_biomasa_slx+': 'boya_biomasa_slx+.jsonld',
@@ -20,6 +26,11 @@ const LOCAL_DCAT: Partial<Record<DatasetType, string>> = {
   muestras_de_peces_py_gcms: 'muestras_de_peces_py_gcms.jsonld',
 };
 
+/** Types that have a bundled copy. The other two depend entirely on the space. */
+export function bundledDcatTypes(): DatasetType[] {
+  return Object.keys(LOCAL_DCAT) as DatasetType[];
+}
+
 export interface DcatVariable {
   name: string;
   description: string;
@@ -28,10 +39,29 @@ export interface DcatVariable {
 
 export interface DcatSchema {
   id: string;
-  source: 'local' | 'remote';
+  /**
+   * Where the schema was read from.
+   *
+   * `dataspace` is the document the provider actually published, and is
+   * preferred; `local` is the copy bundled in `metadata/DCAT/`, which can drift
+   * from it; `remote` is the URL a dataset's own `dcatSchemaRef` points at.
+   */
+  source: 'dataspace' | 'local' | 'remote';
   variables: DcatVariable[];
   names: Set<string>;
 }
+
+/**
+ * Reads the DCAT document a provider published for a type, or null when there is
+ * none, it cannot be fetched, or the connector refuses it.
+ *
+ * A function rather than a dependency so this module keeps doing arithmetic on
+ * JSON and nothing else: the connector, the asset table and the memoization of
+ * fetched documents all stay in `DcatCatalog`.
+ */
+export type SpaceDcatLoader = (
+  datasetType: DatasetType,
+) => Promise<{ id: string; raw: unknown } | null>;
 
 const schemaCache = new Map<string, DcatSchema | null>();
 
@@ -61,7 +91,7 @@ function textOf(v: unknown): string {
 function buildSchema(
   raw: unknown,
   id: string,
-  source: 'local' | 'remote',
+  source: DcatSchema['source'],
 ): DcatSchema | null {
   const measured = (raw as { 'schema:variableMeasured'?: unknown })?.[
     'schema:variableMeasured'
@@ -85,17 +115,53 @@ function buildSchema(
   };
 }
 
-/** Loads the DCAT for a type: bundled copy first, then the file's `dcatSchemaRef`. */
+/**
+ * Loads the DCAT for a type.
+ *
+ * Order: the document published in the data space, then the bundled copy, then
+ * the URL the dataset's own `dcatSchemaRef` names.
+ *
+ * The published document goes first because it is the one the provider is
+ * actually offering — the bundled copy is a snapshot of it and can drift, and
+ * for two of the eight types there is no bundled copy at all. The bundled copy
+ * stays as the fallback rather than being deleted: fetching from the space is a
+ * contract negotiation that can fail, and losing the column check because a
+ * connector was slow would be a worse outcome than validating against a
+ * slightly older schema.
+ */
 export async function loadDcat(
   datasetType: DatasetType,
   dcatSchemaRef?: string | null,
+  space?: SpaceDcatLoader,
 ): Promise<DcatSchema | null> {
+  // Only the local and remote answers are memoized here. A bundled file does not
+  // change while the process runs, but what the space offers does: if the first
+  // sync of a long-lived process ran while the connector was refusing, a cached
+  // answer would make every later sync validate against the bundled copy for
+  // ever. The space loader is expected to memoize for its own lifetime — one
+  // sync run — which is the scope where re-fetching is waste rather than
+  // staleness.
   const cacheKey = `${datasetType}|${dcatSchemaRef ?? ''}`;
-  if (schemaCache.has(cacheKey)) return schemaCache.get(cacheKey) ?? null;
+  const memoizable = !space;
+  if (memoizable && schemaCache.has(cacheKey)) {
+    return schemaCache.get(cacheKey) ?? null;
+  }
 
   let schema: DcatSchema | null = null;
+  if (space) {
+    try {
+      const published = await space(datasetType);
+      if (published) {
+        schema = buildSchema(published.raw, published.id, 'dataspace');
+      }
+    } catch {
+      // Never fatal: the bundled copy answers below. DcatCatalog logs why.
+      schema = null;
+    }
+  }
+
   const localName = LOCAL_DCAT[datasetType];
-  if (localName) {
+  if (!schema && localName) {
     const path = join(process.cwd(), 'metadata', 'DCAT', localName);
     if (existsSync(path)) {
       try {
@@ -120,7 +186,7 @@ export async function loadDcat(
     }
   }
 
-  schemaCache.set(cacheKey, schema);
+  if (memoizable) schemaCache.set(cacheKey, schema);
   return schema;
 }
 
@@ -202,6 +268,8 @@ function comparableColumn(datasetType: DatasetType, name: string): string {
 export interface DcatValidation {
   checked: boolean;
   schemaId: string | null;
+  /** Which of the three sources answered. Null when no schema was found. */
+  schemaSource: DcatSchema['source'] | null;
   unknownColumns: string[];
   missingColumns: string[];
   warnings: string[];
@@ -211,6 +279,8 @@ export async function validateAgainstDcat(opts: {
   datasetType: DatasetType;
   dataset: Record<string, unknown>;
   metadata: Record<string, unknown>;
+  /** Reads the schema the provider published. Omitted, only local copies are used. */
+  space?: SpaceDcatLoader;
 }): Promise<DcatValidation> {
   const { datasetType, dataset, metadata } = opts;
   const warnings: string[] = [];
@@ -218,12 +288,13 @@ export async function validateAgainstDcat(opts: {
     typeof metadata['dcatSchemaRef'] === 'string'
       ? metadata['dcatSchemaRef']
       : null;
-  const schema = await loadDcat(datasetType, dcatSchemaRef);
+  const schema = await loadDcat(datasetType, dcatSchemaRef, opts.space);
 
   if (!schema) {
     return {
       checked: false,
       schemaId: null,
+      schemaSource: null,
       unknownColumns: [],
       missingColumns: [],
       warnings: [
@@ -284,6 +355,7 @@ export async function validateAgainstDcat(opts: {
   return {
     checked: true,
     schemaId: schema.id,
+    schemaSource: schema.source,
     unknownColumns,
     missingColumns,
     warnings,

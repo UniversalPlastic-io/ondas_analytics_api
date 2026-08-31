@@ -30,6 +30,7 @@ import {
   SourceEntry,
 } from './source/dataspace-source';
 import { MetricsService } from '../../metrics/metrics.service';
+import { SpaceDcatCatalog } from './dcat-catalog';
 
 export interface SyncActor {
   userId: string | null;
@@ -215,11 +216,17 @@ export class SyncService {
     }
 
     await this.assertEntryAllowed(opts.actor, entry);
+    const dcat = new SpaceDcatCatalog(this.source, listing.entries);
     const row = await this.ingestOne(entry, {
       force: opts.force,
       syncRunId: runId,
+      dcat,
     });
-    return this.finishRun(runId, [row], listing.warnings);
+    return this.finishRun(
+      runId,
+      [row],
+      [...listing.warnings, ...dcat.warnings()],
+    );
   }
 
   private async assertEntryAllowed(
@@ -238,7 +245,12 @@ export class SyncService {
 
   private async ingestOne(
     entry: SourceEntry,
-    opts: { force?: boolean; syncRunId: Types.ObjectId },
+    opts: {
+      force?: boolean;
+      syncRunId: Types.ObjectId;
+      /** Schemas published in the space, shared by every asset in this run. */
+      dcat: SpaceDcatCatalog;
+    },
   ): Promise<SyncResultRow> {
     const sourceId = entry.ref.id;
     const label = entry.ref.label;
@@ -246,6 +258,7 @@ export class SyncService {
       return await this.ingest.ingestEntry(entry, this.source, {
         force: opts.force,
         syncRunId: opts.syncRunId,
+        dcat: opts.dcat.loader(),
       });
     } catch (e) {
       if (e instanceof NonDataAssetError) {
@@ -338,6 +351,11 @@ export class SyncService {
       offered: listing.entries.length,
     });
 
+    // Built from the listing this run already has, so it costs no extra catalog
+    // call, and thrown away with the run: that is what makes a schema published
+    // since the last sync visible on the next one, with nothing to invalidate.
+    const dcat = new SpaceDcatCatalog(this.source, listing.entries);
+
     const results = await pooled(
       candidates,
       SCAN_CONCURRENCY,
@@ -354,7 +372,11 @@ export class SyncService {
             assetId: existing ? String(existing._id) : undefined,
           };
         }
-        return this.ingestOne(entry, { force: opts.force, syncRunId: runId });
+        return this.ingestOne(entry, {
+          force: opts.force,
+          syncRunId: runId,
+          dcat,
+        });
       },
     );
 
@@ -385,6 +407,9 @@ export class SyncService {
     }
 
     if (opts.dryRun) warnings.push('dryRun: nothing was written');
+    // Once per type rather than once per asset: thirty assets falling back to
+    // the bundled copy for the same reason is one problem, not thirty.
+    warnings.push(...dcat.warnings());
     return this.finishRun(runId, results, warnings);
   }
 

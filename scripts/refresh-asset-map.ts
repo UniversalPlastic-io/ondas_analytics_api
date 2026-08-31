@@ -6,11 +6,17 @@ import { DspacerSource } from '../src/api-v1/dataspace/source/dspacer.source';
 import {
   ASSET_MAP,
   REFERENCE_ASSETS,
+  dcatTypeFromName,
   isNonDataName,
   providerFolderFor,
   suggestMapping,
 } from '../src/api-v1/dataspace/source/asset-map';
-import { STATIONS } from '../src/api-v1/dataspace/dataspace.constants';
+import {
+  DATASET_TYPES,
+  DatasetType,
+  STATIONS,
+} from '../src/api-v1/dataspace/dataspace.constants';
+import { bundledDcatTypes } from '../src/api-v1/dataspace/validate-dcat';
 import {
   DSPACER_BASE_URL,
   DSPACER_LOGIN_URL,
@@ -54,9 +60,15 @@ interface Row {
   place: string;
 }
 
+interface NonDataRow {
+  id: string;
+  name: string;
+  dcatFor: DatasetType | null;
+}
+
 function renderMap(
   rows: Row[],
-  nonData: Array<{ id: string; name: string }>,
+  nonData: NonDataRow[],
   reference: Array<{ id: string; name: string; datasetType: string }>,
 ): string {
   const byProvider = new Map<string, Row[]>();
@@ -96,10 +108,26 @@ function renderMap(
     ' * datasets and are not data: ingesting them would create assets with no',
   );
   lines.push(' * observations and no location.');
+  lines.push(' *');
+  lines.push(
+    ' * They are not merely skipped, though. Each provider publishes one DCAT document',
+  );
+  lines.push(
+    ' * per dataset, and that document is the schema the dataset is validated against.',
+  );
+  lines.push(
+    ' * `dcatFor` says which type each one describes; null means it is a metadata',
+  );
+  lines.push(
+    ' * document that is not a per-type DCAT, still skipped but claiming nothing.',
+  );
   lines.push(' */');
-  lines.push('export const NON_DATA_ASSETS: Record<string, string> = {');
+  lines.push('export const NON_DATA_ASSETS: Record<string, NonDataAsset> = {');
   for (const n of [...nonData].sort((a, b) => a.name.localeCompare(b.name))) {
-    lines.push(`  '${n.id}': ${JSON.stringify(n.name)},`);
+    const dcatFor = n.dcatFor ? `'${n.dcatFor}'` : 'null';
+    lines.push(
+      `  '${n.id}': { name: ${JSON.stringify(n.name)}, dcatFor: ${dcatFor} },`,
+    );
   }
   lines.push('};');
   lines.push('');
@@ -170,7 +198,7 @@ async function main(): Promise<void> {
   console.log(`\n${entries.length} assets offered to us\n`);
 
   const rows: Row[] = [];
-  const nonData: Array<{ id: string; name: string }> = [];
+  const nonData: NonDataRow[] = [];
   const reference: Array<{ id: string; name: string; datasetType: string }> =
     [];
   const unresolved: Array<{ id: string; name: string; provider: string }> = [];
@@ -178,7 +206,7 @@ async function main(): Promise<void> {
   for (const entry of entries) {
     const name = entry.ref.label;
     if (isNonDataName(name)) {
-      nonData.push({ id: entry.ref.id, name });
+      nonData.push({ id: entry.ref.id, name, dcatFor: dcatTypeFromName(name) });
       continue;
     }
     const hint = suggestMapping(name);
@@ -229,6 +257,34 @@ async function main(): Promise<void> {
   for (const u of unresolved) {
     console.log(
       `  ? ${u.provider}: "${u.name}" (${u.id}) — no reliable hint, add it by hand`,
+    );
+  }
+
+  // Which types can be validated against the schema their provider published,
+  // rather than against the copy bundled in metadata/DCAT. Two types have no
+  // bundled copy at all, so for those this is the difference between a column
+  // check and none.
+  const bundled = new Set(bundledDcatTypes());
+  const published = new Map<string, string>();
+  for (const n of nonData) {
+    if (n.dcatFor && !published.has(n.dcatFor))
+      published.set(n.dcatFor, n.name);
+  }
+  console.log('\nDCAT schemas, by dataset type:');
+  for (const type of DATASET_TYPES) {
+    const found = published.get(type);
+    const mark = found ? '✓' : bundled.has(type) ? '·' : '✗';
+    const where = found
+      ? `space: ${found}`
+      : bundled.has(type)
+        ? 'bundled copy only'
+        : 'NOTHING — columns of this type are not checked against anything';
+    console.log(`  ${mark} ${type.padEnd(28)} ${where}`);
+  }
+  for (const n of nonData.filter((x) => !x.dcatFor)) {
+    console.log(
+      `  ? "${n.name}" (${n.id}) — a metadata document of no recognised type; ` +
+        `set dcatFor by hand if it is a schema`,
     );
   }
 

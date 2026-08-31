@@ -97,6 +97,26 @@ export class Asset {
   @Prop({ type: String, default: null })
   dcatSchemaRef!: string | null;
 
+  /**
+   * The DCAT schema the columns were actually checked against, and where it came
+   * from. Distinct from `dcatSchemaRef`, which is what the dataset itself claims.
+   *
+   * Recorded because otherwise nothing in the read model says whether a dataset
+   * was validated against the schema its provider published or against the copy
+   * bundled in the repo — and the difference is the whole point of reading the
+   * schemas from the space. Null when no schema was available and the column
+   * check was skipped.
+   */
+  @Prop({ type: String, default: null })
+  dcatSchemaId!: string | null;
+
+  @Prop({
+    type: String,
+    default: null,
+    enum: ['dataspace', 'local', 'remote', null],
+  })
+  dcatSchemaSource!: 'dataspace' | 'local' | 'remote' | null;
+
   /** How the file stores its data: rows | columnar | nested. */
   @Prop({ required: true })
   format!: string;
