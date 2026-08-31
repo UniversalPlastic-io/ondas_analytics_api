@@ -31,6 +31,7 @@
     "reference:generate": "ts-node -r tsconfig-paths/register scripts/generate-reference-datasets.ts",
     "users:export": "ts-node -r tsconfig-paths/register scripts/export-users.ts",
     "users:reset": "ts-node -r tsconfig-paths/register scripts/reset-password.ts",
+    "migrate:asset-tier": "ts-node -r tsconfig-paths/register scripts/migrate-asset-tier.ts",
     "validate:precision": "ts-node -r tsconfig-paths/register scripts/validate-precision.ts"
   },
   "dependencies": {

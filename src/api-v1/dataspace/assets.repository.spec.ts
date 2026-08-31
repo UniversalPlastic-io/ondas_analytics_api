@@ -1,5 +1,4 @@
 import { assetQuery } from './assets.repository';
-import { REFERENCE_PROVIDER_FOLDER } from './dataspace.constants';
 
 describe('assetQuery', () => {
   it('defaults to active assets', () => {
@@ -7,40 +6,53 @@ describe('assetQuery', () => {
     expect(assetQuery({ status: 'any' })).toEqual({});
   });
 
-  it('matches a provider by declared id or by folder in the key', () => {
+  it('matches a provider by declared id, stored provider, or folder in the key', () => {
     expect(assetQuery({ provider: 'innoceana' }).$or).toEqual([
       { dataProviderIdRaw: 'innoceana' },
+      { providerFolder: 'innoceana' },
       { key: { $regex: '/innoceana/' } },
     ]);
   });
 
   it('excludes a provider with $nor, so it composes with an include', () => {
-    const q = assetQuery({
-      provider: 'innoceana',
-      excludeProvider: REFERENCE_PROVIDER_FOLDER,
-    });
+    const q = assetQuery({ provider: 'innoceana', excludeProvider: 'bcss' });
     expect(q.$or).toEqual([
       { dataProviderIdRaw: 'innoceana' },
+      { providerFolder: 'innoceana' },
       { key: { $regex: '/innoceana/' } },
     ]);
     expect(q.$nor).toEqual([
-      { dataProviderIdRaw: REFERENCE_PROVIDER_FOLDER },
-      { key: { $regex: `/${REFERENCE_PROVIDER_FOLDER}/` } },
+      { dataProviderIdRaw: 'bcss' },
+      { providerFolder: 'bcss' },
+      { key: { $regex: '/bcss/' } },
     ]);
   });
 
-  it('matches the reference tier by its folder in the key, not only by provider id', () => {
-    // The reference datasets are published under the universal_plastic
-    // organization so the ingest can attach them to one, so the folder in the
-    // key is the only thing that still identifies the tier. Both the include and
-    // the exclude have to keep a clause for it.
-    const keyClause = { key: { $regex: `/${REFERENCE_PROVIDER_FOLDER}/` } };
-    expect(
-      assetQuery({ provider: REFERENCE_PROVIDER_FOLDER }).$or,
-    ).toContainEqual(keyClause);
-    expect(
-      assetQuery({ excludeProvider: REFERENCE_PROVIDER_FOLDER }).$nor,
-    ).toContainEqual(keyClause);
+  it('selects the tier by a stored field, never by the object key', () => {
+    // The reference series are published under the universal_plastic
+    // organization, so provider identity cannot distinguish them. It used to be
+    // the folder in the key that did, which meant an asset with no key — one
+    // that came from a catalog rather than a bucket — silently lost its tier and
+    // appeared as something a participant measured. The tier is stored now.
+    expect(assetQuery({ tier: 'observed' })).toEqual({
+      status: 'active',
+      tier: 'observed',
+    });
+    expect(assetQuery({ tier: 'reference' }).tier).toBe('reference');
+    const q = JSON.stringify(assetQuery({ tier: 'observed' }));
+    expect(q).not.toContain('$regex');
+    expect(q).not.toContain('key');
+  });
+
+  it('composes the tier with a provider include and an exclude', () => {
+    const q = assetQuery({
+      tier: 'observed',
+      provider: 'innoceana',
+      excludeProvider: 'bcss',
+    });
+    expect(q.tier).toBe('observed');
+    expect(q.$or).toBeDefined();
+    expect(q.$nor).toBeDefined();
   });
 
   it('keeps the other filters untouched', () => {
@@ -54,7 +66,11 @@ describe('assetQuery', () => {
       status: 'active',
       category: 'biomass',
       ocean: 'mediterraneo',
-      $nor: [{ dataProviderIdRaw: 'x' }, { key: { $regex: '/x/' } }],
+      $nor: [
+        { dataProviderIdRaw: 'x' },
+        { providerFolder: 'x' },
+        { key: { $regex: '/x/' } },
+      ],
     });
   });
 });

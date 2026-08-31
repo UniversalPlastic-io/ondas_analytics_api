@@ -6,10 +6,7 @@ import { AppModule } from '../src/app.module';
 import { AnalysesService } from '../src/api-v1/analyses/analyses.service';
 import { Asset } from '../src/api-v1/dataspace/schemas/asset.schema';
 import { Observation } from '../src/api-v1/dataspace/schemas/observation.schema';
-import {
-  REFERENCE_PROVIDER_FOLDER,
-  publicUrlForKey,
-} from '../src/api-v1/dataspace/dataspace.constants';
+import { publicUrlForKey } from '../src/api-v1/dataspace/dataspace.constants';
 import type { AnalysesRunResponse } from '../src/api-v1/analyses/analyses.types';
 
 /**
@@ -144,10 +141,7 @@ async function main() {
 
   // ---------------------------------------------------------------- 1. Ingesta
   const active = await assets
-    .find({
-      status: 'active',
-      key: { $not: new RegExp(`/${REFERENCE_PROVIDER_FOLDER}/`) },
-    })
+    .find({ status: 'active', tier: 'observed' })
     .lean()
     .exec();
 

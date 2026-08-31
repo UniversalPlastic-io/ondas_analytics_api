@@ -1,9 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, QueryFilter, Types } from 'mongoose';
-import { Asset, AssetDocument } from './schemas/asset.schema';
+import { Asset, AssetDocument, AssetTier } from './schemas/asset.schema';
 
 export interface AssetFilter {
+  /**
+   * Observed data or the calibration series. Reads that answer "what was
+   * measured" pass 'observed'; the analytics fallback is the only caller that
+   * asks for 'reference'. Omit to include both.
+   */
+  tier?: AssetTier;
   ocean?: string;
   datasetType?: string;
   category?: string;
@@ -19,9 +25,20 @@ export interface AssetFilter {
   status?: 'active' | 'missing' | 'failed' | 'any';
 }
 
-/** Matches a provider by its declared id or by its folder in the S3 key. */
+/**
+ * Matches a provider by its declared id, by the stored provider attribute, or by
+ * its folder in the object key.
+ *
+ * The key clause is kept for assets ingested before `providerFolder` was stored;
+ * it matches nothing for an asset that has no path, which is exactly why it can
+ * no longer be the only clause.
+ */
 function providerClauses(provider: string): Array<QueryFilter<Asset>> {
-  return [{ dataProviderIdRaw: provider }, { key: { $regex: `/${provider}/` } }];
+  return [
+    { dataProviderIdRaw: provider },
+    { providerFolder: provider },
+    { key: { $regex: `/${provider}/` } },
+  ];
 }
 
 /**
@@ -31,10 +48,12 @@ function providerClauses(provider: string): Array<QueryFilter<Asset>> {
 export function assetQuery(filter: AssetFilter = {}): QueryFilter<Asset> {
   const q: QueryFilter<Asset> = {};
   if (filter.status !== 'any') q.status = filter.status ?? 'active';
+  if (filter.tier) q.tier = filter.tier;
   if (filter.ocean) q.ocean = filter.ocean;
   if (filter.datasetType) q.datasetType = filter.datasetType;
   if (filter.category) q.category = filter.category;
-  if (filter.organizationId) q.organizationId = new Types.ObjectId(filter.organizationId);
+  if (filter.organizationId)
+    q.organizationId = new Types.ObjectId(filter.organizationId);
   if (filter.provider) {
     q.$or = providerClauses(filter.provider);
   }
@@ -55,7 +74,10 @@ export class AssetsRepository {
   }
 
   find(filter: AssetFilter = {}): Promise<AssetDocument[]> {
-    return this.assets.find(this.queryOf(filter)).sort({ ocean: 1, category: 1, place: 1 }).exec();
+    return this.assets
+      .find(this.queryOf(filter))
+      .sort({ ocean: 1, category: 1, place: 1 })
+      .exec();
   }
 
   count(filter: AssetFilter = {}): Promise<number> {
@@ -63,12 +85,17 @@ export class AssetsRepository {
   }
 
   /** Assets whose key contains any of these fragments (campaign → files mapping). */
-  findByFragments(fragments: string[], filter: AssetFilter = {}): Promise<AssetDocument[]> {
+  findByFragments(
+    fragments: string[],
+    filter: AssetFilter = {},
+  ): Promise<AssetDocument[]> {
     if (!fragments.length) return Promise.resolve([]);
     return this.assets
       .find({
         ...this.queryOf(filter),
-        $or: fragments.map((f) => ({ key: { $regex: f.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') } })),
+        $or: fragments.map((f) => ({
+          key: { $regex: f.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') },
+        })),
       })
       .exec();
   }
@@ -106,7 +133,9 @@ export class AssetsRepository {
   }
 
   /** Bounding box over a set of assets: [[minLat,minLng],[maxLat,maxLng]]. */
-  static bounds(assets: AssetDocument[]): [[number, number], [number, number]] | null {
+  static bounds(
+    assets: AssetDocument[],
+  ): [[number, number], [number, number]] | null {
     if (!assets.length) return null;
     let minLat = Infinity;
     let minLng = Infinity;

@@ -4,9 +4,17 @@ import { Model, Types } from 'mongoose';
 import { Asset, AssetDocument } from './schemas/asset.schema';
 import { Observation } from './schemas/observation.schema';
 import { SyncResultRow } from './schemas/sync-run.schema';
-import { Organization, OrganizationDocument } from '../identity/schemas/organization.schema';
+import {
+  Organization,
+  OrganizationDocument,
+} from '../identity/schemas/organization.schema';
 import { GeoPoint, point } from './schemas/geo.schema';
-import { CATEGORY_BY_TYPE, DATA_BUCKET, DatasetType } from './dataspace.constants';
+import {
+  CATEGORY_BY_TYPE,
+  DATA_BUCKET,
+  DatasetType,
+  tierForProviderFolder,
+} from './dataspace.constants';
 import { parseKey, resolveLocation } from './s3-keys';
 import { getObject, ObjectNotFoundError } from './s3-reader';
 import { validateContainer } from './validate-container';
@@ -52,6 +60,8 @@ interface AssetUpsert {
   key: string;
   bucket: string;
   url: string;
+  tier: 'observed' | 'reference';
+  providerFolder: string | null;
   datasetType: string;
   category: string;
   organizationId: Types.ObjectId | null;
@@ -87,7 +97,9 @@ function sourceRecordCount(dataset: Record<string, unknown>): number {
   if (Array.isArray(records)) return records.length;
   const columns = dataset['columns'];
   if (columns && typeof columns === 'object') {
-    const first = Object.values(columns as Record<string, unknown>).find((v) => Array.isArray(v));
+    const first = Object.values(columns as Record<string, unknown>).find((v) =>
+      Array.isArray(v),
+    );
     return Array.isArray(first) ? first.length : 0;
   }
   return 0;
@@ -109,8 +121,10 @@ export class IngestService {
 
   constructor(
     @InjectModel(Asset.name) private readonly assets: Model<Asset>,
-    @InjectModel(Observation.name) private readonly observations: Model<Observation>,
-    @InjectModel(Organization.name) private readonly organizations: Model<Organization>,
+    @InjectModel(Observation.name)
+    private readonly observations: Model<Observation>,
+    @InjectModel(Organization.name)
+    private readonly organizations: Model<Organization>,
   ) {}
 
   /** Matches a file's provider folder / declared provider id to an organization. */
@@ -118,7 +132,9 @@ export class IngestService {
     providerFolder: string,
     dataProviderIdRaw: string | null,
   ): Promise<OrganizationDocument | null> {
-    const candidates = [providerFolder, dataProviderIdRaw].filter((x): x is string => !!x);
+    const candidates = [providerFolder, dataProviderIdRaw].filter(
+      (x): x is string => !!x,
+    );
     if (!candidates.length) return null;
     return this.organizations
       .findOne({
@@ -138,7 +154,10 @@ export class IngestService {
    * the new ones run in one transaction, so a reader never sees a half-replaced
    * dataset.
    */
-  async ingestKey(key: string, options: IngestOptions = {}): Promise<IngestOutcome> {
+  async ingestKey(
+    key: string,
+    options: IngestOptions = {},
+  ): Promise<IngestOutcome> {
     const parsed = parseKey(key);
     if (!parsed) throw new UnsupportedKeyError(key);
 
@@ -163,8 +182,15 @@ export class IngestService {
 
     const container = validateContainer(fetched.json, parsed.datasetType);
     if (!container.ok || !container.envelope || !container.datasetType) {
-      await this.markFailed(parsed.key, container.errors.join('; '), options.syncRunId ?? null);
-      throw new InvalidAssetError(`asset ${parsed.key} failed container validation`, container.errors);
+      await this.markFailed(
+        parsed.key,
+        container.errors.join('; '),
+        options.syncRunId ?? null,
+      );
+      throw new InvalidAssetError(
+        `asset ${parsed.key} failed container validation`,
+        container.errors,
+      );
     }
 
     const datasetType: DatasetType = container.datasetType;
@@ -182,7 +208,10 @@ export class IngestService {
     const normalized = normalizeDataset(datasetType, dataset);
     warnings.push(...normalized.warnings);
     if (normalized.skipped) {
-      const samples = normalized.skippedSamples.slice(0, 5).map((v) => JSON.stringify(v)).join(', ');
+      const samples = normalized.skippedSamples
+        .slice(0, 5)
+        .map((v) => JSON.stringify(v))
+        .join(', ');
       warnings.push(
         `${normalized.skipped} records skipped for lacking a usable date${samples ? ` (e.g. ${samples})` : ''}`,
       );
@@ -192,11 +221,24 @@ export class IngestService {
     warnings.push(...dcat.warnings);
 
     const derivedRange = dateRangeOf(normalized.observations);
-    const metaRange = metadata['dateRange'] as { start?: unknown; end?: unknown } | null | undefined;
-    if (metaRange && typeof metaRange.start === 'string' && typeof metaRange.end === 'string') {
+    const metaRange = metadata['dateRange'] as
+      | { start?: unknown; end?: unknown }
+      | null
+      | undefined;
+    if (
+      metaRange &&
+      typeof metaRange.start === 'string' &&
+      typeof metaRange.end === 'string'
+    ) {
       if (metaRange.start > metaRange.end) {
-        warnings.push(`metadata.dateRange is inverted (${metaRange.start} → ${metaRange.end}); derived range used`);
-      } else if (derivedRange && (metaRange.start !== derivedRange.start || metaRange.end !== derivedRange.end)) {
+        warnings.push(
+          `metadata.dateRange is inverted (${metaRange.start} → ${metaRange.end}); derived range used`,
+        );
+      } else if (
+        derivedRange &&
+        (metaRange.start !== derivedRange.start ||
+          metaRange.end !== derivedRange.end)
+      ) {
         warnings.push(
           `metadata.dateRange ${metaRange.start}→${metaRange.end} differs from the records ${derivedRange.start}→${derivedRange.end}; derived range used`,
         );
@@ -204,8 +246,13 @@ export class IngestService {
     }
 
     const dataProviderIdRaw =
-      typeof metadata['dataProviderId'] === 'string' ? (metadata['dataProviderId'] as string) : null;
-    const organization = await this.resolveOrganization(parsed.providerFolder, dataProviderIdRaw);
+      typeof metadata['dataProviderId'] === 'string'
+        ? (metadata['dataProviderId'] as string)
+        : null;
+    const organization = await this.resolveOrganization(
+      parsed.providerFolder,
+      dataProviderIdRaw,
+    );
     if (!organization) {
       warnings.push(
         `no organization matches provider folder "${parsed.providerFolder}" / dataProviderId "${dataProviderIdRaw ?? '—'}"`,
@@ -216,6 +263,10 @@ export class IngestService {
       key: parsed.key,
       bucket: DATA_BUCKET,
       url: fetched.url,
+      // Decided once, here, and stored. Every tier-aware read filters on the
+      // field; none of them re-derive it from the key.
+      tier: tierForProviderFolder(parsed.providerFolder),
+      providerFolder: parsed.providerFolder,
       datasetType,
       category,
       organizationId: organization?._id ?? null,
@@ -225,8 +276,14 @@ export class IngestService {
       placeName: parsed.station?.name ?? null,
       city: parsed.station?.city ?? null,
       location: point(location.lat, location.lon),
-      schemaVersion: typeof metadata['schemaVersion'] === 'string' ? (metadata['schemaVersion'] as string) : null,
-      dcatSchemaRef: typeof metadata['dcatSchemaRef'] === 'string' ? (metadata['dcatSchemaRef'] as string) : null,
+      schemaVersion:
+        typeof metadata['schemaVersion'] === 'string'
+          ? (metadata['schemaVersion'] as string)
+          : null,
+      dcatSchemaRef:
+        typeof metadata['dcatSchemaRef'] === 'string'
+          ? (metadata['dcatSchemaRef'] as string)
+          : null,
       format: normalized.shape,
       units: unitsOf(metadata),
       recordCount: sourceRecordCount(dataset),
@@ -247,7 +304,11 @@ export class IngestService {
     };
 
     const action: 'created' | 'updated' = existing ? 'updated' : 'created';
-    const assetId = await this.publishGeneration(assetDoc, normalized.observations, organization?._id ?? null);
+    const assetId = await this.publishGeneration(
+      assetDoc,
+      normalized.observations,
+      organization?._id ?? null,
+    );
 
     this.logger.log(
       `${action} ${parsed.key} → ${normalized.observations.length} observations, ${warnings.length} warnings`,
@@ -327,15 +388,24 @@ export class IngestService {
 
     for (let i = 0; i < docs.length; i += INSERT_CHUNK) {
       // Unordered so the driver can write a batch in parallel.
-      await this.observations.insertMany(docs.slice(i, i + INSERT_CHUNK), { ordered: false });
+      await this.observations.insertMany(docs.slice(i, i + INSERT_CHUNK), {
+        ordered: false,
+      });
     }
 
     // The moment the new data becomes visible.
-    await this.assets.updateOne({ _id: assetId }, { $set: { ...assetDoc, currentIngestId: ingestId } }).exec();
+    await this.assets
+      .updateOne(
+        { _id: assetId },
+        { $set: { ...assetDoc, currentIngestId: ingestId } },
+      )
+      .exec();
 
     // Previous generation, plus anything an earlier failed ingest abandoned.
     try {
-      await this.observations.deleteMany({ assetId, ingestId: { $ne: ingestId } }).exec();
+      await this.observations
+        .deleteMany({ assetId, ingestId: { $ne: ingestId } })
+        .exec();
     } catch (e) {
       this.logger.warn(
         `stale observations left behind for ${assetDoc.key}: ${(e as Error).message}. They are not served; the next sync removes them.`,
@@ -346,21 +416,41 @@ export class IngestService {
   }
 
   /** Records a validation/fetch failure on the asset without dropping its data. */
-  private async markFailed(key: string, error: string, syncRunId: Types.ObjectId | null): Promise<void> {
+  private async markFailed(
+    key: string,
+    error: string,
+    syncRunId: Types.ObjectId | null,
+  ): Promise<void> {
     await this.assets
       .updateOne(
         { key },
-        { $set: { status: 'failed', lastError: error, lastSyncedAt: new Date(), lastSyncRunId: syncRunId } },
+        {
+          $set: {
+            status: 'failed',
+            lastError: error,
+            lastSyncedAt: new Date(),
+            lastSyncRunId: syncRunId,
+          },
+        },
       )
       .exec();
   }
 
   /** Flags an asset whose object no longer exists. Observations are kept. */
-  async markMissing(key: string, syncRunId: Types.ObjectId | null): Promise<AssetDocument | null> {
+  async markMissing(
+    key: string,
+    syncRunId: Types.ObjectId | null,
+  ): Promise<AssetDocument | null> {
     return this.assets
       .findOneAndUpdate(
         { key },
-        { $set: { status: 'missing', lastSyncedAt: new Date(), lastSyncRunId: syncRunId } },
+        {
+          $set: {
+            status: 'missing',
+            lastSyncedAt: new Date(),
+            lastSyncRunId: syncRunId,
+          },
+        },
         { new: true },
       )
       .exec();

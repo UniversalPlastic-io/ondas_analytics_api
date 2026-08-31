@@ -5,6 +5,18 @@ import { GeoPoint, PointSchema } from './geo.schema';
 export type AssetStatus = 'active' | 'missing' | 'failed';
 
 /**
+ * Whether an asset is something a participant measured, or a calibration series
+ * the API generates and falls back to.
+ *
+ * This used to be derived from the provider folder in the object key, which made
+ * every tier-aware read a regex over a storage path. Storing it means a read
+ * model whose meaning does not depend on where the bytes came from — and it is
+ * what lets the source change without the calibration series silently appearing
+ * as measurements.
+ */
+export type AssetTier = 'observed' | 'reference';
+
+/**
  * One document per dataset file in the data space bucket.
  * Replaces the hardcoded S3_CATALOGUE / MAP_CATALOGUE as the runtime inventory.
  */
@@ -18,6 +30,22 @@ export class Asset {
 
   @Prop({ required: true })
   url!: string;
+
+  @Prop({
+    type: String,
+    required: true,
+    enum: ['observed', 'reference'],
+    default: 'observed',
+  })
+  tier!: AssetTier;
+
+  /**
+   * The publishing provider, as an attribute rather than a path segment. Kept
+   * alongside `dataProviderIdRaw`, which is whatever the file declared, typos
+   * included; this one is the folder/participant the asset actually came from.
+   */
+  @Prop({ type: String, default: null })
+  providerFolder!: string | null;
 
   @Prop({ required: true })
   datasetType!: string;
@@ -85,7 +113,12 @@ export class Asset {
   @Prop({ type: [String], default: [] })
   warnings!: string[];
 
-  @Prop({ type: String, required: true, enum: ['active', 'missing', 'failed'], default: 'active' })
+  @Prop({
+    type: String,
+    required: true,
+    enum: ['active', 'missing', 'failed'],
+    default: 'active',
+  })
   status!: AssetStatus;
 
   @Prop({ type: String, default: null })
@@ -113,6 +146,8 @@ export class Asset {
 export type AssetDocument = HydratedDocument<Asset>;
 export const AssetSchema = SchemaFactory.createForClass(Asset);
 
+AssetSchema.index({ tier: 1, category: 1 });
+AssetSchema.index({ providerFolder: 1 });
 AssetSchema.index({ datasetType: 1 });
 AssetSchema.index({ organizationId: 1 });
 AssetSchema.index({ ocean: 1, datasetType: 1 });

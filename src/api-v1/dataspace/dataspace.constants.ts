@@ -120,6 +120,21 @@ export const REFERENCE_PROVIDER_FOLDER = 'ondas_reference';
  */
 export const REFERENCE_PUBLISHER = 'universal_plastic';
 
+/**
+ * The tier an asset belongs to, decided once at ingest and then stored.
+ *
+ * Callers must not re-derive it. Every read that answers "what was measured"
+ * filters on the stored `tier` field; deriving it from the key again would
+ * reintroduce the coupling this exists to remove.
+ */
+export function tierForProviderFolder(
+  providerFolder: string | null | undefined,
+): 'observed' | 'reference' {
+  return providerFolder === REFERENCE_PROVIDER_FOLDER
+    ? 'reference'
+    : 'observed';
+}
+
 export interface Station {
   slug: string;
   name: string;

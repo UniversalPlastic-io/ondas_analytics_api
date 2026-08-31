@@ -1,10 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { AssetFilter, AssetsRepository } from '../dataspace/assets.repository';
 import { ObservationsRepository } from '../dataspace/observations.repository';
-import {
-  REFERENCE_PROVIDER_FOLDER,
-  WATER_POLYMER_FIELDS,
-} from '../dataspace/dataspace.constants';
+import { WATER_POLYMER_FIELDS } from '../dataspace/dataspace.constants';
 
 /**
  * The data inputs the analyses engine calibrates its plots with.
@@ -113,9 +110,9 @@ export class ScenarioLoader {
   private async tiered<T>(
     load: (tier: AssetFilter) => Promise<T | null>,
   ): Promise<T | null> {
-    const observed = await load({ excludeProvider: REFERENCE_PROVIDER_FOLDER });
+    const observed = await load({ tier: 'observed' });
     if (observed !== null) return observed;
-    return load({ provider: REFERENCE_PROVIDER_FOLDER });
+    return load({ tier: 'reference' });
   }
 
   private async loadBiomass(

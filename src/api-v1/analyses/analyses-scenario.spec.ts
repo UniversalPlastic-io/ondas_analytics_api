@@ -1,7 +1,6 @@
 import { ScenarioLoader } from './analyses-scenario';
 import { AssetFilter, AssetsRepository } from '../dataspace/assets.repository';
 import { ObservationsRepository } from '../dataspace/observations.repository';
-import { REFERENCE_PROVIDER_FOLDER } from '../dataspace/dataspace.constants';
 
 const LOC = { lat: 41.4, lon: 2.2 };
 
@@ -12,11 +11,11 @@ const asset = (id: string, coords: [number, number] = [2.24, 41.43]) => ({
 
 /** True when the filter asks for observed datasets (reference excluded). */
 function isObservedTier(filter: AssetFilter): boolean {
-  return filter.excludeProvider === REFERENCE_PROVIDER_FOLDER;
+  return filter.tier === 'observed';
 }
 
 function isReferenceTier(filter: AssetFilter): boolean {
-  return filter.provider === REFERENCE_PROVIDER_FOLDER;
+  return filter.tier === 'reference';
 }
 
 /**
