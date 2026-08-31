@@ -36,6 +36,19 @@ Edita `.env` y fija como mínimo:
 PORTAL_JWT_SECRET=<cadena aleatoria larga>
 ```
 
+Para cargar el modelo de lectura (paso 4) hacen falta además las credenciales del
+conector, que Compose pasa al contenedor si están en `.env`:
+
+```dotenv
+DSPACER_BASE_URL=https://<dominio>/app/<entidad>/middleware
+DSPACER_LOGIN_URL=https://<dominio>/app/<entidad>/login-service/auth/login
+DSPACER_USER=<usuario del conector>
+DSPACER_PASSWORD=<contraseña del conector>
+```
+
+Sin ellas el stack levanta y sirve lo que ya haya en Mongo, pero `backfill` falla
+al arrancar: no hay catálogo que leer.
+
 Genera el secreto con:
 
 ```bash
@@ -138,6 +151,8 @@ y sólo `-v` los elimina.
 | `define PORTAL_JWT_SECRET en .env` al arrancar | Falta el secreto | Fíjalo en `.env` (paso 2) |
 | `api` reinicia en bucle y los logs muestran errores de Mongoose | `MONGODB_URI` apunta a un Atlas inaccesible desde el contenedor | Comenta `MONGODB_URI` en `.env` para usar el Mongo del stack, o añade la IP de salida a la lista de acceso de Atlas |
 | `/v1/overview` responde con KPIs a cero | No se ha ejecutado `backfill` | Paso 4 |
+| Al arrancar aparece `DSPACER_* is not fully configured` y `backfill` falla en el login del conector | Las credenciales del conector no están en `.env` | Paso 2 |
+| Aparecen activos `report_…` en el catálogo del espacio | `DSPACER_PUBLISH_ENABLED` está encendida | Es voluntario y va apagado por defecto; ver [report-publishing.md](../report-publishing.md) |
 | `Bind for 0.0.0.0:3000 failed: port is already allocated` | Puerto ocupado | `PORT=3001 docker compose up -d` |
 | 401 en `/v1/analyses/run` | Token ausente, caducado (8 h) o secreto cambiado | Repetir el login del paso 5 |
 

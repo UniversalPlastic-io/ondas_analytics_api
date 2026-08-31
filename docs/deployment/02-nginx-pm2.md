@@ -72,6 +72,13 @@ pm2 startup         # ejecutar el comando que imprime
 | `PORTAL_JWT_SECRET` | Cadena aleatoria larga |
 | `PUBLIC_API_BASE_PATH` | `/api` |
 | `PUBLIC_API_DISPLAY_URL` | `https://ondas.universalplastic.io/api` |
+| `DSPACER_BASE_URL` · `DSPACER_LOGIN_URL` | *Middleware* y endpoint de login del conector de UP |
+| `DSPACER_USER` · `DSPACER_PASSWORD` | Credenciales del conector en `connector-realm` |
+| `DSPACER_PUBLISH_ENABLED` | Sin definir. Encenderla publica cada análisis generado en el catálogo compartido — ver [report-publishing.md](../report-publishing.md) |
+
+Las cuatro `DSPACER_*` sólo hacen falta para sincronizar y para publicar: los
+endpoints analíticos leen de Mongo y el servicio arranca sin ellas, avisando en el
+log.
 
 El SPA se compila con `VITE_API_BASE_URL=https://ondas.universalplastic.io/api`.
 

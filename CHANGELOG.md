@@ -5,6 +5,82 @@ Versionado según [SemVer](https://semver.org/lang/es/).
 
 ---
 
+## [Sin publicar]
+
+Dieciocho commits desde `v1.1.0`. El cambio de fondo es que **la fuente de datos
+pasa a ser el espacio de datos** y no un bucket de objetos, y con él llegan las
+tres consecuencias que ocupan el resto de esta sección: cómo se eligen los
+datasets que responden una consulta, de dónde sale el esquema con que se validan,
+y que el API deja de ser sólo consumidor.
+
+### Cambios que rompen
+
+- **La ingesta lee del espacio de datos, no del bucket.** El activo ya no se
+  direcciona por una ruta que codifica qué es (`public/{mar}/{proveedor}/{fichero}`)
+  sino por un UUID opaco cuyo acceso concede un contrato. Todo lo derivable de la
+  ruta —el mar, el publicador, el tipo de dataset— pasa a una tabla explícita,
+  `ASSET_MAP`, regenerable con `npm run assets:refresh`. Requiere credenciales de
+  conector (`DSPACER_*`) y **reconstruir el modelo de lectura**:
+  `npm run backfill -- --force`.
+- **`POST /v1/analyses/run` responde 400 fuera de las costas cubiertas.** Un punto
+  a más de 100 km de la costa mediterránea, atlántica (golfo de Cádiz y Canarias)
+  o cantábrica no pertenece a ninguna, y antes recibía cifras del mar menos
+  lejano. Los ejemplos de la especificación usaban Madrid, que ahora se rechaza:
+  todos pasan a Gijón, igual que el punto de partida del SPA.
+- **La selección de datasets es por costa, no por distancia.** Sólo los datasets
+  de la costa asignada pueden responder una consulta; dentro de ella gana el más
+  cercano. Una consulta en Gijón cuya categoría no tenía dataset cantábrico tomaba
+  antes el de Badalona, a 695 km y en otro mar, sin decirlo. Ahora esa categoría
+  cae a la serie de calibración.
+
+### Añadido
+
+- **Nivel de referencia.** Las series de calibración se ingieren por el mismo
+  pipeline que cualquier activo y se marcan `tier: 'reference'` en el modelo de
+  lectura. El mapa, los KPIs y los informes las excluyen; sólo
+  `POST /v1/analyses/run` recurre a ellas, y sólo cuando una costa no tiene
+  ningún dataset observado de esa categoría. El nivel se decide una vez, al
+  ingerir, y se almacena: deducirlo en cada lectura era lo que acoplaba el modelo
+  a la forma de la clave de origen.
+- **Publicación de los análisis en el espacio de datos.** Cada análisis generado
+  se publica como activo propio de UP, ofrecido a todos los participantes, con
+  nombre `report_{lat}_{lon}_{fecha}` y la identidad exacta en la descripción.
+  Ocurre tras responder y no puede alcanzar a quien preguntó. **Apagado salvo que
+  `DSPACER_PUBLISH_ENABLED` lo encienda**, porque escribe en el catálogo
+  compartido de producción. Diseño, riesgos y límites en
+  [`docs/report-publishing.md`](docs/report-publishing.md).
+- **Validación contra el esquema DCAT que publica el proveedor.** Los documentos
+  de esquema del espacio se leen, no sólo se saltan, y son la primera fuente con
+  la que se comprueban las columnas de un dataset; las copias de `metadata/DCAT/`
+  quedan como respaldo. Cierra un hueco real: `atmosfera_previa_evento` y
+  `oceanografia_previa_evento` no tienen copia local, así que sus columnas no se
+  comparaban con nada. Qué esquema respondió se anota en el activo
+  (`dcatSchemaSource`, `dcatSchemaId`).
+- **Métricas de publicación.** `ondas_reports_published_total{status}` e
+  histograma de duración. `status` es la única etiqueta: el punto o la clave
+  crearían una serie temporal por informe.
+- **`npm run fixtures:refresh`**, que recaptura los catálogos reales sobre los que
+  corren las pruebas de `dataspace/source`, sustituyendo BPN y anfitriones por
+  marcadores.
+
+### Corregido
+
+- **Un activo sustituido por una versión posterior se ignora.** Tras la
+  republicación `_v1.1` quedaron pares del mismo dataset en las mismas
+  coordenadas, y el más antiguo —vaciado por el incidente— ganaba la mitad de las
+  veces, de modo que una categoría encontraba un activo sin observaciones, caía a
+  la calibración y publicaba una cifra sustituida con un activo bueno al lado.
+- **La cuenca bajo la que se archiva una salida la decide el punto**, no el activo
+  observado que casualmente estuviera más cerca.
+- **La consulta de campañas iba contra un campo que ya no existe.**
+
+### Documentación
+
+- Retirada la documentación que describía la lectura del bucket y los diseños
+  previos al espacio de datos: describía un sistema que ya no es este.
+
+---
+
 ## [1.1.0] — 2026-08-29
 
 ### Añadido

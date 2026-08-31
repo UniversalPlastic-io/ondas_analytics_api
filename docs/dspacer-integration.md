@@ -4,6 +4,10 @@ Cómo el API obtiene los datos que analiza: autenticación, descubrimiento de
 participantes, catálogo y transferencia. Es la referencia del módulo
 [`src/api-v1/dataspace/`](../src/api-v1/dataspace/).
 
+El camino contrario —el API publicando en el espacio los análisis que genera— está
+en [report-publishing.md](report-publishing.md). Comparte la autenticación de §2 y
+nada más: son tres operaciones de escritura distintas.
+
 > **Estado.** Los apartados 2 a 7 están contrastados contra el despliegue real del
 > espacio de datos (ejecución del 31/08/2026), salvo lo que el §8 declara pendiente.
 > La implementación del cliente se desarrolla en la rama `feat/dspacer-source` y
@@ -223,9 +227,16 @@ antes de iniciar un escaneo.
 | 3 | Las operaciones del middleware declaran `schema: {}` | Las formas de respuesta se derivan de la observación, no del contrato |
 | 4 | Qué motor aplica las obligaciones y prohibiciones ODRL | No afecta al consumo; sí a las condiciones de uso |
 | 5 | Límites de uso y tamaño máximo de activo | Necesario para dimensionar la concurrencia |
+| 6 | Todos los activos del conector resuelven a un mismo `dataAddress.baseUrl` | Es la causa del punto 1. Un análisis que publiquemos puede heredarlo y quedar en el catálogo sin dato recuperable — ver [report-publishing.md §9](report-publishing.md#9-riesgos-abiertos) |
+| 7 | Semántica real de `no_restriction` | Decide si «compartido con todos» describe a cualquier BPN del espacio o a algo más amplio |
 
-Los puntos 1 a 3 se cierran con SQS. Hasta entonces, este documento distingue de
-forma explícita lo contrastado de lo pendiente.
+Los puntos 1 a 3 y el 6 se cierran con SQS. Hasta entonces, este documento
+distingue de forma explícita lo contrastado de lo pendiente.
+
+Consecuencia práctica del punto 6 para la validación: mientras `transfer/request`
+no resuelva, el esquema DCAT publicado por el proveedor tampoco se puede traer, y
+la comprobación de columnas cae a las copias de `metadata/DCAT/`. El mecanismo
+está listo y anota en cada activo cuál respondió.
 
 ---
 

@@ -43,6 +43,15 @@ Todos los endpoints analíticos leen sólo de Mongo, lo que hace que la latencia
 consulta sea independiente del número de activos y del coste de negociar su
 transferencia.
 
+En sentido contrario, el API es también **proveedor** del espacio: cada análisis
+que genera se publica como activo propio de UP, ofrecido a todos los
+participantes, para que un resultado público sea citable. Ocurre **después** de
+responder y nunca alcanza a quien preguntó: el análisis es el producto, publicarlo
+es distribución, y un conector lento no debe encarecer una petición. Va apagado
+salvo que `DSPACER_PUBLISH_ENABLED` lo encienda, porque escribe en el catálogo
+compartido de producción. Diseño y límites en
+[docs/report-publishing.md](docs/report-publishing.md).
+
 ```mermaid
 flowchart LR
   subgraph DS["Espacio de datos ONDAs — D-Spacer (SQS)"]
@@ -73,6 +82,7 @@ flowchart LR
   SYNC --> MONGO
   MONGO --> ANA & OVW & MAP & REP
   IDENT -.->|"Bearer JWT"| ANA & OVW & MAP & REP & SYNC
+  ANA -. "publica el análisis<br/>(tras responder)" .-> MW
   ANA & OVW & MAP & REP & MKT --> SPA
   ANA & OVW & MAP & REP & MKT --> EXT
 ```
@@ -94,6 +104,13 @@ Tres consecuencias de diseño que explican cómo está construido el módulo:
 - **La oferta no se puede cachear entre ejecuciones.** Su identificador incluye el
   nombre del activo, así que cambia si el proveedor lo renombra o recrea la
   política. El catálogo se relee antes de cada transferencia.
+- **El esquema con el que se valida un activo también sale del espacio.** Cada
+  proveedor publica un documento DCAT por dataset, y es contra ese documento
+  contra el que se comprueban las columnas. Las copias de
+  [metadata/DCAT/](metadata/DCAT/) quedan como respaldo, no como fuente: son una
+  instantánea que puede derivar, y de dos de los ocho tipos no existe copia
+  alguna. Qué esquema respondió queda anotado en el activo, en `dcatSchemaSource`.
+  Detalle en [docs/dataset-mapping.md](docs/dataset-mapping.md#metadata-schemas-dcatjson-ld).
 - **El catálogo no expone fecha, versión ni suma de comprobación.** No hay forma de
   saber si un activo cambió sin traerlo, de modo que la detección de cambios ocurre
   *después* de la transferencia, comparando el SHA-256 del contenido con el que ya
@@ -106,6 +123,25 @@ Tres consecuencias de diseño que explican cómo está construido el módulo:
 El acceso efectivo lo define el contrato que cada proveedor ha creado a favor del
 BPN de Universal Plastic. Un activo sin contrato no aparece en el catálogo y el
 API no puede verlo: **la autorización es del espacio de datos, no del API**.
+
+### Cómo se publica un análisis
+
+Simétrico al consumo, y también tres operaciones. En este orden, porque las dos
+últimas necesitan el identificador que devuelve la primera.
+
+| # | Operación del conector | Qué hace |
+|---|---|---|
+| 1 | `POST /data/upload` | Sube el JSON del análisis y crea su activo |
+| 2 | `POST /policies/create/{id}/no_restriction` | Una política que cualquier participante satisface |
+| 3 | `POST /contracts/create` | Liga política y activo: es lo que lo mete en el catálogo |
+
+Un activo sin el paso 3 queda guardado en nuestro conector y ofrecido a nadie, así
+que un fallo ahí es un fallo de toda la publicación, no un éxito parcial.
+
+Se publica el **JSON del análisis**, no los ficheros: los PDF y las gráficas
+siguen yendo a S3, y el JSON es el índice que apunta a ellos. Por eso no se
+publica mientras esas URL sean prefirmadas —caducan, y un activo que se queda en
+el catálogo con enlaces que dejan de resolver es peor que no publicarlo.
 
 ### Módulos
 
@@ -189,7 +225,7 @@ idénticos.
 | Node.js | ≥ 18 | Probado en 20.x, que es la versión del servidor de producción |
 | npm | ≥ 9 | Se usa `npm ci` con `package-lock.json` |
 | MongoDB | ≥ 6 | Atlas o instancia propia. **Obligatorio**: todo endpoint analítico lee de Mongo |
-| Credenciales de conector en el espacio de datos | — | Sólo necesarias para ejecutar la sincronización. Usuario y contraseña del conector de UP en `connector-realm`; el API obtiene y renueva el token de acceso por sí mismo |
+| Credenciales de conector en el espacio de datos | — | Necesarias para sincronizar y para publicar; los endpoints analíticos leen de Mongo y funcionan sin ellas. Usuario y contraseña del conector de UP en `connector-realm`; el API obtiene y renueva el token de acceso por sí mismo |
 
 ### Runtime
 
@@ -268,7 +304,7 @@ vez**. Guárdala antes de cerrar la terminal, o regenérala después con
 | `npm run seed` | Semilla de organizaciones y usuarios |
 | `npm run backfill` | Carga inicial del read model desde el catálogo del espacio de datos |
 | `npm run reference:generate` | Regenera las series de referencia en `output/reference/` |
-| `npm run assets:refresh` | Compara `ASSET_MAP` con el catálogo real (`-- --write` para reescribirla) |
+| `npm run assets:refresh` | Compara `ASSET_MAP` con el catálogo real e informa de qué tipo de dataset tiene esquema DCAT publicado (`-- --write` para reescribir las tablas) |
 | `npm run fixtures:refresh` | Recaptura los catálogos reales sobre los que corren las pruebas de `dataspace/source` |
 | `npm run openapi:generate` | Regenera `docs/openapi.json` a partir de los decoradores |
 | `npm run validate:precision` | Informe de validación: fidelidad de ingesta, exactitud de agregación, reproducibilidad y cobertura |

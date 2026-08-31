@@ -67,6 +67,8 @@ que no casa con ninguna ruta se agrupa en una única serie `unmatched`.
 | `ondas_sync_observations_total` | contador | Observaciones escritas en el modelo de lectura |
 | `ondas_sync_warnings_total` | contador | Avisos de validación acumulados |
 | `ondas_analyses_runs_total` | contador | Analíticas ejecutadas, **una por análisis**: `["all"]` suma cuatro |
+| `ondas_reports_published_total` | contador | Análisis publicados en el catálogo del espacio, por `status` (`published` \| `skipped` \| `failed`) |
+| `ondas_report_publish_duration_seconds` | histograma | Duración de una publicación. Sólo se observa cuando se llamó al conector: un análisis omitido no tardó nada |
 | `ondas_assets_active` | *gauge* | Activos vigentes, leído de Mongo en cada recogida |
 
 Los contadores se publican desde cero, de modo que `rate()` tiene línea base
@@ -141,6 +143,7 @@ Los cuatro síntomas que conviene vigilar:
 | Errores del servidor | tasa de `5xx` > 1 % durante 5 min | Fallo real, no de cliente |
 | Ingesta fallida | `increase(ondas_sync_runs_total{status="failed"}[1h]) > 0` | El modelo de lectura se queda atrás sin que nadie lo note |
 | Modelo de lectura vacío | `ondas_assets_active == 0` | Base equivocada, o `backfill` sin ejecutar |
+| Publicación fallando | `increase(ondas_reports_published_total{status="failed"}[1h]) > 0` | Sólo aplica con `DSPACER_PUBLISH_ENABLED`. Un fallo no afecta a la respuesta, así que nadie lo nota sin esta alerta |
 
 ## 6. Editar el dashboard
 

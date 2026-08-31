@@ -4,7 +4,7 @@
 #   cp .env.example .env      # y fija PORTAL_JWT_SECRET
 #   docker compose up -d --build
 #   docker compose run --rm seed        # usuarios y organizaciones iniciales
-#   docker compose run --rm backfill    # carga del read model (necesita el bucket)
+#   docker compose run --rm backfill    # carga del read model (necesita DSPACER_*)
 #   open http://localhost:3000/docs
 #
 #   docker compose --profile monitoring up -d   # + Prometheus y Grafana
@@ -22,9 +22,17 @@ x-api-env: &api-env
   MONGODB_DB: ${MONGODB_DB:-ondas_dataspace}
   PORTAL_JWT_SECRET: ${PORTAL_JWT_SECRET:?define PORTAL_JWT_SECRET en .env}
   PORTAL_JWT_EXPIRES_IN: ${PORTAL_JWT_EXPIRES_IN:-8h}
-  DATASPACE_S3_BUCKET: ${DATASPACE_S3_BUCKET:-universalplastic-sedia}
-  DATASPACE_S3_REGION: ${DATASPACE_S3_REGION:-eu-central-1}
-  DATASPACE_S3_ROOT_PREFIX: ${DATASPACE_S3_ROOT_PREFIX:-public/}
+  # Conector del espacio de datos. Sin ellas el API arranca y sirve el modelo de
+  # lectura que ya tenga, pero `backfill` y `POST /v1/sync/*` fallan: no hay
+  # catálogo que leer. Se dejan vacías por defecto para que un despliegue de
+  # evaluación levante sin credenciales.
+  DSPACER_BASE_URL: ${DSPACER_BASE_URL:-}
+  DSPACER_LOGIN_URL: ${DSPACER_LOGIN_URL:-}
+  DSPACER_USER: ${DSPACER_USER:-}
+  DSPACER_PASSWORD: ${DSPACER_PASSWORD:-}
+  # Publica cada análisis generado en el catálogo compartido de producción.
+  # Apagada salvo que se pida explícitamente.
+  DSPACER_PUBLISH_ENABLED: ${DSPACER_PUBLISH_ENABLED:-false}
 
 services:
   mongo:
