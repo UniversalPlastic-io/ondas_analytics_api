@@ -3,6 +3,7 @@ import { join } from 'node:path';
 import {
   ASSET_MAP,
   NON_DATA_ASSETS,
+  REFERENCE_ASSETS,
   classifyEntry,
   suggestMapping,
 } from './asset-map';
@@ -15,7 +16,9 @@ import {
   CATEGORY_BY_TYPE,
   DATASET_TYPES,
   OCEANS,
+  REFERENCE_PROVIDER_FOLDER,
   STATIONS,
+  tierForProviderFolder,
 } from '../dataspace.constants';
 import { SourceEntry } from './dataspace-source';
 
@@ -93,19 +96,9 @@ describe('classifyEntry against the live catalogs', () => {
       }
     }
 
-    // UP publishes five calibration series with no place in their name — they
-    // are not measurements of anywhere — so the table cannot key them by
-    // station. They are the only assets allowed to go unresolved; anything else
-    // appearing here is a dataset the read model would silently drop.
-    expect(unresolved.map((u) => u.replace(/^.*\//, '').trim()).sort()).toEqual(
-      [
-        'Boya_biomasa_referencia',
-        'Boya_microplasticos_referencia.',
-        'Environmental_referencia',
-        'Recogidas_playas_referencia',
-        'muestras_de_agua_referencia',
-      ].sort(),
-    );
+    // Nothing may go unresolved: an asset the table does not cover is one the
+    // read model drops, and the drop is invisible in every endpoint downstream.
+    expect(unresolved).toEqual([]);
     expect(classified).toBeGreaterThan(0);
   });
 
@@ -152,6 +145,93 @@ describe('classifyEntry against the live catalogs', () => {
     expect(
       offered.filter((e) => /esquema|metadatos/i.test(e.ref.label)),
     ).toEqual([]);
+  });
+});
+
+describe('REFERENCE_ASSETS', () => {
+  const entry = (id: string, label = 'x') => ({
+    ref: { id, label },
+    provider: 'Universal Plastic',
+    formats: [],
+  });
+
+  it('names a known dataset type for every calibration series', () => {
+    for (const [id, datasetType] of Object.entries(REFERENCE_ASSETS)) {
+      expect(id).toMatch(/^[0-9a-f-]{36}$/);
+      expect(DATASET_TYPES).toContain(datasetType);
+    }
+  });
+
+  it('never lists the same asset as a dataset or as a schema', () => {
+    for (const id of Object.keys(REFERENCE_ASSETS)) {
+      expect(ASSET_MAP[id]).toBeUndefined();
+      expect(NON_DATA_ASSETS[id]).toBeUndefined();
+    }
+  });
+
+  it('covers every category the engine can fall back on', () => {
+    // A category with an observed dataset but no calibration series falls back
+    // to nothing, and the indicator silently reverts to a value derived from
+    // the coordinates. Better to see it here than in a plot.
+    const covered = new Set(
+      Object.values(REFERENCE_ASSETS).map((t) => CATEGORY_BY_TYPE[t]),
+    );
+    for (const category of [
+      'biomass',
+      'cleanup',
+      'environmental',
+      'microplastics',
+      'water_samples',
+    ]) {
+      expect([...covered]).toContain(category);
+    }
+  });
+
+  it('classifies into the calibration tier, not the observed one', () => {
+    // This is the whole point of the separate table. UP publishes these, so
+    // classifying them by their participant would give them `universal_plastic`
+    // and put a synthetic series in open water on the map, in the dashboard
+    // KPIs, in the reports and in the basin that archives every analysis.
+    for (const id of Object.keys(REFERENCE_ASSETS)) {
+      const { classified, warning, skipped, inferred } = classifyEntry(
+        entry(id, 'Boya_biomasa_referencia'),
+      );
+      expect(warning).toBeNull();
+      expect(skipped).toBe(false);
+      expect(inferred).toBe(false);
+      expect(classified!.providerFolder).toBe(REFERENCE_PROVIDER_FOLDER);
+      expect(tierForProviderFolder(classified!.providerFolder)).toBe(
+        'reference',
+      );
+    }
+  });
+
+  it('gives a calibration series no place and no station', () => {
+    // It measures nowhere. A place would make it the nearest dataset to
+    // somewhere, and the fallback would start winning against real data.
+    const [id] = Object.keys(REFERENCE_ASSETS);
+    const { classified } = classifyEntry(entry(id));
+    expect(classified!.place).toBeNull();
+    expect(classified!.station).toBeNull();
+    expect(OCEANS).toContain(classified!.ocean);
+  });
+
+  it('keeps the published name as the fragment, drift and all', () => {
+    const [id] = Object.keys(REFERENCE_ASSETS);
+    const { classified } = classifyEntry(
+      entry(id, 'Boya_microplasticos_referencia.'),
+    );
+    expect(classified!.fragment).toBe('Boya_microplasticos_referencia.');
+  });
+
+  it('resolves the type from the table, never from the name', () => {
+    // The names are inconsistent — a trailing dot here, a capital there — and a
+    // rename must not silently change what the series is taken to be.
+    const [id, datasetType] = Object.entries(REFERENCE_ASSETS)[0];
+    const { classified } = classifyEntry(
+      entry(id, 'nombre completamente otro'),
+    );
+    expect(classified!.datasetType).toBe(datasetType);
   });
 });
 

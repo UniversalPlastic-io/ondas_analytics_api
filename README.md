@@ -139,7 +139,19 @@ Se ingieren por el mismo pipeline que cualquier otro activo y llevan su
 procedencia declarada en `dct:provenance`, así que el catálogo distingue unas de
 otras. El mapa, los KPIs del cuadro de mando y los informes las excluyen
 explícitamente: describen mediciones de un sitio, y una serie de calibración no
-lo es. Regenerarlas y publicarlas:
+lo es.
+
+El nivel no se deduce de quién publica el activo, sino de su asset id, en la
+tabla `REFERENCE_ASSETS` de
+[asset-map.ts](src/api-v1/dataspace/source/asset-map.ts). Tiene que ser así:
+quien las publica en el espacio es UP, el mismo participante que publica datos
+observados, de modo que clasificarlas por su proveedor las metería en el nivel
+observado — una serie sintética en mar abierto acabaría en el mapa, en los KPIs y
+en la cuenca bajo la que se archiva cada análisis. Por lo mismo no llevan lugar
+ni estación: un lugar las convertiría en el dataset más cercano a algún sitio, y
+el sustituto empezaría a ganarle al dato real.
+
+Regenerarlas y publicarlas:
 
 ```bash
 npm run reference:generate   # escribe en output/reference/
