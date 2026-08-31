@@ -284,6 +284,23 @@ export function buildCatalogRequest(
 }
 
 /**
+ * True for the one transfer failure worth retrying.
+ *
+ * The connector polls for the endpoint data reference after a negotiation and
+ * gives up on a fixed timer. That timer fires often enough to look like a broken
+ * asset, and for months it was read as one. It is not: the same asset fails and
+ * then succeeds minutes apart, and the timings separate cleanly — every failure
+ * sits at 18-20 s, every success at 5-6 s.
+ *
+ * Deliberately narrow. A 404 from the provider's own backend and a refused
+ * contract are both deterministic, and retrying either would only multiply the
+ * load on a partner's connector to reach the same answer.
+ */
+export function isEdrTimeout(message: string): boolean {
+  return /no endpoint data reference/i.test(message);
+}
+
+/**
  * Explains a connector 500 in terms of where the exchange broke.
  *
  * The connector reports every downstream failure as a 500 with a nested body, so
@@ -312,9 +329,11 @@ export function explainTransferFailure(body: unknown): string {
     /^\s*\[\s*\]\s*$/.test(response)
   ) {
     return (
-      `${message}. The contract negotiation produced no endpoint data reference, ` +
-      `so the provider never opened a transfer. This is a provider-side or connector-side ` +
-      `problem, not a missing asset.`
+      `${message}. The negotiation produced no endpoint data reference in time. ` +
+      `Measured transient: on 2026-09-01 six of seven assets that failed this way ` +
+      `succeeded on a retry, and every failure took 18-20 s against 5-6 s for every ` +
+      `success — the connector gives up polling rather than the provider refusing. ` +
+      `Retried automatically; this is what it looks like when the retries run out.`
     );
   }
   if (/getting the data/i.test(message) && status === 404) {

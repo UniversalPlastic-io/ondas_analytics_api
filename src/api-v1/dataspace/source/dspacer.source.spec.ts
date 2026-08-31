@@ -28,6 +28,7 @@ function source(
     participants: Participant[];
     catalog: (p: Participant) => Promise<unknown>;
     transfer: (ref: SourceRef) => Promise<unknown>;
+    transferRetries: number;
   }> = {},
 ) {
   const client = {
@@ -40,7 +41,22 @@ function source(
       (async () => ({ metadata: {}, dataset: { records: [] } })),
     healthy: async () => true,
   } as unknown as DspacerClient;
-  return new DspacerSource(client);
+  return new DspacerSource(
+    client,
+    overrides.transferRetries === undefined
+      ? {}
+      : { transferRetries: overrides.transferRetries },
+  );
+}
+
+/** The failure the connector raises when it stops waiting for the EDR. */
+function edrTimeout(): DspacerRequestError {
+  return new DspacerRequestError(
+    500,
+    'transfer',
+    'The response from checking the EDR transaction state was unsuccessful. ' +
+      'The negotiation produced no endpoint data reference in time.',
+  );
 }
 
 describe('DspacerSource.list', () => {
@@ -171,6 +187,73 @@ describe('DspacerSource.get', () => {
     await expect(src.get(ref)).rejects.toThrow(
       /without a resolvable data address/,
     );
+  });
+
+  it('retries a negotiation whose endpoint data reference never arrived', async () => {
+    // Measured on 2026-09-01: a transfer resolves in about five seconds or fails
+    // at eighteen, and the eighteen is the connector giving up on polling. Six of
+    // seven assets that failed this way came back on a retry. Reading it as a
+    // permanent failure is what left the read model unpopulated for months.
+    let attempts = 0;
+    const src = source({
+      transfer: async () => {
+        attempts += 1;
+        if (attempts < 3) throw edrTimeout();
+        return { metadata: {}, dataset: { records: [] } };
+      },
+    });
+    await expect(src.get(ref)).resolves.toMatchObject({ ref });
+    expect(attempts).toBe(3);
+  });
+
+  it('gives up once the attempts are spent, and says so', async () => {
+    let attempts = 0;
+    const src = source({
+      transferRetries: 2,
+      transfer: async () => {
+        attempts += 1;
+        throw edrTimeout();
+      },
+    });
+    await expect(src.get(ref)).rejects.toThrow(/no endpoint data reference/);
+    expect(attempts).toBe(3);
+  });
+
+  it('does not retry a refused contract or a missing asset', async () => {
+    // Both are deterministic. Retrying either would only multiply the load on a
+    // partner's connector to reach the same answer.
+    for (const error of [
+      new DspacerRequestError(403, 'transfer', 'no contract'),
+      new DspacerRequestError(404, 'transfer', 'unknown asset'),
+    ]) {
+      let attempts = 0;
+      const src = source({
+        transfer: async () => {
+          attempts += 1;
+          throw error;
+        },
+      });
+      await expect(src.get(ref)).rejects.toThrow();
+      expect(attempts).toBe(1);
+    }
+  });
+
+  it('does not retry an asset whose provider serves nothing behind it', async () => {
+    // The negotiation succeeded and the provider's own backend 404s. Nothing
+    // about waiting changes that.
+    let attempts = 0;
+    const src = source({
+      transfer: async () => {
+        attempts += 1;
+        throw new DspacerRequestError(
+          500,
+          'transfer',
+          "transfer failed: the provider's data plane returned 404, which means the asset is published without a resolvable data address",
+        );
+      },
+    });
+    await expect(src.get(ref)).rejects.toThrow(AssetForbiddenError);
+    expect(attempts).toBe(1);
   });
 
   it('treats a 404 from the connector itself as a missing asset', async () => {

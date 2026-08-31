@@ -3,6 +3,7 @@ import {
   buildContractRequest,
   dataProviders,
   explainTransferFailure,
+  isEdrTimeout,
   parseCatalog,
   parseParticipants,
   parseUploadedAsset,
@@ -376,7 +377,18 @@ describe('explainTransferFailure', () => {
   it('names the missing-EDR failure as a negotiation problem, not a missing asset', () => {
     const msg = explainTransferFailure(transferErrors.edr_never_materialised);
     expect(msg).toContain('no endpoint data reference');
-    expect(msg).toContain('not a missing asset');
+    // The message has to say it is transient, because for months it said the
+    // opposite and the read model was left unpopulated on the strength of it.
+    expect(msg).toMatch(/transient|retr/i);
+    expect(isEdrTimeout(msg)).toBe(true);
+  });
+
+  it('does not mark the provider-404 failure as retryable', () => {
+    // Deterministic: the negotiation worked and the provider's own backend has
+    // nothing behind the asset. Retrying only multiplies load to reach the same
+    // answer.
+    const msg = explainTransferFailure(transferErrors.provider_backend_404);
+    expect(isEdrTimeout(msg)).toBe(false);
   });
 
   it('names the 404 failure as an asset published without a resolvable data address', () => {

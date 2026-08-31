@@ -222,21 +222,38 @@ antes de iniciar un escaneo.
 
 | # | Asunto | Impacto |
 |---|---|---|
-| 1 | Forma de la respuesta de `POST /transfer/request` | Bloquea el normalizador de entrada |
+| ✅ | ~~La transferencia no resuelve~~ | **Resuelto el 01/09/2026.** Ver abajo |
 | 2 | Especificación del `login-service` | El login se implementa contra el comportamiento observado |
 | 3 | Las operaciones del middleware declaran `schema: {}` | Las formas de respuesta se derivan de la observación, no del contrato |
 | 4 | Qué motor aplica las obligaciones y prohibiciones ODRL | No afecta al consumo; sí a las condiciones de uso |
 | 5 | Límites de uso y tamaño máximo de activo | Necesario para dimensionar la concurrencia |
-| 6 | Todos los activos del conector resuelven a un mismo `dataAddress.baseUrl` | Es la causa del punto 1. Un análisis que publiquemos puede heredarlo y quedar en el catálogo sin dato recuperable — ver [report-publishing.md §9](report-publishing.md#9-riesgos-abiertos) |
+| 6 | Tres proveedores publican activos que su propio backend no sirve | Su plano de datos responde 404 tras una negociación correcta. No se reintenta: es determinista |
 | 7 | Semántica real de `no_restriction` | Decide si «compartido con todos» describe a cualquier BPN del espacio o a algo más amplio |
 
-Los puntos 1 a 3 y el 6 se cierran con SQS. Hasta entonces, este documento
-distingue de forma explícita lo contrastado de lo pendiente.
+Los puntos 2, 3 y 6 se cierran con SQS. Hasta entonces, este documento distingue
+de forma explícita lo contrastado de lo pendiente.
 
-Consecuencia práctica del punto 6 para la validación: mientras `transfer/request`
-no resuelva, el esquema DCAT publicado por el proveedor tampoco se puede traer, y
-la comprobación de columnas cae a las copias de `metadata/DCAT/`. El mecanismo
-está listo y anota en cada activo cuál respondió.
+### La transferencia sí resuelve: era un temporizador, no un activo roto
+
+Durante meses `POST /transfer/request` se dio por inservible, y con él la carga
+del modelo de lectura. La medición del **01/09/2026** dice otra cosa.
+
+Los tiempos separan los dos desenlaces sin solaparse: **todo éxito llega en 5-6 s
+y todo fallo en 18-20 s**. Ese fallo es el conector dejando de esperar la
+*endpoint data reference* tras la negociación, no el proveedor negándose. Y no es
+propiedad del activo: el mismo activo falla y minutos después funciona. De siete
+activos que fallaron así, **seis se recuperaron reintentando** —uno al segundo
+intento, uno al tercero, uno al cuarto—.
+
+`DspacerSource.get()` reintenta ahora esa negociación, y sólo esa. Un 403 por
+contrato y un 404 del backend del proveedor son deterministas: reintentarlos sólo
+multiplicaría la carga sobre el conector de un socio para llegar a la misma
+respuesta. Sin espera entre intentos, porque el fallo ya costó dieciocho segundos.
+
+Comprobado de extremo a extremo: **los ocho esquemas DCAT se descargan**, cuatro
+al primer intento y cuatro al segundo, incluidos los de `atmosfera_previa_evento`
+y `oceanografia_previa_evento`, que no tienen copia en `metadata/DCAT/` y cuyas
+columnas no se comparaban con nada.
 
 ---
 

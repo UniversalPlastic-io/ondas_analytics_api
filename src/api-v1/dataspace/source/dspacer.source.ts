@@ -11,7 +11,11 @@ import {
   SourceRef,
 } from './dataspace-source';
 import { DspacerClient, DspacerRequestError } from './dspacer.client';
-import { DspacerRefPayload, parseCatalog } from './dspacer-catalog';
+import {
+  DspacerRefPayload,
+  isEdrTimeout,
+  parseCatalog,
+} from './dspacer-catalog';
 import { classifyEntry } from './asset-map';
 
 /**
@@ -28,7 +32,16 @@ export class DspacerSource implements DataspaceSource {
 
   constructor(
     private readonly client: DspacerClient,
-    private readonly opts: { catalogPageSize?: number } = {},
+    private readonly opts: {
+      catalogPageSize?: number;
+      /**
+       * Extra attempts for a transfer whose endpoint data reference never
+       * arrived. Four attempts total by default, which is what the measurement
+       * of 2026-09-01 needed to recover six of seven: one asset came back on the
+       * second attempt, one on the third, one on the fourth.
+       */
+      transferRetries?: number;
+    } = {},
   ) {}
 
   async list(): Promise<SourceListing> {
@@ -88,12 +101,36 @@ export class DspacerSource implements DataspaceSource {
    * carries no version, date or checksum, so the checksum computed here is the
    * only change detector available and it necessarily comes after the transfer.
    */
+  /**
+   * Fetches one asset, retrying the negotiation that timed out.
+   *
+   * A transfer either resolves in about five seconds or fails at eighteen, and
+   * the eighteen is the connector giving up on polling for the endpoint data
+   * reference — not the provider refusing and not the asset being empty. That
+   * was read as a permanent failure for months, and it is why the read model
+   * could not be populated.
+   *
+   * No backoff between attempts: the failure already cost eighteen seconds of
+   * waiting, which is more delay than any backoff would add, and the next
+   * negotiation is independent of the one that timed out.
+   */
   async get(ref: SourceRef): Promise<FetchedAsset> {
+    const attempts = Math.max(1, (this.opts.transferRetries ?? 3) + 1);
     let payload: unknown;
-    try {
-      payload = await this.client.transfer(ref);
-    } catch (e) {
-      throw this.translate(ref, e);
+
+    for (let attempt = 1; ; attempt += 1) {
+      try {
+        payload = await this.client.transfer(ref);
+        break;
+      } catch (e) {
+        const translated = this.translate(ref, e);
+        const retryable =
+          e instanceof DspacerRequestError && isEdrTimeout(e.message);
+        if (!retryable || attempt >= attempts) throw translated;
+        this.logger.warn(
+          `${ref.label}: no endpoint data reference after ${attempt} of ${attempts} attempts; retrying`,
+        );
+      }
     }
 
     // The connector returns the asset's content as parsed JSON. Re-serialising it

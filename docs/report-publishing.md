@@ -253,13 +253,17 @@ nuestro. No entra en este diseño.
 
 | # | Qué | Por qué bloquea |
 |---|---|---|
-| 1 | **Todos los activos del conector comparten un mismo `dataAddress.baseUrl`** | Es la causa de que `POST /transfer/request` no resuelva. Si el conector asigna ese mismo `baseUrl` a lo que subimos, un análisis publicado tampoco se podrá recuperar, y el activo sería un catálogo sin dato. Sigue sin comprobarse, y es la razón de que el interruptor siga apagado |
+| 1 | ~~Un análisis publicado podría no recuperarse~~ | **Menos grave de lo que parecía.** El 01/09/2026 se midió que la transferencia sí resuelve: el fallo era el conector dejando de esperar la *endpoint data reference*, y un reintento lo recupera. Queda por comprobar con **una** publicación real si un activo que subamos se descarga igual |
 | 2 | La especificación del *middleware* declara las respuestas de las tres operaciones de escritura como `schema: {}` | Los nombres de campo de la respuesta no están documentados. La forma del activo se conoce por `POST /data/all`, que devuelve `@id` y `properties`. `parseUploadedAsset` acepta varias grafías del identificador en vez de apostar por una, y falla explícitamente si no encuentra ninguna: sin id no hay contrato que crear, así que no es un éxito |
 | 3 | Semántica real de `no_restriction` | ¿Cualquier BPN del espacio, o público de verdad? Decide si «compartido con todo el mundo» es exacto. A confirmar con SQS |
 | 4 | Crecimiento del catálogo | Ver §6 |
 
-El riesgo 1 no se resuelve leyendo código: hace falta **una** publicación real y
-mirar el `dataAddress` que devuelve. Como es una escritura en el catálogo de
+El riesgo 1 se ha reducido, no cerrado. Lo que se creía una dirección de datos
+compartida e inservible resultó ser un temporizador: con reintento, los ocho
+esquemas DCAT y la mayoría de los datasets se descargan
+—ver [dspacer-integration.md](dspacer-integration.md#la-transferencia-sí-resuelve-era-un-temporizador-no-un-activo-roto)—.
+Lo que falta es comprobar que un activo **subido por nosotros** se comporta igual,
+y eso necesita **una** publicación real. Como es una escritura en el catálogo de
 producción, no se hace sin pedirlo, y hasta entonces el interruptor sigue
 apagado.
 
