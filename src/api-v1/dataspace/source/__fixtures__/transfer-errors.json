@@ -1,0 +1,16 @@
+{
+ "edr_never_materialised": {
+  "detail": {
+   "message": "The response from checking the EDR transaction state was unsuccessful",
+   "downstream_status": 200,
+   "downstream_response": "[]"
+  }
+ },
+ "provider_data_404": {
+  "detail": {
+   "message": "The response from getting the data was unsuccessful",
+   "downstream_status": 404,
+   "downstream_response": "{\"timestamp\":\"2026-08-31T14:17:30.214+00:00\",\"status\":404,\"error\":\"Not Found\",\"path\":\"/ddadf21b-0c4d-40c8-97d7-e5cf902a5024\"}"
+  }
+ }
+}

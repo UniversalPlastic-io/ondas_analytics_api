@@ -1,0 +1,276 @@
+{
+ "@id": "abb4be3e-9c07-4dbb-b213-87275e3081ac",
+ "@type": "dcat:Catalog",
+ "dcat:dataset": [
+  {
+   "@id": "3735082f-9ed1-4c07-b96f-518b92234bb0",
+   "@type": "dcat:Dataset",
+   "odrl:hasPolicy": {
+    "@id": "bXVlc3RyYXNfcGVjZXNfdGVuZXJpZmU=:MzczNTA4MmYtOWVkMS00YzA3LWI5NmYtNTE4YjkyMjM0YmIw:YjkwMTRmYTItNTk3My00MDM0LWJkYWQtMDYxMTk3ZjU4OWRm",
+    "@type": "odrl:Offer",
+    "odrl:permission": {
+     "odrl:action": {
+      "@id": "USE"
+     },
+     "odrl:constraint": {
+      "odrl:or": {
+       "odrl:leftOperand": {
+        "@id": "BusinessPartnerNumber"
+       },
+       "odrl:operator": {
+        "@id": "odrl:eq"
+       },
+       "odrl:rightOperand": "BPNL000000000001"
+      }
+     }
+    },
+    "odrl:prohibition": [],
+    "odrl:obligation": []
+   },
+   "dcat:distribution": [
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "AzureStorage-PUSH"
+     },
+     "dcat:accessService": {
+      "@id": "a727a921-3e29-41ae-9de9-7b7a8752ead7",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    },
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "HttpData-PULL"
+     },
+     "dcat:accessService": {
+      "@id": "a727a921-3e29-41ae-9de9-7b7a8752ead7",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    },
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "HttpData-PUSH"
+     },
+     "dcat:accessService": {
+      "@id": "a727a921-3e29-41ae-9de9-7b7a8752ead7",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    },
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "AmazonS3-PUSH"
+     },
+     "dcat:accessService": {
+      "@id": "a727a921-3e29-41ae-9de9-7b7a8752ead7",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    }
+   ],
+   "name": "muestras_peces_tenerife",
+   "description": "Concentración de microplásticos en muestras de peces, expresada en microgramos por gramos (µg/g). Incluye 12 tipos de polímeros plásticos: Polietileno, Polipropileno, Poliestireno, Cloruro de polivinilo, Tereftalato de polietileno, Poliamida, Policarbonato, Poliuretano, Poli(metacrilato de metilo), Acrilonitrilo-butadieno-estireno, Acetato de polivinilo y Alcohol polivinílico.",
+   "id": "3735082f-9ed1-4c07-b96f-518b92234bb0"
+  },
+  {
+   "@id": "ede82a3c-2859-47e7-a586-45dff1de2897",
+   "@type": "dcat:Dataset",
+   "odrl:hasPolicy": {
+    "@id": "bXVlc3RyYXNfcGVjZXNfYmFkYWxvbmE=:ZWRlODJhM2MtMjg1OS00N2U3LWE1ODYtNDVkZmYxZGUyODk3:YTU2NjJkMmUtZTg4Ni00MGU3LTk3MzktYmVhNmE0ZDM5M2Uy",
+    "@type": "odrl:Offer",
+    "odrl:permission": {
+     "odrl:action": {
+      "@id": "USE"
+     },
+     "odrl:constraint": {
+      "odrl:or": {
+       "odrl:leftOperand": {
+        "@id": "BusinessPartnerNumber"
+       },
+       "odrl:operator": {
+        "@id": "odrl:eq"
+       },
+       "odrl:rightOperand": "BPNL000000000001"
+      }
+     }
+    },
+    "odrl:prohibition": [],
+    "odrl:obligation": []
+   },
+   "dcat:distribution": [
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "AzureStorage-PUSH"
+     },
+     "dcat:accessService": {
+      "@id": "a727a921-3e29-41ae-9de9-7b7a8752ead7",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    },
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "HttpData-PULL"
+     },
+     "dcat:accessService": {
+      "@id": "a727a921-3e29-41ae-9de9-7b7a8752ead7",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    },
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "HttpData-PUSH"
+     },
+     "dcat:accessService": {
+      "@id": "a727a921-3e29-41ae-9de9-7b7a8752ead7",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    },
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "AmazonS3-PUSH"
+     },
+     "dcat:accessService": {
+      "@id": "a727a921-3e29-41ae-9de9-7b7a8752ead7",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    }
+   ],
+   "name": "muestras_peces_badalona",
+   "description": "Concentración de microplásticos en muestras de peces, expresada en microgramos por gramos (µg/g). Incluye 12 tipos de polímeros plásticos: Polietileno, Polipropileno, Poliestireno, Cloruro de polivinilo, Tereftalato de polietileno, Poliamida, Policarbonato, Poliuretano, Poli(metacrilato de metilo), Acrilonitrilo-butadieno-estireno, Acetato de polivinilo y Alcohol polivinílico.",
+   "id": "ede82a3c-2859-47e7-a586-45dff1de2897"
+  },
+  {
+   "@id": "6c72fc6a-e233-49e0-8fdb-940c3e6ded21",
+   "@type": "dcat:Dataset",
+   "odrl:hasPolicy": {
+    "@id": "bXVlc3RyYXNfcGVjZXNfZ2lqb24=:NmM3MmZjNmEtZTIzMy00OWUwLThmZGItOTQwYzNlNmRlZDIx:NTAyNDViYTAtOWNjNC00ZWJmLThkOWEtNzBkMTUzNmZkYWVj",
+    "@type": "odrl:Offer",
+    "odrl:permission": {
+     "odrl:action": {
+      "@id": "USE"
+     },
+     "odrl:constraint": {
+      "odrl:or": {
+       "odrl:leftOperand": {
+        "@id": "BusinessPartnerNumber"
+       },
+       "odrl:operator": {
+        "@id": "odrl:eq"
+       },
+       "odrl:rightOperand": "BPNL000000000001"
+      }
+     }
+    },
+    "odrl:prohibition": [],
+    "odrl:obligation": []
+   },
+   "dcat:distribution": [
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "AzureStorage-PUSH"
+     },
+     "dcat:accessService": {
+      "@id": "a727a921-3e29-41ae-9de9-7b7a8752ead7",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    },
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "HttpData-PULL"
+     },
+     "dcat:accessService": {
+      "@id": "a727a921-3e29-41ae-9de9-7b7a8752ead7",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    },
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "HttpData-PUSH"
+     },
+     "dcat:accessService": {
+      "@id": "a727a921-3e29-41ae-9de9-7b7a8752ead7",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    },
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "AmazonS3-PUSH"
+     },
+     "dcat:accessService": {
+      "@id": "a727a921-3e29-41ae-9de9-7b7a8752ead7",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    }
+   ],
+   "name": "muestras_peces_gijon",
+   "description": "Concentración de microplásticos en muestras de peces, expresada en microgramos por gramos (µg/g). Incluye 12 tipos de polímeros plásticos: Polietileno, Polipropileno, Poliestireno, Cloruro de polivinilo, Tereftalato de polietileno, Poliamida, Policarbonato, Poliuretano, Poli(metacrilato de metilo), Acrilonitrilo-butadieno-estireno, Acetato de polivinilo y Alcohol polivinílico.",
+   "id": "6c72fc6a-e233-49e0-8fdb-940c3e6ded21"
+  }
+ ],
+ "dcat:catalog": [],
+ "dcat:distribution": [],
+ "dcat:service": {
+  "@id": "a727a921-3e29-41ae-9de9-7b7a8752ead7",
+  "@type": "dcat:DataService",
+  "dcat:endpointDescription": "dspace:connector",
+  "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+  "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+ },
+ "dspace:participantId": "BPNL000000000003",
+ "@context": {
+  "tx": "https://w3id.org/tractusx/v0.0.1/ns/",
+  "tx-auth": "https://w3id.org/tractusx/auth/",
+  "cx-policy": "https://w3id.org/catenax/policy/",
+  "dcat": "http://www.w3.org/ns/dcat#",
+  "dct": "http://purl.org/dc/terms/",
+  "odrl": "http://www.w3.org/ns/odrl/2/",
+  "dspace": "https://w3id.org/dspace/v0.8/",
+  "@vocab": "https://w3id.org/edc/v0.0.1/ns/",
+  "edc": "https://w3id.org/edc/v0.0.1/ns/"
+ }
+}

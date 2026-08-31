@@ -1,0 +1,470 @@
+{
+ "@id": "3c33d08d-ab27-448c-ae58-98a87ae5edd1",
+ "@type": "dcat:Catalog",
+ "dcat:dataset": [
+  {
+   "@id": "e1e523dd-7577-4174-b761-8bd58fbb4d37",
+   "@type": "dcat:Dataset",
+   "odrl:hasPolicy": {
+    "@id": "RXNxdWVtYSBkZSBkYXRvcyBib3lhIGJpb21hc2Egc2x4KyB2MQ==:ZTFlNTIzZGQtNzU3Ny00MTc0LWI3NjEtOGJkNThmYmI0ZDM3:M2ZlOWU4MDYtYzhiMS00MjRkLWEyNjMtYjRmMDIzM2YwYjAw",
+    "@type": "odrl:Offer",
+    "odrl:permission": {
+     "odrl:action": {
+      "@id": "USE"
+     }
+    },
+    "odrl:prohibition": [],
+    "odrl:obligation": []
+   },
+   "dcat:distribution": [
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "AzureStorage-PUSH"
+     },
+     "dcat:accessService": {
+      "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    },
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "HttpData-PULL"
+     },
+     "dcat:accessService": {
+      "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    },
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "HttpData-PUSH"
+     },
+     "dcat:accessService": {
+      "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    },
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "AmazonS3-PUSH"
+     },
+     "dcat:accessService": {
+      "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    }
+   ],
+   "name": "metadatos_boya_biomasa_slx+",
+   "description": "Metadatos correspondientes al monitoreo de biomasa mediante boya Satlink SLX+",
+   "id": "e1e523dd-7577-4174-b761-8bd58fbb4d37"
+  },
+  {
+   "@id": "4d0de6e2-8944-45a4-86c1-093eec1c3f71",
+   "@type": "dcat:Dataset",
+   "odrl:hasPolicy": {
+    "@id": "RXNxdWVtYSBkZSBkYXRvcyBtdWVzdHJhcyBhZ3VhIHB5IGdjbXMgdjE=:NGQwZGU2ZTItODk0NC00NWE0LTg2YzEtMDkzZWVjMWMzZjcx:MmFiOTkzY2EtOTJiNC00ZTNlLWIwY2QtNTRlY2ZiMmMzYTU0",
+    "@type": "odrl:Offer",
+    "odrl:permission": {
+     "odrl:action": {
+      "@id": "USE"
+     }
+    },
+    "odrl:prohibition": [],
+    "odrl:obligation": []
+   },
+   "dcat:distribution": [
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "AzureStorage-PUSH"
+     },
+     "dcat:accessService": {
+      "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    },
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "HttpData-PULL"
+     },
+     "dcat:accessService": {
+      "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    },
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "HttpData-PUSH"
+     },
+     "dcat:accessService": {
+      "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    },
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "AmazonS3-PUSH"
+     },
+     "dcat:accessService": {
+      "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    }
+   ],
+   "name": "esquema_datos_muestras_agua_py_gcms_v1",
+   "description": "Este recurso es un esquema de datos para la preparación y estandarización de resultados de análisis de microplásticos en muestras de agua mediante pirólisis-GC/MS. Define la estructura esperada del dataset, incluyendo variables, unidades y formato, para facilitar la interoperabilidad y la ingestión en el espacio de datos.",
+   "id": "4d0de6e2-8944-45a4-86c1-093eec1c3f71"
+  },
+  {
+   "@id": "c4d99e61-faf0-4fbe-b167-8b8a8443a3dc",
+   "@type": "dcat:Dataset",
+   "odrl:hasPolicy": {
+    "@id": "RXNxdWVtYSBkZSBkYXRvcyBib3lhIG1pY3JvcGzDoXN0aWNvcyBzZWFib3QgdjE=:YzRkOTllNjEtZmFmMC00ZmJlLWIxNjctOGI4YTg0NDNhM2Rj:NTJkMmIzYTMtNDc0NC00NjFkLWFhYjMtMjNmY2UxZWYxZjdj",
+    "@type": "odrl:Offer",
+    "odrl:permission": {
+     "odrl:action": {
+      "@id": "USE"
+     }
+    },
+    "odrl:prohibition": [],
+    "odrl:obligation": []
+   },
+   "dcat:distribution": [
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "AzureStorage-PUSH"
+     },
+     "dcat:accessService": {
+      "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    },
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "HttpData-PULL"
+     },
+     "dcat:accessService": {
+      "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    },
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "HttpData-PUSH"
+     },
+     "dcat:accessService": {
+      "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    },
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "AmazonS3-PUSH"
+     },
+     "dcat:accessService": {
+      "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    }
+   ],
+   "name": "esquema_datos_boya_microplasticos_seabot_v1",
+   "description": "Este recurso contiene el esquema de datos para la preparación y estandarización de resultados del monitoreo de microplásticos mediante boya SEABOT. Define la estructura esperada del conjunto de datos, incluyendo variables, unidades y formato, para facilitar la interoperabilidad y la ingestión en el espacio de datos\n",
+   "id": "c4d99e61-faf0-4fbe-b167-8b8a8443a3dc"
+  },
+  {
+   "@id": "fbe3ecf6-6c6b-4337-970e-03cf1ad08995",
+   "@type": "dcat:Dataset",
+   "odrl:hasPolicy": {
+    "@id": "RXNxdWVtYSBkZSBkYXRvcyBtdWVzdHJhcyBwZWNlcyBweSBnY21zIHYx:ZmJlM2VjZjYtNmM2Yi00MzM3LTk3MGUtMDNjZjFhZDA4OTk1:Y2JjOWNjMGUtMzUzOS00YTEyLWJmMzgtYjAyNjVhNWM2MGVm",
+    "@type": "odrl:Offer",
+    "odrl:permission": {
+     "odrl:action": {
+      "@id": "USE"
+     }
+    },
+    "odrl:prohibition": [],
+    "odrl:obligation": []
+   },
+   "dcat:distribution": [
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "AzureStorage-PUSH"
+     },
+     "dcat:accessService": {
+      "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    },
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "HttpData-PULL"
+     },
+     "dcat:accessService": {
+      "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    },
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "HttpData-PUSH"
+     },
+     "dcat:accessService": {
+      "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    },
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "AmazonS3-PUSH"
+     },
+     "dcat:accessService": {
+      "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    }
+   ],
+   "name": "esquema_datos_muestras de peces_ py_gcms_v1",
+   "description": "Este recurso contiene el esquema de datos para la preparación y estandarización de resultados del monitoreo de microplásticos en muestras de peces analizadas mediante pirólisis-GC/MS. Define la estructura esperada del conjunto de datos, incluyendo variables, unidades y formato, para facilitar la interoperabilidad y la ingestión en el espacio de datos\n\n",
+   "id": "fbe3ecf6-6c6b-4337-970e-03cf1ad08995"
+  },
+  {
+   "@id": "c958044a-893b-4f5e-b5af-66281a57835e",
+   "@type": "dcat:Dataset",
+   "odrl:hasPolicy": {
+    "@id": "RXNxdWVtYSBkZSBkYXRvcyByZWNvZ2lkYXMgcGzDoXN0aWNvIGFwcCB1cCB2NzAwIHYx:Yzk1ODA0NGEtODkzYi00ZjVlLWI1YWYtNjYyODFhNTc4MzVl:ZGM0YjUwNzYtMTdmZC00Y2Y1LWEyM2ItNjZlMTU4YzNjNWRm",
+    "@type": "odrl:Offer",
+    "odrl:permission": {
+     "odrl:action": {
+      "@id": "USE"
+     }
+    },
+    "odrl:prohibition": [],
+    "odrl:obligation": []
+   },
+   "dcat:distribution": [
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "AzureStorage-PUSH"
+     },
+     "dcat:accessService": {
+      "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    },
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "HttpData-PULL"
+     },
+     "dcat:accessService": {
+      "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    },
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "HttpData-PUSH"
+     },
+     "dcat:accessService": {
+      "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    },
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "AmazonS3-PUSH"
+     },
+     "dcat:accessService": {
+      "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    }
+   ],
+   "name": "esquema_datos_recogidas_plastico_app_up_v700_v1",
+   "description": "Este recurso contiene el esquema de datos para la preparación y estandarización de resultados de registros de ciencia ciudadana generados mediante la aplicación móvil Universal Plastic v7.0.0, utilizada para registrar limpiezas de plásticos costeros. Define la estructura esperada del conjunto de datos, incluyendo variables, unidades y formatos, con el fin de facilitar la interoperabilidad y la ingestión en el espacio de datos.",
+   "id": "c958044a-893b-4f5e-b5af-66281a57835e"
+  },
+  {
+   "@id": "e81d27e4-45c6-42a3-9755-dbd7ac494d05",
+   "@type": "dcat:Dataset",
+   "odrl:hasPolicy": {
+    "@id": "Qm95YSBiaW9tYXNhIEPDoWRpeg==:ZTgxZDI3ZTQtNDVjNi00MmEzLTk3NTUtZGJkN2FjNDk0ZDA1:Nzc5MWQ5NzktNDk1Yi00ZWUzLWFkOGQtZTIwZjg5NjBjNjYw",
+    "@type": "odrl:Offer",
+    "odrl:permission": {
+     "odrl:action": {
+      "@id": "USE"
+     },
+     "odrl:constraint": {
+      "odrl:or": {
+       "odrl:leftOperand": {
+        "@id": "BusinessPartnerNumber"
+       },
+       "odrl:operator": {
+        "@id": "odrl:eq"
+       },
+       "odrl:rightOperand": "BPNL000000000001"
+      }
+     }
+    },
+    "odrl:prohibition": [],
+    "odrl:obligation": []
+   },
+   "dcat:distribution": [
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "AzureStorage-PUSH"
+     },
+     "dcat:accessService": {
+      "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    },
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "HttpData-PULL"
+     },
+     "dcat:accessService": {
+      "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    },
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "HttpData-PUSH"
+     },
+     "dcat:accessService": {
+      "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    },
+    {
+     "@type": "dcat:Distribution",
+     "dct:format": {
+      "@id": "AmazonS3-PUSH"
+     },
+     "dcat:accessService": {
+      "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+      "@type": "dcat:DataService",
+      "dcat:endpointDescription": "dspace:connector",
+      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+     }
+    }
+   ],
+   "name": "Boya biomasa Cádiz",
+   "description": "Registro de datos de biomasa obtenidos mediante una boya ecosonda autónoma Satlink SLX fondeada en un puerto de Cádiz. La planilla recoge las estimaciones de biomasa, la fecha, la hora y la biomasa en los distintos rangos de profundidad.\n",
+   "id": "e81d27e4-45c6-42a3-9755-dbd7ac494d05"
+  }
+ ],
+ "dcat:catalog": [],
+ "dcat:distribution": [],
+ "dcat:service": {
+  "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+  "@type": "dcat:DataService",
+  "dcat:endpointDescription": "dspace:connector",
+  "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
+  "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
+ },
+ "dspace:participantId": "BPNL000000000001",
+ "@context": {
+  "tx": "https://w3id.org/tractusx/v0.0.1/ns/",
+  "tx-auth": "https://w3id.org/tractusx/auth/",
+  "cx-policy": "https://w3id.org/catenax/policy/",
+  "dcat": "http://www.w3.org/ns/dcat#",
+  "dct": "http://purl.org/dc/terms/",
+  "odrl": "http://www.w3.org/ns/odrl/2/",
+  "dspace": "https://w3id.org/dspace/v0.8/",
+  "@vocab": "https://w3id.org/edc/v0.0.1/ns/",
+  "edc": "https://w3id.org/edc/v0.0.1/ns/"
+ }
+}
