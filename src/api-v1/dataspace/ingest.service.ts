@@ -11,12 +11,16 @@ import {
 import { GeoPoint, point } from './schemas/geo.schema';
 import {
   CATEGORY_BY_TYPE,
-  DATA_BUCKET,
   DatasetType,
   tierForProviderFolder,
 } from './dataspace.constants';
-import { parseKey, resolveLocation } from './s3-keys';
-import { getObject, ObjectNotFoundError } from './s3-reader';
+import { resolveLocation } from './asset-location';
+import {
+  AssetNotFoundError,
+  DataspaceSource,
+  SourceEntry,
+} from './source/dataspace-source';
+import { classifyEntry } from './source/asset-map';
 import { validateContainer } from './validate-container';
 import { validateAgainstDcat } from './validate-dcat';
 import { CanonicalObservation, normalizeDataset } from './normalize';
@@ -32,12 +36,22 @@ export class InvalidAssetError extends Error {
   }
 }
 
-export class UnsupportedKeyError extends Error {
-  constructor(key: string) {
-    super(
-      `key "${key}" does not match the data space layout public/{ocean}/{provider}/{file}.json (or points at a schema/output folder)`,
-    );
-    this.name = 'UnsupportedKeyError';
+/** The asset is offered, but the API does not know what it is. */
+export class UnclassifiedAssetError extends Error {
+  constructor(
+    readonly sourceId: string,
+    reason: string,
+  ) {
+    super(reason);
+    this.name = 'UnclassifiedAssetError';
+  }
+}
+
+/** A schema or metadata document. Published alongside datasets, and not one. */
+export class NonDataAssetError extends Error {
+  constructor(readonly sourceId: string) {
+    super(`asset ${sourceId} is a schema or metadata document, not a dataset`);
+    this.name = 'NonDataAssetError';
   }
 }
 
@@ -57,9 +71,10 @@ const INSERT_CHUNK = 2000;
 
 /** Exactly the fields an ingest writes onto an asset. */
 interface AssetUpsert {
-  key: string;
-  bucket: string;
-  url: string;
+  sourceId: string;
+  label: string | null;
+  providerBpn: string | null;
+  url: string | null;
   tier: 'observed' | 'reference';
   providerFolder: string | null;
   datasetType: string;
@@ -148,21 +163,32 @@ export class IngestService {
   }
 
   /**
-   * Fetches one key, validates it, normalizes it and replaces its observations.
+   * Transfers one asset, validates it, normalizes it and replaces its
+   * observations.
    *
-   * The asset upsert, the delete of the previous observations and the insert of
-   * the new ones run in one transaction, so a reader never sees a half-replaced
-   * dataset.
+   * The unchanged check happens after the transfer, not before it. The catalog
+   * carries no version, date or checksum, so there is nothing to compare until
+   * the content is in hand; what is saved is the reprocessing and the write, not
+   * the fetch.
    */
-  async ingestKey(
-    key: string,
+  async ingestEntry(
+    entry: SourceEntry,
+    source: DataspaceSource,
     options: IngestOptions = {},
   ): Promise<IngestOutcome> {
-    const parsed = parseKey(key);
-    if (!parsed) throw new UnsupportedKeyError(key);
+    const sourceId = entry.ref.id;
+    const classification = classifyEntry(entry);
+    if (classification.skipped) throw new NonDataAssetError(sourceId);
+    if (!classification.classified) {
+      throw new UnclassifiedAssetError(
+        sourceId,
+        classification.warning ?? `asset ${sourceId} could not be classified`,
+      );
+    }
+    const parsed = classification.classified;
 
-    const fetched = await getObject(parsed.key);
-    const existing = await this.assets.findOne({ key: parsed.key }).exec();
+    const fetched = await source.get(entry.ref);
+    const existing = await this.assets.findOne({ sourceId }).exec();
 
     if (
       !options.force &&
@@ -172,7 +198,8 @@ export class IngestService {
       existing.checksum === fetched.checksum
     ) {
       return {
-        key: parsed.key,
+        sourceId,
+        label: entry.ref.label,
         action: 'unchanged',
         assetId: String(existing._id),
         observations: existing.observationCount,
@@ -183,12 +210,12 @@ export class IngestService {
     const container = validateContainer(fetched.json, parsed.datasetType);
     if (!container.ok || !container.envelope || !container.datasetType) {
       await this.markFailed(
-        parsed.key,
+        sourceId,
         container.errors.join('; '),
         options.syncRunId ?? null,
       );
       throw new InvalidAssetError(
-        `asset ${parsed.key} failed container validation`,
+        `asset ${entry.ref.label} (${sourceId}) failed container validation`,
         container.errors,
       );
     }
@@ -199,7 +226,7 @@ export class IngestService {
     const warnings = [...container.warnings];
 
     const location = resolveLocation(
-      parsed.fragment,
+      sourceId,
       metadata['location'] as { lat?: unknown; lon?: unknown } | null,
       parsed.station,
     );
@@ -260,9 +287,12 @@ export class IngestService {
     }
 
     const assetDoc: AssetUpsert = {
-      key: parsed.key,
-      bucket: DATA_BUCKET,
-      url: fetched.url,
+      sourceId,
+      label: entry.ref.label,
+      providerBpn:
+        (entry.ref.payload as { providerBpn?: string } | undefined)
+          ?.providerBpn ?? null,
+      url: fetched.url ?? null,
       // Decided once, here, and stored. Every tier-aware read filters on the
       // field; none of them re-derive it from the key.
       tier: tierForProviderFolder(parsed.providerFolder),
@@ -292,10 +322,10 @@ export class IngestService {
       summary: buildSummary(category, normalized.observations),
       warnings,
       status: 'active' as const,
-      etag: fetched.etag,
+      etag: fetched.etag ?? null,
       checksum: fetched.checksum,
       sizeBytes: fetched.sizeBytes,
-      sourceLastModified: fetched.lastModified,
+      sourceLastModified: fetched.lastModified ?? null,
       lastSyncedAt: new Date(),
       lastSyncRunId: options.syncRunId ?? null,
       lastError: null,
@@ -311,11 +341,12 @@ export class IngestService {
     );
 
     this.logger.log(
-      `${action} ${parsed.key} → ${normalized.observations.length} observations, ${warnings.length} warnings`,
+      `${action} ${entry.ref.label} (${sourceId}) → ${normalized.observations.length} observations, ${warnings.length} warnings`,
     );
 
     return {
-      key: parsed.key,
+      sourceId,
+      label: entry.ref.label,
       action,
       assetId: String(assetId),
       observations: normalized.observations.length,
@@ -347,11 +378,10 @@ export class IngestService {
 
     const reserved = await this.assets
       .findOneAndUpdate(
-        { key: assetDoc.key },
+        { sourceId: assetDoc.sourceId },
         {
           $setOnInsert: {
-            key: assetDoc.key,
-            bucket: assetDoc.bucket,
+            sourceId: assetDoc.sourceId,
             url: assetDoc.url,
             datasetType: assetDoc.datasetType,
             category: assetDoc.category,
@@ -408,7 +438,7 @@ export class IngestService {
         .exec();
     } catch (e) {
       this.logger.warn(
-        `stale observations left behind for ${assetDoc.key}: ${(e as Error).message}. They are not served; the next sync removes them.`,
+        `stale observations left behind for ${assetDoc.sourceId}: ${(e as Error).message}. They are not served; the next sync removes them.`,
       );
     }
 
@@ -417,13 +447,13 @@ export class IngestService {
 
   /** Records a validation/fetch failure on the asset without dropping its data. */
   private async markFailed(
-    key: string,
+    sourceId: string,
     error: string,
     syncRunId: Types.ObjectId | null,
   ): Promise<void> {
     await this.assets
       .updateOne(
-        { key },
+        { sourceId },
         {
           $set: {
             status: 'failed',
@@ -436,14 +466,20 @@ export class IngestService {
       .exec();
   }
 
-  /** Flags an asset whose object no longer exists. Observations are kept. */
+  /**
+   * Flags an asset the space no longer offers. Observations are kept.
+   *
+   * Reserved for an asset that genuinely disappeared from every catalog. An
+   * asset that is merely unreadable — a lapsed contract, a provider serving no
+   * data — is not missing, and marking it so would discard valid observations.
+   */
   async markMissing(
-    key: string,
+    sourceId: string,
     syncRunId: Types.ObjectId | null,
   ): Promise<AssetDocument | null> {
     return this.assets
       .findOneAndUpdate(
-        { key },
+        { sourceId },
         {
           $set: {
             status: 'missing',
@@ -457,6 +493,6 @@ export class IngestService {
   }
 
   static isNotFound(e: unknown): boolean {
-    return e instanceof ObjectNotFoundError;
+    return e instanceof AssetNotFoundError;
   }
 }

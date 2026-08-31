@@ -6,7 +6,10 @@ import { AppModule } from '../src/app.module';
 import { AnalysesService } from '../src/api-v1/analyses/analyses.service';
 import { Asset } from '../src/api-v1/dataspace/schemas/asset.schema';
 import { Observation } from '../src/api-v1/dataspace/schemas/observation.schema';
-import { publicUrlForKey } from '../src/api-v1/dataspace/dataspace.constants';
+import {
+  DATASPACE_SOURCE,
+  DataspaceSource,
+} from '../src/api-v1/dataspace/source/dataspace-source';
 import type { AnalysesRunResponse } from '../src/api-v1/analyses/analyses.types';
 
 /**
@@ -145,8 +148,12 @@ async function main() {
     .lean()
     .exec();
 
+  const source = app.get<DataspaceSource>(DATASPACE_SOURCE);
+  const listing = await source.list();
+  const offered = new Map(listing.entries.map((e) => [e.ref.id, e]));
+
   const fidelity: Array<{
-    key: string;
+    asset: string;
     expected: number | null;
     stored: number;
     skipped: number;
@@ -155,20 +162,26 @@ async function main() {
 
   for (const asset of active) {
     const a = asset as unknown as {
-      key: string;
+      sourceId: string;
+      label?: string | null;
       currentIngestId?: Types.ObjectId;
       _id: Types.ObjectId;
       warnings?: string[];
     };
+    // Re-read the asset from the space and count what it actually contains.
+    // A source that cannot serve it leaves `expected` null, and the asset is
+    // excluded from the ratio rather than counted as a loss.
     let expected: number | null = null;
-    try {
-      const res = await fetch(publicUrlForKey(a.key));
-      if (res.ok)
+    const entry = offered.get(a.sourceId);
+    if (entry) {
+      try {
+        const fetched = await source.get(entry.ref);
         expected = expectedObservations(
-          ((await res.json()) as { dataset?: unknown }).dataset,
+          (fetched.json as { dataset?: unknown }).dataset,
         );
-    } catch {
-      expected = null;
+      } catch {
+        expected = null;
+      }
     }
     const stored = await observations.countDocuments({
       assetId: a._id,
@@ -180,7 +193,7 @@ async function main() {
     // so about — an unparseable date, say — is the system working, and the defect
     // is in the published file, not here.
     fidelity.push({
-      key: a.key,
+      asset: a.label ?? a.sourceId,
       expected,
       stored,
       skipped,
@@ -311,13 +324,13 @@ async function main() {
   );
   for (const m of comparable.filter((f) => !f.ok)) {
     console.log(
-      `  ! ${m.key}: esperado ${m.expected}, almacenado ${m.stored}, descartado con aviso ${m.skipped}`,
+      `  ! ${m.asset}: esperado ${m.expected}, almacenado ${m.stored}, descartado con aviso ${m.skipped}`,
     );
   }
   const explained = comparable.filter((f) => f.skipped > 0);
   for (const e of explained) {
     console.log(
-      `  · ${e.key}: ${e.skipped} registro(s) descartados por la ingesta, con aviso registrado`,
+      `  · ${e.asset}: ${e.skipped} registro(s) descartados por la ingesta, con aviso registrado`,
     );
   }
   const unreachable = fidelity.length - comparable.length;

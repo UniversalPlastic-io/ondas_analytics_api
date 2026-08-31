@@ -23,7 +23,6 @@ export interface CreateOrganizationInput {
   publicProfile?: boolean;
   dataProviderIds?: string[];
   providerFolders?: string[];
-  s3?: { bucket?: string; prefix?: string };
 }
 
 export interface CreateUserInput {
@@ -61,7 +60,6 @@ export class IdentityService {
       publicProfile: input.publicProfile ?? true,
       dataProviderIds: input.dataProviderIds ?? [slug],
       providerFolders: input.providerFolders ?? [slug],
-      s3: input.s3 ?? {},
       active: true,
     });
   }

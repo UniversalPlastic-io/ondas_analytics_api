@@ -1,23 +1,37 @@
 import {
   buildReferenceDatasets,
-  REFERENCE_KEYS,
+  REFERENCE_FILENAMES,
   REFERENCE_LOCATION,
   REFERENCE_RANGE,
   REFERENCE_STATISTICS,
+  ReferenceDatasetFile,
 } from './reference-datasets';
 import {
-  REFERENCE_PROVIDER_FOLDER,
+  CATEGORY_BY_TYPE,
+  REFERENCE_PUBLISHER,
   WATER_POLYMER_FIELDS,
+  canonicalDatasetType,
 } from './dataspace.constants';
-import { parseKey, resolveLocation } from './s3-keys';
+import { resolveLocation } from './asset-location';
 import { validateContainer } from './validate-container';
 import { normalizeDataset } from './normalize';
-import { SEED_KEYS } from './s3-reader';
 
 const files = buildReferenceDatasets();
 
+/** What the file declares it is. There is no path to read it out of any more. */
+function typeOf(file: ReferenceDatasetFile) {
+  return canonicalDatasetType(
+    (file.body.metadata as { datasetType?: unknown }).datasetType,
+  );
+}
+
+function categoryOf(file: ReferenceDatasetFile): string | null {
+  const t = typeOf(file);
+  return t ? CATEGORY_BY_TYPE[t] : null;
+}
+
 function fileFor(category: string) {
-  const file = files.find((f) => parseKey(f.key)?.category === category);
+  const file = files.find((f) => categoryOf(f) === category);
   if (!file) throw new Error(`no reference dataset for category ${category}`);
   return file;
 }
@@ -25,14 +39,13 @@ function fileFor(category: string) {
 /** Runs a reference file through the same pipeline an ingest would. */
 function ingest(category: string) {
   const file = fileFor(category);
-  const parsed = parseKey(file.key)!;
-  const container = validateContainer(file.body, parsed.datasetType);
+  const container = validateContainer(file.body, typeOf(file));
   expect(container.ok).toBe(true);
   const normalized = normalizeDataset(
     container.datasetType!,
     container.envelope!.dataset,
   );
-  return { file, parsed, container, normalized };
+  return { file, container, normalized };
 }
 
 function mean(values: number[]): number {
@@ -63,7 +76,7 @@ describe('buildReferenceDatasets', () => {
   });
 
   it('produces one dataset per input the analytics engine loads', () => {
-    const categories = files.map((f) => parseKey(f.key)?.category).sort();
+    const categories = files.map((f) => categoryOf(f)).sort();
     expect(categories).toEqual([
       'biomass',
       'cleanup',
@@ -73,29 +86,30 @@ describe('buildReferenceDatasets', () => {
     ]);
   });
 
-  it('places every file in the reference provider folder', () => {
+  it('declares its own dataset type, since no path carries it', () => {
+    // These files are published as data space assets like any other, so what
+    // they are has to be inside them.
     for (const file of files) {
-      const parsed = parseKey(file.key);
-      expect(parsed).not.toBeNull();
-      expect(parsed!.providerFolder).toBe(REFERENCE_PROVIDER_FOLDER);
-      expect(parsed!.datasetType).not.toBeNull();
+      expect(typeOf(file)).not.toBeNull();
+      expect(categoryOf(file)).not.toBeNull();
+      expect((file.body.metadata as { dataProviderId?: string }).dataProviderId).toBe(
+        REFERENCE_PUBLISHER,
+      );
     }
   });
 
-  it('exports its keys for the bundled inventory, so a scan without ListBucket finds them', () => {
-    expect(REFERENCE_KEYS).toEqual(files.map((f) => f.key));
-    for (const key of REFERENCE_KEYS) expect(SEED_KEYS).toContain(key);
+  it('exports its file names, in the order the datasets are built', () => {
+    expect(REFERENCE_FILENAMES).toEqual(files.map((f) => f.filename));
   });
 
   it('declares a location the ingest can read, instead of falling back to 0,0', () => {
     for (const file of files) {
-      const parsed = parseKey(file.key)!;
-      // No station suffix in the filename, so metadata.location is the only source.
-      expect(parsed.station).toBeNull();
+      // A reference series belongs to no station, so metadata.location is the
+      // only source and it has to be usable on its own.
       const resolved = resolveLocation(
-        parsed.fragment,
+        file.fragment,
         file.body.metadata.location as { lat?: unknown; lon?: unknown },
-        parsed.station,
+        null,
       );
       expect(resolved).toEqual({ ...REFERENCE_LOCATION, warnings: [] });
     }
@@ -103,19 +117,19 @@ describe('buildReferenceDatasets', () => {
 
   it('passes container validation with no errors and no type warnings', () => {
     for (const file of files) {
-      const parsed = parseKey(file.key)!;
-      const container = validateContainer(file.body, parsed.datasetType);
+      const datasetType = typeOf(file);
+      const container = validateContainer(file.body, datasetType);
       expect(container.errors).toEqual([]);
       expect(container.ok).toBe(true);
-      expect(container.datasetType).toBe(parsed.datasetType);
+      expect(container.datasetType).toBe(datasetType);
       expect(container.warnings).toEqual([]);
     }
   });
 
   it('keeps every observation inside the declared range', () => {
     for (const file of files) {
-      const parsed = parseKey(file.key)!;
-      const container = validateContainer(file.body, parsed.datasetType);
+      const datasetType = typeOf(file);
+      const container = validateContainer(file.body, datasetType);
       const { observations } = normalizeDataset(
         container.datasetType!,
         container.envelope!.dataset,

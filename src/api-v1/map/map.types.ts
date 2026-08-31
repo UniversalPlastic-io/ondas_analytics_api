@@ -10,6 +10,8 @@ export interface CleanupEvent {
 
 export interface MapPoint {
   id: string;
+  /** The asset id in the data space. Same value as `id`; kept explicit. */
+  sourceId: string;
   name: string;
   datasetType: string;
   label: string;
@@ -23,7 +25,14 @@ export interface MapPoint {
   dateRange: DateRange | null;
   format: string;
   units?: Record<string, string>;
-  url: string;
+  /**
+   * Address of the underlying content, when one exists.
+   *
+   * Always null for data space assets: an asset is reached by negotiating a
+   * contract, not by dereferencing a URL. Kept so existing clients do not break
+   * on a missing field.
+   */
+  url: string | null;
   metadataSchemaRef: string | null;
   warnings: string[];
   // headline numbers for the popup (shape depends on category)

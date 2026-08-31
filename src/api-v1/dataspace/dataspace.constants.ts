@@ -100,15 +100,11 @@ export const OCEANS = ['mediterraneo', 'atlantico', 'catambrico'] as const;
 export type Ocean = (typeof OCEANS)[number];
 
 /**
- * Provider folder holding the reference datasets (see reference-datasets.ts).
+ * The publisher label the reference datasets carry.
  *
- * These datasets are calibration series, not observations of a site, so every
- * read path that answers "what was measured" excludes this provider: the map,
- * the dashboard aggregates, and the nearest-dataset lookup the analytics engine
- * runs. The engine falls back to them only when a category has no observed
- * dataset at all, which is why they have to be distinguishable in the first
- * place — `nearest()` orders purely by distance and would otherwise prefer a
- * reference series over a real buoy further away.
+ * They are calibration series, not observations of a site, so every read that
+ * answers "what was measured" excludes them. The exclusion is done on the stored
+ * `tier` field; this constant only labels who publishes them.
  */
 export const REFERENCE_PROVIDER_FOLDER = 'ondas_reference';
 
@@ -200,13 +196,13 @@ export const STATIONS: Record<string, Station> = {
   },
 };
 
-export const DATA_BUCKET =
-  process.env.DATASPACE_S3_BUCKET ?? 'universalplastic-sedia';
-export const DATA_BUCKET_REGION =
-  process.env.DATASPACE_S3_REGION ?? 'eu-central-1';
-export const DATA_BUCKET_BASE_URL = `https://${DATA_BUCKET}.s3.${DATA_BUCKET_REGION}.amazonaws.com`;
-export const ROOT_PREFIX = process.env.DATASPACE_S3_ROOT_PREFIX ?? 'public/';
+/** Connector settings. The password is read from the environment and never logged. */
+export const DSPACER_BASE_URL = process.env.DSPACER_BASE_URL ?? '';
+export const DSPACER_LOGIN_URL = process.env.DSPACER_LOGIN_URL ?? '';
+export const DSPACER_USER = process.env.DSPACER_USER ?? '';
+export const DSPACER_PASSWORD = process.env.DSPACER_PASSWORD ?? '';
 
-export function publicUrlForKey(key: string): string {
-  return `${DATA_BUCKET_BASE_URL}/${key.split('/').map(encodeURIComponent).join('/')}`;
+/** True when enough is configured to talk to the connector. */
+export function dspacerConfigured(): boolean {
+  return !!(DSPACER_BASE_URL && DSPACER_LOGIN_URL && DSPACER_USER && DSPACER_PASSWORD);
 }

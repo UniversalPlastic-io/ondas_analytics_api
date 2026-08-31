@@ -134,18 +134,48 @@ describe('classifyEntry on assets the table does not cover', () => {
     formats: [],
   });
 
-  it('refuses to classify and says which asset, rather than guessing', () => {
+  it('classifies from the name and flags it, rather than dropping the asset', () => {
+    // Providers republish assets under new ids — a platform data-loss incident
+    // had every dataset re-uploaded as `_v1.1` — so refusing anything absent
+    // from the table would empty the read model on every such round.
     const res = classifyEntry(unknown('Recogidas playas Blanes'));
-    expect(res.classified).toBeNull();
-    expect(res.skipped).toBe(false);
-    expect(res.warning).toContain('does not know');
+    expect(res.classified).toMatchObject({
+      datasetType: 'recogidas_playa',
+      place: 'blanes',
+      ocean: 'mediterraneo',
+    });
+    expect(res.inferred).toBe(true);
+    expect(res.warning).toContain('not in ASSET_MAP');
     expect(res.warning).toContain('Recogidas playas Blanes');
   });
 
-  it('suggests a mapping when the name is recognisable', () => {
-    expect(classifyEntry(unknown('Oceanografía Gijón')).warning).toContain(
-      'looks like oceanografia_previa_evento at gijon',
+  it('names the inferred type in the warning, so it can be reviewed', () => {
+    const res = classifyEntry(unknown('Oceanografía Gijón'));
+    expect(res.warning).toContain(
+      'classified from its name as oceanografia_previa_evento at gijon',
     );
+    expect(res.inferred).toBe(true);
+  });
+
+  it('classifies a republished asset despite its version suffix', () => {
+    // Seen live as both `_v1.1` and `_v.1.1`, with stray double spaces.
+    for (const label of [
+      'Boya microplásticos  Cádiz_v1.1',
+      'Boya microplásticos Gijón_v.1.1',
+      'Recogidas playas Blanes v2',
+    ]) {
+      const res = classifyEntry(unknown(label));
+      expect(res.classified).not.toBeNull();
+      expect(res.classified!.datasetType).not.toBeNull();
+    }
+  });
+
+  it('marks a republished asset as unchanged in kind, not as a new dataset type', () => {
+    const base = classifyEntry(unknown('Boya microplásticos Cádiz')).classified!;
+    const republished = classifyEntry(unknown('Boya microplásticos  Cádiz_v1.1')).classified!;
+    expect(republished.datasetType).toBe(base.datasetType);
+    expect(republished.place).toBe(base.place);
+    expect(republished.ocean).toBe(base.ocean);
   });
 
   it('says so plainly when the name gives no hint', () => {

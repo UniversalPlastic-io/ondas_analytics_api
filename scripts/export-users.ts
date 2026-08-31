@@ -34,7 +34,6 @@ async function main() {
       role: u.role,
       organization: org?.slug ?? '',
       organizationName: org?.name ?? '',
-      s3Prefix: org?.s3?.prefix ?? '',
       active: String(u.active),
       lastLoginAt: u.lastLoginAt ? u.lastLoginAt.toISOString() : '',
     };

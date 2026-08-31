@@ -27,7 +27,6 @@ export class AdminController {
       contact: o.contact,
       dataProviderIds: o.dataProviderIds,
       providerFolders: o.providerFolders,
-      s3: o.s3,
       active: o.active,
     }));
   }

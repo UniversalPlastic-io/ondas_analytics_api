@@ -4,7 +4,8 @@ import { ObservationsRepository } from '../dataspace/observations.repository';
 
 const ASSET = (over: Record<string, unknown> = {}) => ({
   _id: 'a1',
-  key: 'public/mediterraneo/port_badalona/boya_biomasa_badalona.json',
+  sourceId: '40d5bbbb-bf2e-4a39-892a-82bd16c893fe',
+  providerFolder: 'port_badalona',
   url: 'https://bucket/public/mediterraneo/port_badalona/boya_biomasa_badalona.json',
   datasetType: 'boya_biomasa_slx+',
   category: 'biomass',
@@ -39,7 +40,7 @@ describe('MapService.getPoints', () => {
     const res = await svc.getPoints();
     expect(res.count).toBe(1);
     expect(res.points[0]).toMatchObject({
-      id: 'mediterraneo/port_badalona/boya_biomasa_badalona',
+      id: '40d5bbbb-bf2e-4a39-892a-82bd16c893fe',
       name: 'Badalona — Fish biomass buoy',
       datasetType: 'boya_biomasa_slx+',
       category: 'biomass',
@@ -62,7 +63,8 @@ describe('MapService.getPoints', () => {
 
   it('attaches the per-event list to cleanup markers', async () => {
     const cleanup = ASSET({
-      key: 'public/atlantico/innoceana/recogidas_playa_tenerife.json',
+      sourceId: 'ddadf21b-0c4d-40c8-97d7-e5cf902a5024',
+      providerFolder: 'innoceana',
       category: 'cleanup',
       datasetType: 'recogidas_playa',
       placeName: 'Tenerife',
@@ -80,7 +82,7 @@ describe('MapService.getPoints', () => {
   it('computes bounds across markers', async () => {
     const { svc } = service([
       ASSET(),
-      ASSET({ _id: 'a2', key: 'public/catambrico/universal_plastic/boya_biomasa_gijon.json', location: { type: 'Point', coordinates: [-5.7212, 43.5721] } }),
+      ASSET({ _id: 'a2', sourceId: '71034599-0830-44a8-a4bd-5f7aea885536', location: { type: 'Point', coordinates: [-5.7212, 43.5721] } }),
     ]);
     const res = await svc.getPoints();
     expect(res.bounds).toEqual([[41.4342, -5.7212], [43.5721, 2.2433]]);

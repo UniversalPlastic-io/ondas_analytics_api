@@ -43,10 +43,6 @@ export class Organization {
   @Prop({ default: true })
   publicProfile!: boolean;
 
-  /** Reference to this participant's space in the data space bucket. */
-  @Prop({ type: MongooseSchema.Types.Mixed, default: {} })
-  s3!: { bucket?: string; prefix?: string };
-
   @Prop({ default: true })
   active!: boolean;
 }

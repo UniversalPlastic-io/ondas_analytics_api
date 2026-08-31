@@ -5,7 +5,10 @@ export type SyncAction = 'created' | 'updated' | 'unchanged' | 'missing' | 'fail
 export type SyncStatus = 'running' | 'ok' | 'partial' | 'failed';
 
 export interface SyncResultRow {
-  key: string;
+  /** The asset id the source identified it by. */
+  sourceId: string;
+  /** The published name, so a run is readable without looking every id up. */
+  label?: string;
   action: SyncAction;
   assetId?: string;
   observations?: number;

@@ -22,9 +22,7 @@
 
 import { jitter } from '../deterministic-rng';
 import {
-  REFERENCE_PROVIDER_FOLDER,
   REFERENCE_PUBLISHER,
-  ROOT_PREFIX,
   WATER_POLYMER_FIELDS,
 } from './dataspace.constants';
 
@@ -34,7 +32,8 @@ export interface ReferenceRange {
 }
 
 export interface ReferenceDatasetFile {
-  key: string;
+  /** File name to write locally and to publish the asset under. */
+  filename: string;
   fragment: string;
   body: {
     metadata: Record<string, unknown>;
@@ -176,7 +175,7 @@ function biomassFile(range: ReferenceRange): ReferenceDatasetFile {
   }
 
   return {
-    key: keyFor('boya_biomasa_referencia'),
+    filename: filenameFor('boya_biomasa_referencia'),
     fragment: 'boya_biomasa_referencia',
     body: {
       metadata: metadataFor({
@@ -241,7 +240,7 @@ function cleanupFile(range: ReferenceRange): ReferenceDatasetFile {
   }
 
   return {
-    key: keyFor('recogidas_playas_referencia'),
+    filename: filenameFor('recogidas_playas_referencia'),
     fragment: 'recogidas_playas_referencia',
     body: {
       metadata: metadataFor({
@@ -320,7 +319,7 @@ function environmentalFile(range: ReferenceRange): ReferenceDatasetFile {
   }
 
   return {
-    key: keyFor('environmental_referencia'),
+    filename: filenameFor('environmental_referencia'),
     fragment: 'environmental_referencia',
     body: {
       metadata: metadataFor({
@@ -373,7 +372,7 @@ function microplasticsFile(range: ReferenceRange): ReferenceDatasetFile {
   }
 
   return {
-    key: keyFor('boya_microplasticos_referencia'),
+    filename: filenameFor('boya_microplasticos_referencia'),
     fragment: 'boya_microplasticos_referencia',
     body: {
       metadata: metadataFor({
@@ -437,7 +436,7 @@ function waterSamplesFile(range: ReferenceRange): ReferenceDatasetFile {
   }
 
   return {
-    key: keyFor('muestras_de_agua_referencia'),
+    filename: filenameFor('muestras_de_agua_referencia'),
     fragment: 'muestras_de_agua_referencia',
     body: {
       metadata: metadataFor({
@@ -456,8 +455,8 @@ function waterSamplesFile(range: ReferenceRange): ReferenceDatasetFile {
   };
 }
 
-function keyFor(fragment: string): string {
-  return `${ROOT_PREFIX}${REFERENCE_OCEAN}/${REFERENCE_PROVIDER_FOLDER}/${fragment}.json`;
+function filenameFor(fragment: string): string {
+  return `${fragment}.json`;
 }
 
 /** The reference datasets, in a stable order. */
@@ -474,14 +473,14 @@ export function buildReferenceDatasets(
 }
 
 /**
- * Keys of the reference datasets, for the bundled inventory in s3-reader.ts.
- * Listed rather than derived from buildReferenceDatasets() so that importing
- * this constant does not generate a year of records.
+ * Names of the reference datasets. Listed rather than derived from
+ * buildReferenceDatasets() so that importing this constant does not generate a
+ * year of records.
  */
-export const REFERENCE_KEYS: string[] = [
+export const REFERENCE_FILENAMES: string[] = [
   'boya_biomasa_referencia',
   'recogidas_playas_referencia',
   'environmental_referencia',
   'boya_microplasticos_referencia',
   'muestras_de_agua_referencia',
-].map(keyFor);
+].map(filenameFor);

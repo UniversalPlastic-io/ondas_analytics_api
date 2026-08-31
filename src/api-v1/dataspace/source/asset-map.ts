@@ -280,14 +280,26 @@ const TYPE_HINTS: Array<[RegExp, DatasetType]> = [
   [/^muestras[\s_](de[\s_])?peces/i, 'muestras_de_peces_py_gcms'],
 ];
 
-/** Lowercased, accent-stripped, whitespace-collapsed. Provider names are untidy. */
-function fold(name: string): string {
+/**
+ * Version suffixes providers append when they republish an asset.
+ *
+ * Seen in the wild as `_v1.1`, `_v.1.1` and ` v1.1` on the same upload round, so
+ * the shape is matched loosely rather than exactly. The version is not part of
+ * what an asset *is*: "Boya microplásticos Cádiz_v1.1" is the same measurement
+ * series as "Boya microplásticos Cádiz", republished.
+ */
+const VERSION_SUFFIX = /[\s_-]*v\.?\s*\d+(?:[._]\d+)*\s*$/i;
+
+/** Lowercased, accent-stripped, whitespace-collapsed, version-stripped. */
+export function fold(name: string): string {
   return name
     .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
+    .replace(/[\u0300-\u036f]/g, '')
     .trim()
     .toLowerCase()
-    .replace(/\s+/g, ' ');
+    .replace(/\s+/g, ' ')
+    .replace(VERSION_SUFFIX, '')
+    .trim();
 }
 
 export interface Suggestion {
@@ -306,10 +318,26 @@ export function suggestMapping(name: string): Suggestion {
 
 export interface ClassificationResult {
   classified: ClassifiedAsset | null;
-  /** Set when the asset was deliberately not classified, explaining why. */
+  /** Why the asset was skipped, inferred, or refused. */
   warning: string | null;
+  /** True when the classification came from the name, not the table. */
+  inferred: boolean;
   /** True for schema and metadata assets, which are skipped without complaint. */
   skipped: boolean;
+}
+
+/** Participant display name → the provider folder the organizations are keyed by. */
+const PROVIDER_FOLDERS: Record<string, string> = {
+  'universal plastic': 'universal_plastic',
+  innoceana: 'innoceana',
+  bcss: 'bcss',
+  'port badalona': 'port_badalona',
+  'gijon surf hostel': 'gijon_surf_hostel',
+};
+
+export function providerFolderFor(providerName: string): string {
+  const folded = fold(providerName);
+  return PROVIDER_FOLDERS[folded] ?? folded.replace(/\s+/g, '_');
 }
 
 /**
@@ -322,20 +350,45 @@ export interface ClassificationResult {
 export function classifyEntry(entry: SourceEntry): ClassificationResult {
   const id = entry.ref.id;
 
-  if (NON_DATA_ASSETS[id]) {
-    return { classified: null, warning: null, skipped: true };
+  if (NON_DATA_ASSETS[id] || /^(esquema_datos|metadatos)/i.test(fold(entry.ref.label))) {
+    return { classified: null, warning: null, inferred: false, skipped: true };
   }
 
   const mapped = ASSET_MAP[id];
   if (!mapped) {
+    // Providers republish assets under new ids — a data loss incident on the
+    // platform had every dataset re-uploaded as `_v1.1` — so refusing anything
+    // absent from the table would empty the read model on every such round.
+    // Classifying from the name and saying so loudly loses less than skipping,
+    // and the warning names the asset so the table can be refreshed.
     const hint = suggestMapping(entry.ref.label);
-    const guess =
-      hint.datasetType && hint.place
-        ? ` It looks like ${hint.datasetType} at ${hint.place}; add it to ASSET_MAP to ingest it.`
-        : ' Its name gives no reliable hint; identify it before adding it to ASSET_MAP.';
+    if (hint.datasetType && hint.place) {
+      const station = STATIONS[hint.place];
+      const datasetType = canonicalDatasetType(hint.datasetType);
+      return {
+        classified: {
+          ocean: station.ocean,
+          providerFolder: providerFolderFor(entry.provider),
+          fragment: entry.ref.label,
+          place: hint.place,
+          station,
+          datasetType,
+          category: datasetType ? CATEGORY_BY_TYPE[datasetType] : null,
+        },
+        warning:
+          `${entry.provider} offers "${entry.ref.label}" (${id}), which is not in ASSET_MAP. ` +
+          `It was classified from its name as ${hint.datasetType} at ${hint.place}. ` +
+          `Run \`npm run assets:refresh\` to review and record it.`,
+        inferred: true,
+        skipped: false,
+      };
+    }
     return {
       classified: null,
-      warning: `${entry.provider} offers an asset this API does not know: "${entry.ref.label}" (${id}).${guess}`,
+      warning:
+        `${entry.provider} offers an asset this API does not know: "${entry.ref.label}" (${id}), ` +
+        `and its name gives no reliable hint. Identify it and add it to ASSET_MAP.`,
+      inferred: false,
       skipped: false,
     };
   }
@@ -359,6 +412,7 @@ export function classifyEntry(entry: SourceEntry): ClassificationResult {
       ? `asset ${id} is published as "${entry.ref.label}" but ASSET_MAP records "${mapped.name}"; ` +
         `the mapping still holds because it is keyed by id, but the entry should be refreshed`
       : null,
+    inferred: false,
     skipped: false,
   };
 }

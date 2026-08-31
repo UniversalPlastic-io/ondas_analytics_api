@@ -23,7 +23,6 @@ interface SeedOrg {
   territory: string | null;
   providerFolders: string[];
   dataProviderIds: string[];
-  prefix: string;
   legacyUsername: string;
 }
 
@@ -36,7 +35,6 @@ const ORGS: SeedOrg[] = [
     providerFolders: ['universal_plastic'],
     // Every spelling found in the live files.
     dataProviderIds: ['universal_plastic', 'universalplastic', 'universal`plastic'],
-    prefix: 'public/',
     legacyUsername: 'user_universalplastic',
   },
   {
@@ -46,7 +44,6 @@ const ORGS: SeedOrg[] = [
     territory: 'Catalunya & Canary Islands, Spain',
     providerFolders: ['innoceana'],
     dataProviderIds: ['innoceana'],
-    prefix: 'public/',
     legacyUsername: 'user_innoceana',
   },
   {
@@ -56,7 +53,6 @@ const ORGS: SeedOrg[] = [
     territory: 'Badalona, Catalunya, Spain',
     providerFolders: ['port_badalona'],
     dataProviderIds: ['portbadalona', 'port_badalona'],
-    prefix: 'public/mediterraneo/port_badalona/',
     legacyUsername: 'user_portbadalona',
   },
   {
@@ -66,7 +62,6 @@ const ORGS: SeedOrg[] = [
     territory: 'Gijón, Asturias, Spain',
     providerFolders: ['gijon_surf_hostel'],
     dataProviderIds: ['gijonsurfhostel', 'gijon_surf_hostel'],
-    prefix: 'public/catambrico/gijon_surf_hostel/',
     legacyUsername: 'user_gijonsurfhostel',
   },
   {
@@ -76,7 +71,6 @@ const ORGS: SeedOrg[] = [
     territory: 'Spain',
     providerFolders: ['bcss'],
     dataProviderIds: ['bcss'],
-    prefix: 'public/',
     legacyUsername: 'user_bcss',
   },
 ];
@@ -121,7 +115,6 @@ async function main() {
         territory: org.territory,
         dataProviderIds: org.dataProviderIds,
         providerFolders: org.providerFolders,
-        s3: { bucket: process.env.DATASPACE_S3_BUCKET ?? 'universalplastic-sedia', prefix: org.prefix },
       });
       logger.log(`organization ${org.slug} created`);
     }

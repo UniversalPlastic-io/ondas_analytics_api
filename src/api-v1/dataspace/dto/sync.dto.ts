@@ -1,31 +1,27 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class SyncAssetDto {
-  @ApiPropertyOptional({
-    example: 'public/mediterraneo/port_badalona/boya_biomasa_badalona.json',
-    description: 'S3 object key of the asset that was uploaded or updated',
+  @ApiProperty({
+    example: 'ddadf21b-0c4d-40c8-97d7-e5cf902a5024',
+    description:
+      'Id of the asset in the data space, as its catalog entry reports it',
   })
-  key?: string;
-
-  @ApiPropertyOptional({
-    example: 'https://universalplastic-sedia.s3.eu-central-1.amazonaws.com/public/…/file.json',
-    description: 'Full object URL — an alternative to `key`',
-  })
-  url?: string;
+  sourceId!: string;
 
   @ApiPropertyOptional({
     default: false,
-    description: 'Re-ingest even when the object checksum is unchanged',
+    description: 'Re-ingest even when the content is unchanged',
   })
   force?: boolean;
 }
 
 export class SyncScanDto {
   @ApiPropertyOptional({
-    example: 'public/mediterraneo/',
-    description: 'Prefix to reconcile. Defaults to your organization space, or the whole root for admins.',
+    example: 'innoceana',
+    description:
+      'Reconcile only this provider. Defaults to every provider the space offers us.',
   })
-  prefix?: string;
+  provider?: string;
 
   @ApiPropertyOptional({ default: false, description: 'Report the plan without writing anything' })
   dryRun?: boolean;
@@ -35,7 +31,10 @@ export class SyncScanDto {
 }
 
 export class SyncResultRowDto {
-  @ApiProperty() key!: string;
+  @ApiProperty({ description: 'Id of the asset in the data space' })
+  sourceId!: string;
+  @ApiPropertyOptional({ description: 'Name the provider publishes it under' })
+  label?: string;
   @ApiProperty({ enum: ['created', 'updated', 'unchanged', 'missing', 'failed', 'skipped'] }) action!: string;
   @ApiPropertyOptional() assetId?: string;
   @ApiPropertyOptional() observations?: number;

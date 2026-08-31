@@ -14,26 +14,12 @@ function unitsSample(
   return entries.length ? Object.fromEntries(entries) : undefined;
 }
 
-/** `public/mediterraneo/port_badalona/boya_biomasa_badalona.json` → `mediterraneo/port_badalona/boya_biomasa_badalona` */
-function idOf(key: string): string {
-  return key.replace(/^public\//, '').replace(/\.json$/, '');
-}
-
-/**
- * Falls back to the provider stored on the asset. Older documents ingested
- * before that field existed still carry it in the key, hence the second step.
- */
+/** What the provider declared, falling back to the participant that published it. */
 function providerOf(asset: {
   dataProviderIdRaw: string | null;
   providerFolder?: string | null;
-  key: string;
 }): string {
-  return (
-    asset.dataProviderIdRaw ??
-    asset.providerFolder ??
-    asset.key.split('/')[2] ??
-    ''
-  );
+  return asset.dataProviderIdRaw ?? asset.providerFolder ?? '';
 }
 
 /**
@@ -84,7 +70,8 @@ export class MapService {
     const [lng, lat] = asset.location.coordinates;
 
     const point: MapPoint = {
-      id: idOf(asset.key),
+      id: asset.sourceId,
+      sourceId: asset.sourceId,
       name: `${asset.placeName ?? asset.place ?? asset.ocean} — ${meta.label}`,
       datasetType: asset.datasetType,
       label: meta.label,

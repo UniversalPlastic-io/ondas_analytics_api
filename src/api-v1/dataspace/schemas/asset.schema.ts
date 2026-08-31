@@ -17,19 +17,35 @@ export type AssetStatus = 'active' | 'missing' | 'failed';
 export type AssetTier = 'observed' | 'reference';
 
 /**
- * One document per dataset file in the data space bucket.
- * Replaces the hardcoded S3_CATALOGUE / MAP_CATALOGUE as the runtime inventory.
+ * One document per dataset offered in the data space.
+ *
+ * Identity is the asset id the publishing connector assigns. It is opaque: it
+ * says nothing about what the asset is, who published it or where it was
+ * measured. Everything the system knows about an asset is therefore a stored
+ * field, decided once at ingest — never re-derived from the identifier.
  */
 @Schema({ collection: 'assets', timestamps: true })
 export class Asset {
+  /** The asset id assigned by the publishing connector. Unique across the space. */
   @Prop({ required: true, unique: true })
-  key!: string;
+  sourceId!: string;
 
-  @Prop({ required: true })
-  bucket!: string;
+  /** The name the provider publishes the asset under, for operators reading a run. */
+  @Prop({ type: String, default: null })
+  label!: string | null;
 
-  @Prop({ required: true })
-  url!: string;
+  /** The BPN of the participant that published it. */
+  @Prop({ type: String, default: null })
+  providerBpn!: string | null;
+
+  /**
+   * Where the content came from, when the source has an address for it.
+   *
+   * Null for a data space asset: it is reached by negotiating a contract, not by
+   * dereferencing a URL, and there is no address a client could follow.
+   */
+  @Prop({ type: String, default: null })
+  url!: string | null;
 
   @Prop({
     type: String,
@@ -146,6 +162,7 @@ export class Asset {
 export type AssetDocument = HydratedDocument<Asset>;
 export const AssetSchema = SchemaFactory.createForClass(Asset);
 
+AssetSchema.index({ providerBpn: 1 });
 AssetSchema.index({ tier: 1, category: 1 });
 AssetSchema.index({ providerFolder: 1 });
 AssetSchema.index({ datasetType: 1 });

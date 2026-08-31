@@ -28,10 +28,10 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "seed": "ts-node -r tsconfig-paths/register scripts/seed.ts",
     "backfill": "ts-node -r tsconfig-paths/register scripts/backfill.ts",
+    "assets:refresh": "ts-node -r tsconfig-paths/register scripts/refresh-asset-map.ts",
     "reference:generate": "ts-node -r tsconfig-paths/register scripts/generate-reference-datasets.ts",
     "users:export": "ts-node -r tsconfig-paths/register scripts/export-users.ts",
     "users:reset": "ts-node -r tsconfig-paths/register scripts/reset-password.ts",
-    "migrate:asset-tier": "ts-node -r tsconfig-paths/register scripts/migrate-asset-tier.ts",
     "validate:precision": "ts-node -r tsconfig-paths/register scripts/validate-precision.ts"
   },
   "dependencies": {
