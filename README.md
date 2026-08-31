@@ -111,7 +111,7 @@ API no puede verlo: **la autorización es del espacio de datos, no del API**.
 
 | Módulo | Carpeta | Responsabilidad |
 |---|---|---|
-| `dataspace` | [src/api-v1/dataspace/](src/api-v1/dataspace/) | Consumo de activos del espacio de datos (catálogo y transferencia), validación DCAT y de contenedor, normalización de campos, escritura del read model, registro de ejecuciones de sync |
+| `dataspace` | [src/api-v1/dataspace/](src/api-v1/dataspace/) | Consumo de activos del espacio de datos (catálogo y transferencia), validación DCAT y de contenedor, normalización de campos, escritura del read model, publicación de los análisis generados como activos propios, registro de ejecuciones de sync y de publicación |
 | `identity` | [src/api-v1/identity/](src/api-v1/identity/) | Organizaciones, usuarios, roles (`admin` / `provider` / `viewer`), guards y *scoping* de los datos por organización |
 | `auth` | [src/api-v1/auth/](src/api-v1/auth/) | Login del portal, emisión y verificación de JWT |
 | `analyses` | [src/api-v1/analyses/](src/api-v1/analyses/) | Cálculo de índices e indicadores y generación de gráficas (WebP / PDF) |
@@ -124,7 +124,8 @@ API no puede verlo: **la autorización es del espacio de datos, no del API**.
 Integración con el conector, autenticación y flujo de consumo:
 [docs/dspacer-integration.md](docs/dspacer-integration.md).
 Modelo de datos y contrato de sincronización: [docs/dataspace-sync.md](docs/dataspace-sync.md).
-Publicación de análisis en el espacio de datos (diseño, sin implementar): [docs/report-publishing.md](docs/report-publishing.md).
+Publicación de los análisis generados como activos propios en el espacio de datos:
+[docs/report-publishing.md](docs/report-publishing.md).
 Esquemas y estructura de cada tipo de dataset: [docs/dataset-mapping.md](docs/dataset-mapping.md).
 
 ### Datasets observados y de referencia
@@ -235,6 +236,7 @@ documentadas en [.env.example](.env.example)):
 | `DSPACER_LOGIN_URL` | para sync | Endpoint de login del conector |
 | `DSPACER_USER` | para sync | Usuario del conector en `connector-realm` |
 | `DSPACER_PASSWORD` | para sync | Contraseña del conector. **Nunca se versiona** |
+| `DSPACER_PUBLISH_ENABLED` | — | Publica cada análisis generado en el catálogo de UP. **Apagada por defecto**: escribe en el catálogo compartido de producción |
 | `PORT` | — | Puerto HTTP (por defecto `3000`) |
 | `PUBLIC_API_BASE_PATH` | — | Prefijo público tras un proxy inverso, sólo para los enlaces de Swagger |
 | `PUBLIC_API_DISPLAY_URL` | — | URL pública completa mostrada en la documentación |

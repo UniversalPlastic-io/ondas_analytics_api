@@ -5,6 +5,8 @@ import {
   explainTransferFailure,
   Participant,
   parseParticipants,
+  parseUploadedAsset,
+  UploadedAsset,
 } from './dspacer-catalog';
 import { SourceRef } from './dataspace-source';
 
@@ -170,19 +172,28 @@ export class DspacerClient {
     }
   }
 
-  /** One authenticated middleware call. Retries once on 401, in case the token expired in flight. */
+  /**
+   * One authenticated middleware call. Retries once on 401, in case the token
+   * expired in flight.
+   *
+   * The method is explicit because the write path needs a POST with no body:
+   * `POST /policies/create/{id}/no_restriction` takes its only argument in the
+   * path, so deriving the method from the presence of a body would send a GET.
+   */
   private async call(
     operation: string,
     path: string,
-    body?: unknown,
+    init: { method?: 'GET' | 'POST'; body?: unknown } = {},
   ): Promise<unknown> {
+    const method = init.method ?? (init.body === undefined ? 'GET' : 'POST');
+    const body = init.body;
     for (const attempt of [1, 2]) {
       const token = await this.accessToken();
       let res: Response;
       try {
         res = await this.withTimeout((signal) =>
           this.fetchImpl(`${this.options.baseUrl}${path}`, {
-            method: body === undefined ? 'GET' : 'POST',
+            method,
             headers: {
               authorization: `Bearer ${token}`,
               ...(body === undefined
@@ -265,11 +276,9 @@ export class DspacerClient {
     provider: Participant,
     opts: { offset?: number; limit?: number } = {},
   ): Promise<unknown> {
-    return this.call(
-      `catalog/${provider.name}`,
-      '/catalog/request',
-      buildCatalogRequest(provider, opts),
-    );
+    return this.call(`catalog/${provider.name}`, '/catalog/request', {
+      body: buildCatalogRequest(provider, opts),
+    });
   }
 
   /**
@@ -281,10 +290,117 @@ export class DspacerClient {
    * are the two observed live; the success path is the part still unproven.
    */
   async transfer(ref: SourceRef): Promise<unknown> {
-    return this.call(
-      `transfer/${ref.label}`,
-      '/transfer/request',
-      buildContractRequest(ref),
+    return this.call(`transfer/${ref.label}`, '/transfer/request', {
+      body: buildContractRequest(ref),
+    });
+  }
+
+  /* ---------------------------------------------------------------- write path */
+
+  /**
+   * Uploads a JSON document and returns the asset the connector created for it.
+   *
+   * This is the first of the three calls that publish something: the policy and
+   * the contract both need the identifier it returns.
+   */
+  async uploadData(opts: {
+    name: string;
+    description: string;
+    payload: unknown;
+  }): Promise<UploadedAsset> {
+    const body = await this.call('data/upload', '/data/upload', {
+      body: {
+        request: opts.payload,
+        asset_data: {
+          asset_name: opts.name,
+          asset_description: opts.description,
+        },
+      },
+    });
+    const asset = parseUploadedAsset(body);
+    if (!asset) {
+      // The upload may well have succeeded; what failed is finding the id in the
+      // answer, and without it no contract can be created. Report the keys, not
+      // the body: the body is the document we just uploaded.
+      throw new DspacerRequestError(
+        200,
+        'data/upload',
+        `the connector accepted the upload but its answer carried no asset id ` +
+          `(keys: ${Object.keys((body ?? {}) as object).join(', ') || 'none'})`,
+      );
+    }
+    return asset;
+  }
+
+  /**
+   * Creates a policy that every participant satisfies.
+   *
+   * `policy_id` is ours to choose and travels in the path; the operation takes no
+   * request body.
+   */
+  async createNoRestrictionPolicy(policyId: string): Promise<void> {
+    await this.call(
+      'policies/create/no_restriction',
+      `/policies/create/${encodeURIComponent(policyId)}/no_restriction`,
+      { method: 'POST' },
     );
   }
+
+  /**
+   * Binds a policy to an asset. This is the call that puts the asset in the
+   * catalog other participants read: an asset with no contract definition is
+   * stored on the connector and offered to nobody.
+   */
+  async createContract(opts: {
+    contractId: string;
+    policyId: string;
+    assetId: string;
+  }): Promise<void> {
+    await this.call('contracts/create', '/contracts/create', {
+      body: {
+        contract_id: opts.contractId,
+        policy_id: opts.policyId,
+        asset_id: opts.assetId,
+      },
+    });
+  }
+
+  /**
+   * The assets this connector holds, without negotiating anything.
+   *
+   * Ours to read directly because the connector is ours. `filterExpression` is
+   * passed through to the connector rather than filtering here: the catalog grows
+   * by one asset per published analysis, so a caller that fetched everything and
+   * filtered locally would get slower every day.
+   */
+  async listOwnAssets(
+    opts: {
+      offset?: number;
+      limit?: number;
+      filterExpression?: unknown[];
+    } = {},
+  ): Promise<unknown> {
+    return this.call('data/all', '/data/all', {
+      body: {
+        raw: {
+          '@context': { '@vocab': 'https://w3id.org/edc/v0.0.1/ns/' },
+          '@type': 'QuerySpec',
+          offset: opts.offset ?? 0,
+          limit: opts.limit ?? 50,
+          sortOrder: 'DESC',
+          sortField: 'id',
+          filterExpression: opts.filterExpression ?? [],
+        },
+      },
+    });
+  }
 }
+
+/**
+ * Injection token for the single client instance.
+ *
+ * The client caches an access token, so a second instance means a second login
+ * per token lifetime and two clients each renewing on their own schedule. The
+ * catalog source and the report publisher share this one.
+ */
+export const DSPACER_CLIENT = Symbol('DSPACER_CLIENT');

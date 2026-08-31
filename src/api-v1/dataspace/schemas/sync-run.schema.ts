@@ -1,7 +1,20 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Schema as MongooseSchema, Types } from 'mongoose';
 
-export type SyncAction = 'created' | 'updated' | 'unchanged' | 'missing' | 'failed' | 'skipped';
+export type SyncAction =
+  | 'created'
+  | 'updated'
+  | 'unchanged'
+  | 'missing'
+  | 'failed'
+  | 'skipped';
+
+/**
+ * What a run did. `publish` is the outward direction: the API publishing a
+ * generated analysis into the space, rather than ingesting from it. It shares
+ * this collection so `GET /v1/sync/runs` shows both without a second one.
+ */
+export type SyncKind = 'asset' | 'scan' | 'publish';
 export type SyncStatus = 'running' | 'ok' | 'partial' | 'failed';
 
 export interface SyncResultRow {
@@ -19,8 +32,8 @@ export interface SyncResultRow {
 /** Audit trail: what a sync touched, when, triggered by whom. */
 @Schema({ collection: 'sync_runs', timestamps: true })
 export class SyncRun {
-  @Prop({ type: String, required: true, enum: ['asset', 'scan'] })
-  kind!: 'asset' | 'scan';
+  @Prop({ type: String, required: true, enum: ['asset', 'scan', 'publish'] })
+  kind!: SyncKind;
 
   @Prop({ type: Types.ObjectId, ref: 'User', default: null })
   userId!: Types.ObjectId | null;
@@ -37,7 +50,12 @@ export class SyncRun {
   @Prop({ type: Date, default: null })
   finishedAt!: Date | null;
 
-  @Prop({ type: String, required: true, enum: ['running', 'ok', 'partial', 'failed'], default: 'running' })
+  @Prop({
+    type: String,
+    required: true,
+    enum: ['running', 'ok', 'partial', 'failed'],
+    default: 'running',
+  })
   status!: SyncStatus;
 
   @Prop({ type: MongooseSchema.Types.Mixed, default: [] })

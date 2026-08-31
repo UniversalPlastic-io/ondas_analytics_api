@@ -13,6 +13,18 @@ import {
 import type { AnalysesRunResponse } from '../src/api-v1/analyses/analyses.types';
 
 /**
+ * A precision check is not a result anyone should cite, and this script runs the
+ * real analytics service — which publishes every analysis it computes into UP's
+ * catalog. Forced off here whatever the environment says: reproducibility alone
+ * runs the same request twice, and a grid of coverage queries would put dozens of
+ * validation artifacts in a catalog other participants read.
+ *
+ * This works because `dspacerPublishEnabled()` reads the environment on each
+ * call rather than at import time.
+ */
+process.env.DSPACER_PUBLISH_ENABLED = 'false';
+
+/**
  * Produces the figures published in docs/validacion-precision.md.
  *
  *   npm run validate:precision

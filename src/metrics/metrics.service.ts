@@ -61,6 +61,28 @@ export class MetricsService {
     registers: [this.registry],
   });
 
+  /**
+   * Analyses published back into the space, by outcome.
+   *
+   * `status` is the only label, and deliberately: the interesting dimensions —
+   * which point, which cache key — are exactly the ones that would create a new
+   * time series per report and eventually take Prometheus down.
+   */
+  readonly reportsPublished = new Counter({
+    name: 'ondas_reports_published_total',
+    help: 'Análisis publicados como activo en el catálogo del espacio de datos',
+    labelNames: ['status'] as const,
+    registers: [this.registry],
+  });
+
+  /** How long publishing took. Three connector calls, so seconds-scale. */
+  readonly reportPublishDuration = new Histogram({
+    name: 'ondas_report_publish_duration_seconds',
+    help: 'Duración de la publicación de un análisis en el espacio de datos',
+    buckets: [0.25, 0.5, 1, 2.5, 5, 10, 30, 60],
+    registers: [this.registry],
+  });
+
   /** Supplies the active-asset count; set by whoever owns the read model. */
   private activeAssetsSource: (() => Promise<number>) | null = null;
 
@@ -99,6 +121,20 @@ export class MetricsService {
 
   recordAnalyses(analyses: readonly string[]): void {
     for (const analysis of analyses) this.analysesRuns.inc({ analysis });
+  }
+
+  /**
+   * One publication outcome.
+   *
+   * The duration is only observed when the connector was actually called: a
+   * report skipped because publishing is off took no time, and recording it as a
+   * fast publication would make the histogram describe something else.
+   */
+  recordReportPublished(status: string, seconds?: number): void {
+    this.reportsPublished.inc({ status });
+    if (typeof seconds === 'number' && Number.isFinite(seconds)) {
+      this.reportPublishDuration.observe(seconds);
+    }
   }
 
   /**

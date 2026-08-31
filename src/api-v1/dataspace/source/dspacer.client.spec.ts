@@ -316,3 +316,116 @@ describe('DspacerClient operations', () => {
     );
   });
 });
+
+describe('DspacerClient write path', () => {
+  /**
+   * Publishing is three calls, and the connector's specification declares the
+   * response of all three as `schema: {}`. So what is pinned here is the request
+   * shape, which is documented, and the tolerance of the response parsing, which
+   * is not.
+   */
+
+  const asset = {
+    '@id': 'asset-1',
+    properties: { name: 'report_43.5721_-5.7212_2026-08-31', id: 'asset-1' },
+    dataAddress: { baseUrl: 'urn:uuid:abc' },
+  };
+
+  it('uploads a document under the field names the connector expects', async () => {
+    const h = harness(() => json(asset));
+    await h.client.uploadData({
+      name: 'report_43.5721_-5.7212_2026-08-31',
+      description: 'ONDAs analytics report · key=abc',
+      payload: { hello: 'world' },
+    });
+    const call = h.calls.find((c) => c.url.endsWith('/data/upload'))!;
+    expect(call.method).toBe('POST');
+    expect(call.body).toEqual({
+      request: { hello: 'world' },
+      asset_data: {
+        asset_name: 'report_43.5721_-5.7212_2026-08-31',
+        asset_description: 'ONDAs analytics report · key=abc',
+      },
+    });
+  });
+
+  it('returns the asset id and the address the connector assigned it', async () => {
+    const h = harness(() => json(asset));
+    const uploaded = await h.client.uploadData({
+      name: 'n',
+      description: 'd',
+      payload: {},
+    });
+    expect(uploaded).toEqual({
+      id: 'asset-1',
+      name: 'report_43.5721_-5.7212_2026-08-31',
+      dataAddressBaseUrl: 'urn:uuid:abc',
+    });
+  });
+
+  it('fails when the answer carries no asset id', async () => {
+    // The upload may well have succeeded. What failed is finding the identifier,
+    // and without it no contract can be created — so it is not a success.
+    const h = harness(() => json({ ok: true, message: 'stored' }));
+    await expect(
+      h.client.uploadData({ name: 'n', description: 'd', payload: {} }),
+    ).rejects.toThrow(/no asset id \(keys: ok, message\)/);
+  });
+
+  it('creates a policy with a POST and no body', async () => {
+    // The operation takes its only argument in the path. Deriving the method
+    // from the presence of a body would send a GET and never create anything.
+    const h = harness(() => json({ '@id': 'policy-1' }));
+    await h.client.createNoRestrictionPolicy('pol 1/2');
+    const call = h.calls.find((c) => c.url.includes('/policies/create/'))!;
+    expect(call.method).toBe('POST');
+    expect(call.body).toBeUndefined();
+    expect(call.url).toBe(`${BASE}/policies/create/pol%201%2F2/no_restriction`);
+  });
+
+  it('creates a contract with the snake_case fields the connector declares', async () => {
+    const h = harness(() => json({ '@id': 'contract-1' }));
+    await h.client.createContract({
+      contractId: 'c-1',
+      policyId: 'p-1',
+      assetId: 'asset-1',
+    });
+    const call = h.calls.find((c) => c.url.endsWith('/contracts/create'))!;
+    expect(call.body).toEqual({
+      contract_id: 'c-1',
+      policy_id: 'p-1',
+      asset_id: 'asset-1',
+    });
+  });
+
+  it('asks the connector to do the filtering', async () => {
+    // The catalog grows by one asset per published analysis, so a caller that
+    // fetched everything and filtered here would get slower every day.
+    const h = harness(() => json({ '@graph': [] }));
+    await h.client.listOwnAssets({
+      limit: 5,
+      offset: 10,
+      filterExpression: [
+        { operandLeft: 'name', operator: '=', operandRight: 'x' },
+      ],
+    });
+    const call = h.calls.find((c) => c.url.endsWith('/data/all'))!;
+    expect(call.body).toMatchObject({
+      raw: {
+        '@type': 'QuerySpec',
+        offset: 10,
+        limit: 5,
+        filterExpression: [
+          { operandLeft: 'name', operator: '=', operandRight: 'x' },
+        ],
+      },
+    });
+  });
+
+  it('explains a rejected upload instead of passing the status on alone', async () => {
+    const h = harness(() => json({ detail: 'asset already exists' }, 409));
+    await expect(
+      h.client.uploadData({ name: 'n', description: 'd', payload: {} }),
+    ).rejects.toThrow(/data\/upload failed \(409\): asset already exists/);
+  });
+});

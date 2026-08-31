@@ -55,6 +55,26 @@ describe('MetricsService', () => {
     expect(body).toContain('ondas_analyses_runs_total{analysis="eco_risk"} 2');
   });
 
+  it('counts a publication and times it', async () => {
+    metrics.recordReportPublished('published', 2.5);
+
+    const body = await metrics.metrics();
+    expect(body).toContain(
+      'ondas_reports_published_total{status="published"} 1',
+    );
+    expect(body).toContain('ondas_report_publish_duration_seconds_count 1');
+  });
+
+  it('does not time a publication that never called the connector', async () => {
+    // An analysis skipped because publishing is off took no time. Recording it
+    // as a fast publication would make the histogram describe something else.
+    metrics.recordReportPublished('skipped');
+
+    const body = await metrics.metrics();
+    expect(body).toContain('ondas_reports_published_total{status="skipped"} 1');
+    expect(body).toContain('ondas_report_publish_duration_seconds_count 0');
+  });
+
   it('reads the active-asset gauge on scrape', async () => {
     let count = 22;
     metrics.bindActiveAssets(async () => count);
@@ -79,23 +99,22 @@ describe('MetricsService', () => {
     // label this service declares must come from a closed set.
     const bounded = new Set(['method', 'route', 'status', 'kind', 'analysis']);
 
-    const declared = [
-      metrics.httpDuration,
-      metrics.syncRuns,
-      metrics.syncObservations,
-      metrics.syncWarnings,
-      metrics.analysesRuns,
-      metrics.activeAssets,
-    ].flatMap((m) => (m as unknown as { labelNames: string[] }).labelNames);
+    // Discovered from the instance rather than listed, so a metric added later is
+    // checked too. A hand-written list would leave the next one uncovered while
+    // still passing, which is the failure this test exists to prevent.
+    const declared = Object.values(
+      metrics as unknown as Record<string, unknown>,
+    )
+      .filter(
+        (m): m is { labelNames: string[] } =>
+          !!m &&
+          typeof m === 'object' &&
+          Array.isArray((m as { labelNames?: unknown }).labelNames),
+      )
+      .flatMap((m) => m.labelNames);
 
-    expect(declared).toEqual([
-      'method',
-      'route',
-      'status',
-      'kind',
-      'status',
-      'analysis',
-    ]);
+    // Enough to prove the discovery found the metrics rather than nothing.
+    expect(declared.length).toBeGreaterThanOrEqual(6);
     expect(declared.filter((l) => !bounded.has(l))).toEqual([]);
   });
 });

@@ -202,7 +202,37 @@ export const DSPACER_LOGIN_URL = process.env.DSPACER_LOGIN_URL ?? '';
 export const DSPACER_USER = process.env.DSPACER_USER ?? '';
 export const DSPACER_PASSWORD = process.env.DSPACER_PASSWORD ?? '';
 
-/** True when enough is configured to talk to the connector. */
+/**
+ * True when enough is configured to talk to the connector.
+ *
+ * Reads the environment on each call rather than the constants above, which are
+ * the snapshot the client is built from. In a running process the two always
+ * agree — dotenv loads before anything imports this — and reading live means the
+ * answer can be exercised without reloading the module.
+ */
 export function dspacerConfigured(): boolean {
-  return !!(DSPACER_BASE_URL && DSPACER_LOGIN_URL && DSPACER_USER && DSPACER_PASSWORD);
+  const env = process.env;
+  return !!(
+    env.DSPACER_BASE_URL &&
+    env.DSPACER_LOGIN_URL &&
+    env.DSPACER_USER &&
+    env.DSPACER_PASSWORD
+  );
+}
+
+/**
+ * Whether a generated analysis is published back into the space as an asset.
+ *
+ * Off unless explicitly turned on, and that default is the point: publishing
+ * writes to the shared production catalog, so without the switch any developer
+ * machine holding the connector credentials would publish every analysis the
+ * test suite ran.
+ *
+ * Read from the environment on each call rather than at import time, because
+ * whether publishing happens is an operational decision, not a build-time one,
+ * and a function can be switched in a test without reloading the module.
+ */
+export function dspacerPublishEnabled(): boolean {
+  const raw = (process.env.DSPACER_PUBLISH_ENABLED ?? '').trim().toLowerCase();
+  return raw === 'true' || raw === '1';
 }

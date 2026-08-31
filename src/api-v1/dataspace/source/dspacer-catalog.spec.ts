@@ -5,6 +5,7 @@ import {
   explainTransferFailure,
   parseCatalog,
   parseParticipants,
+  parseUploadedAsset,
   PULL_FORMAT,
   DspacerRefPayload,
 } from './dspacer-catalog';
@@ -396,5 +397,63 @@ describe('explainTransferFailure', () => {
         detail: { message: 'boom', downstream_status: 502 },
       }),
     ).toContain('downstream 502');
+  });
+});
+
+describe('parseUploadedAsset', () => {
+  /**
+   * The middleware declares the response of every write operation as
+   * `schema: {}`, so none of these field names are documented. The shape read
+   * here is the one `POST /data/all` returns for an existing asset, and the
+   * tolerance is deliberate: the alternative to accepting several spellings is
+   * an upload that succeeded and a publication that reports failure.
+   */
+
+  it('reads the id from the JSON-LD identifier', () => {
+    expect(
+      parseUploadedAsset({
+        '@id': 'asset-1',
+        properties: { name: 'report_x', id: 'asset-1' },
+      }),
+    ).toEqual({ id: 'asset-1', name: 'report_x', dataAddressBaseUrl: null });
+  });
+
+  it('falls back to the id inside properties', () => {
+    expect(parseUploadedAsset({ properties: { id: 'asset-2' } })?.id).toBe(
+      'asset-2',
+    );
+  });
+
+  it('reads an EDC-namespaced property', () => {
+    const ns = 'https://w3id.org/edc/v0.0.1/ns/';
+    expect(
+      parseUploadedAsset({
+        '@id': 'asset-3',
+        properties: { [`${ns}name`]: 'report_y' },
+        dataAddress: { [`${ns}baseUrl`]: 'urn:uuid:abc' },
+      }),
+    ).toEqual({
+      id: 'asset-3',
+      name: 'report_y',
+      dataAddressBaseUrl: 'urn:uuid:abc',
+    });
+  });
+
+  it('looks inside a wrapper rather than assuming the top level', () => {
+    expect(parseUploadedAsset({ asset: { '@id': 'asset-4' } })?.id).toBe(
+      'asset-4',
+    );
+    expect(parseUploadedAsset({ data: { '@id': 'asset-5' } })?.id).toBe(
+      'asset-5',
+    );
+  });
+
+  it('returns null when nothing in the answer identifies an asset', () => {
+    // The caller turns this into a failure. Guessing an id would create a
+    // contract pointing at nothing.
+    expect(parseUploadedAsset({ ok: true })).toBeNull();
+    expect(parseUploadedAsset(null)).toBeNull();
+    expect(parseUploadedAsset('stored')).toBeNull();
+    expect(parseUploadedAsset({ '@id': '   ' })).toBeNull();
   });
 });

@@ -9,6 +9,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Asset } from './schemas/asset.schema';
 import {
+  SyncKind,
   SyncResultRow,
   SyncRun,
   SyncRunDocument,
@@ -38,7 +39,11 @@ export interface SyncActor {
 
 export interface SyncRunSummary {
   runId: string;
-  kind: 'asset' | 'scan';
+  /**
+   * Widened to every kind the collection stores, because this mirrors a stored
+   * row. `startRun` stays narrow: a sync can only ever start a sync.
+   */
+  kind: SyncKind;
   status: SyncStatus;
   startedAt: Date;
   finishedAt: Date | null;
@@ -271,7 +276,12 @@ export class SyncService {
         return { sourceId, label, action: 'failed', error: e.message };
       }
       if (e instanceof InvalidAssetError) {
-        return { sourceId, label, action: 'failed', error: e.errors.join('; ') };
+        return {
+          sourceId,
+          label,
+          action: 'failed',
+          error: e.errors.join('; '),
+        };
       }
       this.logger.error(`ingest failed for ${label}: ${(e as Error).message}`);
       return { sourceId, label, action: 'failed', error: (e as Error).message };
@@ -365,8 +375,7 @@ export class SyncService {
       .select('sourceId label')
       .exec();
     for (const orphan of orphans) {
-      if (!opts.dryRun)
-        await this.ingest.markMissing(orphan.sourceId, runId);
+      if (!opts.dryRun) await this.ingest.markMissing(orphan.sourceId, runId);
       results.push({
         sourceId: orphan.sourceId,
         label: orphan.label ?? undefined,
@@ -401,7 +410,9 @@ export class SyncService {
       run.organizationId &&
       String(run.organizationId) !== String(actor.organizationId)
     ) {
-      throw new ForbiddenException('this sync run belongs to another organization');
+      throw new ForbiddenException(
+        'this sync run belongs to another organization',
+      );
     }
     return run;
   }

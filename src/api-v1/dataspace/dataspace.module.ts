@@ -10,8 +10,9 @@ import { AssetsRepository } from './assets.repository';
 import { ObservationsRepository } from './observations.repository';
 import { IdentityModule } from '../identity/identity.module';
 import { DATASPACE_SOURCE } from './source/dataspace-source';
-import { DspacerClient } from './source/dspacer.client';
+import { DSPACER_CLIENT, DspacerClient } from './source/dspacer.client';
 import { DspacerSource } from './source/dspacer.source';
+import { PublishService } from './publish.service';
 import {
   DSPACER_BASE_URL,
   DSPACER_LOGIN_URL,
@@ -21,16 +22,20 @@ import {
 } from './dataspace.constants';
 
 /**
- * The data space connector, built once per process.
+ * The connector client, built once per process.
+ *
+ * One instance, shared by the catalog source and the report publisher, because
+ * the client caches an access token: a second instance means a second login per
+ * token lifetime and two renewal schedules running past each other.
  *
  * Missing credentials are not a startup failure: every analytic endpoint reads
- * from Mongo and only a sync touches the connector, so an API serving an already
- * populated read model must still boot. The failure surfaces on the first sync,
- * where it can be reported to whoever asked for it.
+ * from Mongo and only a sync or a publication touches the connector, so an API
+ * serving an already populated read model must still boot. The failure surfaces
+ * on the first sync, where it can be reported to whoever asked for it.
  */
-const dataspaceSourceProvider = {
-  provide: DATASPACE_SOURCE,
-  useFactory: (): DspacerSource => {
+const dspacerClientProvider = {
+  provide: DSPACER_CLIENT,
+  useFactory: (): DspacerClient => {
     if (!dspacerConfigured()) {
       Logger.warn(
         'DSPACER_* is not fully configured; the analytic endpoints work from the ' +
@@ -38,15 +43,20 @@ const dataspaceSourceProvider = {
         'DataspaceModule',
       );
     }
-    return new DspacerSource(
-      new DspacerClient({
-        baseUrl: DSPACER_BASE_URL,
-        loginUrl: DSPACER_LOGIN_URL,
-        usuario: DSPACER_USER,
-        password: DSPACER_PASSWORD,
-      }),
-    );
+    return new DspacerClient({
+      baseUrl: DSPACER_BASE_URL,
+      loginUrl: DSPACER_LOGIN_URL,
+      usuario: DSPACER_USER,
+      password: DSPACER_PASSWORD,
+    });
   },
+};
+
+const dataspaceSourceProvider = {
+  provide: DATASPACE_SOURCE,
+  inject: [DSPACER_CLIENT],
+  useFactory: (client: DspacerClient): DspacerSource =>
+    new DspacerSource(client),
 };
 
 @Module({
@@ -60,16 +70,20 @@ const dataspaceSourceProvider = {
   ],
   controllers: [SyncController],
   providers: [
+    dspacerClientProvider,
     dataspaceSourceProvider,
     IngestService,
     SyncService,
+    PublishService,
     AssetsRepository,
     ObservationsRepository,
   ],
   exports: [
+    dspacerClientProvider,
     dataspaceSourceProvider,
     IngestService,
     SyncService,
+    PublishService,
     AssetsRepository,
     ObservationsRepository,
     MongooseModule,

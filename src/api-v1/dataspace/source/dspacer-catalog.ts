@@ -325,3 +325,78 @@ export function explainTransferFailure(body: unknown): string {
   }
   return `${message}${status !== undefined ? ` (downstream ${String(status)})` : ''}${response ? `: ${response.slice(0, 200)}` : ''}`;
 }
+
+/* ------------------------------------------------------------------ write path */
+
+/**
+ * The asset the connector created for a document we uploaded.
+ *
+ * The middleware declares the response of every write operation as `schema: {}`,
+ * so none of these field names are documented. The shape below is the one
+ * `POST /data/all` returns for an asset that already exists, and every spelling
+ * of the identifier seen there is accepted rather than betting on one.
+ */
+export interface UploadedAsset {
+  id: string;
+  name: string | null;
+  /**
+   * Where the connector says the data lives.
+   *
+   * Kept because every asset on this deployment currently resolves to the same
+   * address, which is why `POST /transfer/request` returns nothing usable. A
+   * published report inherits that, and recording the address is what makes it
+   * visible instead of a report that is in the catalog and cannot be read.
+   */
+  dataAddressBaseUrl: string | null;
+}
+
+function firstString(candidates: unknown[]): string | null {
+  for (const c of candidates) {
+    if (typeof c === 'string' && c.trim()) return c.trim();
+  }
+  return null;
+}
+
+const EDC_NS = 'https://w3id.org/edc/v0.0.1/ns/';
+
+export function parseUploadedAsset(body: unknown): UploadedAsset | null {
+  if (!body || typeof body !== 'object') return null;
+  const top = body as Record<string, unknown>;
+  // The asset may come back at the top level or under a wrapper. Rather than
+  // assume, take the first candidate that actually carries an identifier.
+  for (const candidate of [top, top.asset, top.data, top.result]) {
+    if (!candidate || typeof candidate !== 'object') continue;
+    const asset = candidate as Record<string, unknown>;
+    const properties = (
+      typeof asset.properties === 'object' && asset.properties
+        ? asset.properties
+        : {}
+    ) as Record<string, unknown>;
+    const id = firstString([
+      asset['@id'],
+      properties.id,
+      properties[`${EDC_NS}id`],
+      asset.id,
+      asset.assetId,
+    ]);
+    if (!id) continue;
+    const dataAddress = (
+      typeof asset.dataAddress === 'object' && asset.dataAddress
+        ? asset.dataAddress
+        : {}
+    ) as Record<string, unknown>;
+    return {
+      id,
+      name: firstString([
+        properties.name,
+        properties[`${EDC_NS}name`],
+        asset.name,
+      ]),
+      dataAddressBaseUrl: firstString([
+        dataAddress.baseUrl,
+        dataAddress[`${EDC_NS}baseUrl`],
+      ]),
+    };
+  }
+  return null;
+}

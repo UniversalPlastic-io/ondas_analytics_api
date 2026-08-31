@@ -16,6 +16,7 @@ import { MAX_OFFSHORE_KM, coastFor } from '../dataspace/coastline';
 import { Ocean } from '../dataspace/dataspace.constants';
 import { MetricsService } from '../../metrics/metrics.service';
 import { AssetsRepository } from '../dataspace/assets.repository';
+import { PublishService } from '../dataspace/publish.service';
 
 type CacheEntry = {
   expiresAtMs: number;
@@ -298,6 +299,7 @@ export class AnalysesService {
     private readonly scenario: ScenarioLoader,
     private readonly metrics: MetricsService,
     private readonly assets: AssetsRepository,
+    private readonly publisher: PublishService,
   ) {}
 
   private readonly cache = new Map<string, CacheEntry>();
@@ -393,6 +395,16 @@ export class AnalysesService {
         cacheKey,
       };
     }
+
+    // Published only when the analysis was actually computed. A cache hit returns
+    // above, and republishing it would put a second asset in the catalog for an
+    // analysis that is already there.
+    //
+    // Called after the cache metadata is set, so the published document is the
+    // one the caller receives, and without awaiting: the analysis is the product,
+    // publishing it is distribution, and a slow connector must not slow a request
+    // down or fail it.
+    this.publisher.publishInBackground(computed, { coast: match.coast });
 
     return computed;
   }
