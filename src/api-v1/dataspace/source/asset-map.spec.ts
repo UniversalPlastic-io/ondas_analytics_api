@@ -39,6 +39,15 @@ function entriesFrom(file: string, providerName: string): SourceEntry[] {
   return parseCatalog(fixture(file), provider).entries;
 }
 
+/** Every catalog captured from the live space, with the provider that offers it. */
+const CATALOGS = [
+  ['catalog-innoceana.json', 'Innoceana'],
+  ['catalog-bcss.json', 'BCSS'],
+  ['catalog-universal-plastic.json', 'Universal Plastic'],
+  ['catalog-port-badalona.json', 'Port Badalona'],
+  ['catalog-gijon-surf-hostel.json', 'Gijon Surf Hostel'],
+] as const;
+
 describe('ASSET_MAP', () => {
   it('only ever names dataset types, oceans and places the system knows', () => {
     for (const [id, m] of Object.entries(ASSET_MAP)) {
@@ -124,10 +133,9 @@ describe('classifyEntry against the live catalogs', () => {
   });
 
   it('skips schema and metadata assets silently', () => {
-    // The `_v1.1` republication round did not restore the schema assets, so the
-    // live catalogs currently hold none. The rule still has to hold: they were
-    // there before and will be again, and ingesting one would create an asset
-    // with no observations and no location.
+    // Ingesting one would create an asset with no observations and no location.
+    // Skipped without a warning, because a schema document in the catalog is
+    // expected — one per dataset — not an anomaly to report on every scan.
     for (const label of [
       'esquema_datos_recogidas_plastico_app_up_v700_v1',
       'metadatos_boya_biomasa_slx+',
@@ -142,13 +150,21 @@ describe('classifyEntry against the live catalogs', () => {
       expect(res.warning).toBeNull();
     }
 
-    const offered = entriesFrom(
-      'catalog-universal-plastic.json',
-      'Universal Plastic',
-    );
-    expect(
-      offered.filter((e) => /esquema|metadatos/i.test(e.ref.label)),
-    ).toEqual([]);
+    // And on the real thing: every schema the space actually offers.
+    let seen = 0;
+    for (const [file, name] of CATALOGS) {
+      for (const entry of entriesFrom(file, name)) {
+        if (!NON_DATA_ASSETS[entry.ref.id]) continue;
+        seen += 1;
+        const res = classifyEntry(entry);
+        expect(res.skipped).toBe(true);
+        expect(res.classified).toBeNull();
+        expect(res.warning).toBeNull();
+      }
+    }
+    // One per dataset type. Asserted so a fixture that lost them cannot make
+    // this pass by iterating over nothing.
+    expect(seen).toBe(DATASET_TYPES.length);
   });
 });
 
@@ -183,35 +199,29 @@ describe('isNonDataName', () => {
     }
   });
 
-  it('does not fire on any dataset name the space actually offers', () => {
-    // The other half of the rule: broadening it must not start swallowing real
-    // datasets, which would empty a category out of the read model in silence.
+  it('fires on exactly the schema assets the space offers, and nothing else', () => {
+    // The rule cuts both ways. It has to catch every schema document — one is
+    // published per dataset type — and it must never swallow a real dataset,
+    // which would empty a category out of the read model in silence.
     const swallowed: string[] = [];
+    const caught: string[] = [];
     let checked = 0;
-    for (const file of [
-      'catalog-innoceana.json',
-      'catalog-bcss.json',
-      'catalog-universal-plastic.json',
-      'catalog-port-badalona.json',
-      'catalog-gijon-surf-hostel.json',
-    ] as const) {
-      const provider = file
-        .replace('catalog-', '')
-        .replace('.json', '')
-        .replace(/-/g, ' ');
-      const name = providers.find(
-        (p) => p.name.toLowerCase().replace(/\s+/g, ' ') === provider,
-      )?.name;
-      expect(name).toBeDefined();
-      for (const entry of entriesFrom(file, name!)) {
+
+    for (const [file, name] of CATALOGS) {
+      for (const entry of entriesFrom(file, name)) {
         checked += 1;
-        if (isNonDataName(entry.ref.label)) swallowed.push(entry.ref.label);
+        if (!isNonDataName(entry.ref.label)) continue;
+        // A name it fires on must be a schema in the table, never a dataset.
+        if (NON_DATA_ASSETS[entry.ref.id]) caught.push(entry.ref.label);
+        else swallowed.push(`${entry.provider}/${entry.ref.label}`);
       }
     }
+
     // Asserted on the count too: a fixture rename would otherwise make this
     // test pass by iterating over nothing.
     expect(checked).toBeGreaterThanOrEqual(30);
     expect(swallowed).toEqual([]);
+    expect(caught).toHaveLength(DATASET_TYPES.length);
   });
 
   it('leaves a plain dataset name alone', () => {

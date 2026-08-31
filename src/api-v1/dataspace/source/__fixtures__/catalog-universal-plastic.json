@@ -1,12 +1,12 @@
 {
-  "@id": "65dfcf62-e636-4b80-a0cd-350b53c77c5f",
+  "@id": "adb3fd3a-c679-4ef2-8813-d137ce8e7901",
   "@type": "dcat:Catalog",
   "dcat:dataset": [
     {
       "@id": "42201660-011d-44c1-9c3d-8114fbf55f39",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "Qm95YSBtaWNyb3Bsw6FzdGljb3MgQ8OhZGl6IHYuMS4x:NDIyMDE2NjAtMDExZC00NGMxLTljM2QtODExNGZiZjU1ZjM5:NzIxZGEzYmYtODY4ZC00NzZlLTg4MjUtYWYzM2QxZTQ2ZDAx",
+        "@id": "Qm95YSBtaWNyb3Bsw6FzdGljb3MgQ8OhZGl6IHYuMS4x:NDIyMDE2NjAtMDExZC00NGMxLTljM2QtODExNGZiZjU1ZjM5:ZTliNmRjMjctMGVkMy00N2RiLTk0ZmYtODY0MzZlMDNmNjdm",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -89,7 +89,7 @@
       "@id": "4ea47a2b-f881-450e-b462-e3d61308af61",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "UmVjb2dpZGFzIHBsYXlhcyBCYWRhbG9uYV92MS4x:NGVhNDdhMmItZjg4MS00NTBlLWI0NjItZTNkNjEzMDhhZjYx:ZWFjNDFmMGEtNmNlNy00NzBhLWJiNGYtOTU5ODE0ZjUxODFl",
+        "@id": "UmVjb2dpZGFzIHBsYXlhcyBCYWRhbG9uYV92MS4x:NGVhNDdhMmItZjg4MS00NTBlLWI0NjItZTNkNjEzMDhhZjYx:M2EwODQzNDAtMGZjOC00NDBlLWEzYTEtY2U1YzU5OGE1NmJl",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -172,7 +172,7 @@
       "@id": "0aee0640-546a-436d-8dd8-23f02a9b3823",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "UmVjb2dpZGEgcGxheWFzIEJsYW5lc192MS4x:MGFlZTA2NDAtNTQ2YS00MzZkLThkZDgtMjNmMDJhOWIzODIz:MzVmZGNhMTktNjE3OC00OTFmLWFmNzEtYmY3ZTRkMzhkYTZm",
+        "@id": "UmVjb2dpZGEgcGxheWFzIEJsYW5lc192MS4x:MGFlZTA2NDAtNTQ2YS00MzZkLThkZDgtMjNmMDJhOWIzODIz:MTFlZjNiZjMtMGFmNC00ZDAyLTgyYTQtZWFmMjAzZmYyZThj",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -255,7 +255,7 @@
       "@id": "1ae34dab-5dd9-4c5f-8910-fed007781df0",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "Qm95YSBtaWNyb3Bsw6FzdGljb3MgR2lqw7NuX3YuMS4x:MWFlMzRkYWItNWRkOS00YzVmLTg5MTAtZmVkMDA3NzgxZGYw:Yjg2NTJhNDMtODlmZi00M2UwLWI2MmQtYjA4M2U0NWM5YTIw",
+        "@id": "Qm95YSBtaWNyb3Bsw6FzdGljb3MgR2lqw7NuX3YuMS4x:MWFlMzRkYWItNWRkOS00YzVmLTg5MTAtZmVkMDA3NzgxZGYw:YTI2MWNjZDUtYWU3MS00ZWQ0LWE5NzgtN2UzZjdlMmFiNjA5",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -338,7 +338,7 @@
       "@id": "c8ef3fe3-c966-4e63-a003-f3615ad94c71",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "Qm95YSBiaW9tYXNhIEdpasOzbl92MS4x:YzhlZjNmZTMtYzk2Ni00ZTYzLWEwMDMtZjM2MTVhZDk0Yzcx:NGU0ZGUxMjAtMWRkMi00ZDUwLWFiODQtYmRhZTU3MzkyZjlk",
+        "@id": "Qm95YSBiaW9tYXNhIEdpasOzbl92MS4x:YzhlZjNmZTMtYzk2Ni00ZTYzLWEwMDMtZjM2MTVhZDk0Yzcx:MjBlMGNiMzgtYmI1NC00MDVjLWFhN2MtY2Q3YWQ2N2IwZmM4",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -418,176 +418,10 @@
       "id": "c8ef3fe3-c966-4e63-a003-f3615ad94c71"
     },
     {
-      "@id": "c1c71785-6da1-4d8f-a796-df566b8e4f9d",
-      "@type": "dcat:Dataset",
-      "odrl:hasPolicy": {
-        "@id": "Qm95YV9taWNyb3BsYXN0aWNvc19yZWZlcmVuY2lh:YzFjNzE3ODUtNmRhMS00ZDhmLWE3OTYtZGY1NjZiOGU0Zjlk:YmU1ODM0Y2UtZmE4My00M2QyLTk0MmMtYzE3Yzc3ODlhZDA3",
-        "@type": "odrl:Offer",
-        "odrl:permission": {
-          "odrl:action": {
-            "@id": "USE"
-          },
-          "odrl:constraint": {
-            "odrl:or": {
-              "odrl:leftOperand": {
-                "@id": "BusinessPartnerNumber"
-              },
-              "odrl:operator": {
-                "@id": "odrl:eq"
-              },
-              "odrl:rightOperand": "BPNL000000000000001"
-            }
-          }
-        },
-        "odrl:prohibition": [],
-        "odrl:obligation": []
-      },
-      "dcat:distribution": [
-        {
-          "@type": "dcat:Distribution",
-          "dct:format": {
-            "@id": "AzureStorage-PUSH"
-          },
-          "dcat:accessService": {
-            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
-            "@type": "dcat:DataService",
-            "dcat:endpointDescription": "dspace:connector",
-            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
-            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
-          }
-        },
-        {
-          "@type": "dcat:Distribution",
-          "dct:format": {
-            "@id": "HttpData-PULL"
-          },
-          "dcat:accessService": {
-            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
-            "@type": "dcat:DataService",
-            "dcat:endpointDescription": "dspace:connector",
-            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
-            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
-          }
-        },
-        {
-          "@type": "dcat:Distribution",
-          "dct:format": {
-            "@id": "HttpData-PUSH"
-          },
-          "dcat:accessService": {
-            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
-            "@type": "dcat:DataService",
-            "dcat:endpointDescription": "dspace:connector",
-            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
-            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
-          }
-        },
-        {
-          "@type": "dcat:Distribution",
-          "dct:format": {
-            "@id": "AmazonS3-PUSH"
-          },
-          "dcat:accessService": {
-            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
-            "@type": "dcat:DataService",
-            "dcat:endpointDescription": "dspace:connector",
-            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
-            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
-          }
-        }
-      ],
-      "name": "Boya_microplasticos_referencia.",
-      "description": "Registro de datos de microplásticos obtenidos mediante una boya de muestreo. La planilla recoge la caracterización de partículas mediante estereomicroscopía, incluyendo número, forma, tamaño y color y su posterior identificación mediante microFTIR. ",
-      "id": "c1c71785-6da1-4d8f-a796-df566b8e4f9d"
-    },
-    {
-      "@id": "a69dc135-4dbc-4285-bb71-5fad09793ccf",
-      "@type": "dcat:Dataset",
-      "odrl:hasPolicy": {
-        "@id": "TXVlc3RyYXNfZGVfYWd1YV9yZWZlcmVuY2lh:YTY5ZGMxMzUtNGRiYy00Mjg1LWJiNzEtNWZhZDA5NzkzY2Nm:ZjNlZjgwN2UtODdmYy00NzkwLTlhZGYtY2RiMTFmMzMxM2Q0",
-        "@type": "odrl:Offer",
-        "odrl:permission": {
-          "odrl:action": {
-            "@id": "USE"
-          },
-          "odrl:constraint": {
-            "odrl:or": {
-              "odrl:leftOperand": {
-                "@id": "BusinessPartnerNumber"
-              },
-              "odrl:operator": {
-                "@id": "odrl:eq"
-              },
-              "odrl:rightOperand": "BPNL000000000000001"
-            }
-          }
-        },
-        "odrl:prohibition": [],
-        "odrl:obligation": []
-      },
-      "dcat:distribution": [
-        {
-          "@type": "dcat:Distribution",
-          "dct:format": {
-            "@id": "AzureStorage-PUSH"
-          },
-          "dcat:accessService": {
-            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
-            "@type": "dcat:DataService",
-            "dcat:endpointDescription": "dspace:connector",
-            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
-            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
-          }
-        },
-        {
-          "@type": "dcat:Distribution",
-          "dct:format": {
-            "@id": "HttpData-PULL"
-          },
-          "dcat:accessService": {
-            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
-            "@type": "dcat:DataService",
-            "dcat:endpointDescription": "dspace:connector",
-            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
-            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
-          }
-        },
-        {
-          "@type": "dcat:Distribution",
-          "dct:format": {
-            "@id": "HttpData-PUSH"
-          },
-          "dcat:accessService": {
-            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
-            "@type": "dcat:DataService",
-            "dcat:endpointDescription": "dspace:connector",
-            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
-            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
-          }
-        },
-        {
-          "@type": "dcat:Distribution",
-          "dct:format": {
-            "@id": "AmazonS3-PUSH"
-          },
-          "dcat:accessService": {
-            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
-            "@type": "dcat:DataService",
-            "dcat:endpointDescription": "dspace:connector",
-            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
-            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
-          }
-        }
-      ],
-      "name": "muestras_de_agua_referencia",
-      "description": "Concentración de microplásticos en muestras de agua, expresada en microgramos por litro (µg/L). Incluye 12 tipos de polímeros plásticos: Polietileno, Polipropileno, Poliestireno, Cloruro de polivinilo, Tereftalato de polietileno, Poliamida, Policarbonato, Poliuretano, Poli(metacrilato de metilo), Acrilonitrilo-butadieno-estireno, Acetato de polivinilo y Alcohol polivinílico. \n",
-      "id": "a69dc135-4dbc-4285-bb71-5fad09793ccf"
-    },
-    {
       "@id": "22748ef0-9b87-4aa6-9352-77a445c4d129",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "TXVlc3RyYXMgYWd1YSBUZW5lcmlmZV92MS4x:MjI3NDhlZjAtOWI4Ny00YWE2LTkzNTItNzdhNDQ1YzRkMTI5:NzQ3ZTkzNTUtYjY0OC00YjBiLTk3OTktZDQwMmE0YjA3YWI0",
+        "@id": "TXVlc3RyYXMgYWd1YSBUZW5lcmlmZV92MS4x:MjI3NDhlZjAtOWI4Ny00YWE2LTkzNTItNzdhNDQ1YzRkMTI5:OWRlNWU5YzctYjM0My00ODliLTg0MWYtMzJmOTI1NTQ2NDdh",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -667,10 +501,176 @@
       "id": "22748ef0-9b87-4aa6-9352-77a445c4d129"
     },
     {
+      "@id": "7008b00b-3f42-4469-9422-8b4cf5838ff7",
+      "@type": "dcat:Dataset",
+      "odrl:hasPolicy": {
+        "@id": "RXNxdWVtYSBib3lhIGJpb21hc2Egc2x4K192MS4x:NzAwOGIwMGItM2Y0Mi00NDY5LTk0MjItOGI0Y2Y1ODM4ZmY3:MjFjMDc4MTctNzM4Yi00Y2IzLWFjMmEtOTk3ZWVjZTU4YzI1",
+        "@type": "odrl:Offer",
+        "odrl:permission": {
+          "odrl:action": {
+            "@id": "USE"
+          },
+          "odrl:constraint": {
+            "odrl:or": {
+              "odrl:leftOperand": {
+                "@id": "BusinessPartnerNumber"
+              },
+              "odrl:operator": {
+                "@id": "odrl:eq"
+              },
+              "odrl:rightOperand": "BPNL000000000000001"
+            }
+          }
+        },
+        "odrl:prohibition": [],
+        "odrl:obligation": []
+      },
+      "dcat:distribution": [
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AzureStorage-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PULL"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AmazonS3-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        }
+      ],
+      "name": "Esquema boya biomasa slx+_v1.1",
+      "description": "Este recurso contiene el esquema de datos para la preparación y estandarización de los registros de biomasa obtenidos mediante una boya ecosonda autónoma Satlink SLX. Define la estructura esperada del conjunto de datos, incluyendo fecha, hora, estimaciones de biomasa y rangos de profundidad, para facilitar la interoperabilidad y la ingestión en el espacio de datos.",
+      "id": "7008b00b-3f42-4469-9422-8b4cf5838ff7"
+    },
+    {
+      "@id": "9c8e0b78-aa4f-4bb5-bffd-243b62154959",
+      "@type": "dcat:Dataset",
+      "odrl:hasPolicy": {
+        "@id": "TXVlc3RyYXMgZGUgYWd1YSByZWZlcmVuY2lhX3YxLjE=:OWM4ZTBiNzgtYWE0Zi00YmI1LWJmZmQtMjQzYjYyMTU0OTU5:YzVjMDYzZTQtMjk4Mi00OGZmLTlkM2ItMDNlNzZkNjg4ZWRk",
+        "@type": "odrl:Offer",
+        "odrl:permission": {
+          "odrl:action": {
+            "@id": "USE"
+          },
+          "odrl:constraint": {
+            "odrl:or": {
+              "odrl:leftOperand": {
+                "@id": "BusinessPartnerNumber"
+              },
+              "odrl:operator": {
+                "@id": "odrl:eq"
+              },
+              "odrl:rightOperand": "BPNL000000000000001"
+            }
+          }
+        },
+        "odrl:prohibition": [],
+        "odrl:obligation": []
+      },
+      "dcat:distribution": [
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AzureStorage-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PULL"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AmazonS3-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        }
+      ],
+      "name": "Muestras de agua referencia_v1.1",
+      "description": "Concentración de microplásticos en muestras de agua, expresada en microgramos por litro (µg/L). Incluye 12 tipos de polímeros plásticos: Polietileno, Polipropileno, Poliestireno, Cloruro de polivinilo, Tereftalato de polietileno, Poliamida, Policarbonato, Poliuretano, Poli(metacrilato de metilo), Acrilonitrilo-butadieno-estireno, Acetato de polivinilo y Alcohol polivinílico.",
+      "id": "9c8e0b78-aa4f-4bb5-bffd-243b62154959"
+    },
+    {
       "@id": "fa52faf0-8c2e-4797-81a3-5b2166d48253",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "Qm95YSBiaW9tYXNhIENhZGl6X3YxLjE=:ZmE1MmZhZjAtOGMyZS00Nzk3LTgxYTMtNWIyMTY2ZDQ4MjUz:YzZjY2NkNjgtYWU5Ni00YjY4LThiMzAtY2I1YmI5YTg1NzBk",
+        "@id": "Qm95YSBiaW9tYXNhIENhZGl6X3YxLjE=:ZmE1MmZhZjAtOGMyZS00Nzk3LTgxYTMtNWIyMTY2ZDQ4MjUz:YjRjNGE0ODEtNmU4Mi00Y2UwLWFmMTgtNWU2ZGI4MDY2MWE3",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -753,7 +753,7 @@
       "@id": "ecd40fc6-158c-4839-b7d8-173e03a41563",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "QXRtw7NzZmVyYSBCbGFuZXNfdjEuMQ==:ZWNkNDBmYzYtMTU4Yy00ODM5LWI3ZDgtMTczZTAzYTQxNTYz:MDA5NDIzZmItN2U4ZS00MWVkLTk0MzEtNDYxOGI1ZjU1NzZm",
+        "@id": "QXRtw7NzZmVyYSBCbGFuZXNfdjEuMQ==:ZWNkNDBmYzYtMTU4Yy00ODM5LWI3ZDgtMTczZTAzYTQxNTYz:ZWYwOTVlMzUtNWEzMi00M2MwLTllNjktMjRjNWEzYzJkZjk1",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -836,7 +836,7 @@
       "@id": "ec33f3e1-70d2-4992-9442-796eeee58e89",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "QXRtw7NzZmVyYSBCYXJjZWxvbmFfdjEuMQ==:ZWMzM2YzZTEtNzBkMi00OTkyLTk0NDItNzk2ZWVlZTU4ZTg5:NmJjZmQ3ZWUtZjk5MS00MTJmLThjMjAtNTA2OTIxZTNkYzIx",
+        "@id": "QXRtw7NzZmVyYSBCYXJjZWxvbmFfdjEuMQ==:ZWMzM2YzZTEtNzBkMi00OTkyLTk0NDItNzk2ZWVlZTU4ZTg5:ZWNhNzU5YjQtM2JlZS00ODg2LWJiNTAtNTc2MDg1YmI1ZTcy",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -919,7 +919,7 @@
       "@id": "36346baf-a6aa-451e-a464-f8cc7b3e6458",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "T2NlYW5vZ3JhZsOtYSBCYXJjZWxvbmFfdjEuMQ==:MzYzNDZiYWYtYTZhYS00NTFlLWE0NjQtZjhjYzdiM2U2NDU4:YTA4YzU1YjEtZDhkNS00Yjg1LTk5MjgtNGUxMTRiYmQ4NTNm",
+        "@id": "T2NlYW5vZ3JhZsOtYSBCYXJjZWxvbmFfdjEuMQ==:MzYzNDZiYWYtYTZhYS00NTFlLWE0NjQtZjhjYzdiM2U2NDU4:NTM0M2JlODktOWFhYS00ZDE4LWIzZDUtY2UzMGI3ZmI5NWRj",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -1002,7 +1002,7 @@
       "@id": "ae3fad45-6a7a-475d-a283-9eadaa0cf8cb",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "TXVlc3RyYXMgYWd1YSBCYWRhbG9uYV92MS4x:YWUzZmFkNDUtNmE3YS00NzVkLWEyODMtOWVhZGFhMGNmOGNi:Nzg3OGMzM2YtOTcxZS00Yjk3LWIwMGMtNjg4NDcxOTBjZWVj",
+        "@id": "TXVlc3RyYXMgYWd1YSBCYWRhbG9uYV92MS4x:YWUzZmFkNDUtNmE3YS00NzVkLWEyODMtOWVhZGFhMGNmOGNi:MGZmMmJiZTItNzZjNy00MDY2LWE3NTAtMWEzMjU3YzIxNzYz",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -1082,10 +1082,176 @@
       "id": "ae3fad45-6a7a-475d-a283-9eadaa0cf8cb"
     },
     {
+      "@id": "5504c807-e735-4d47-832d-92609efd82c0",
+      "@type": "dcat:Dataset",
+      "odrl:hasPolicy": {
+        "@id": "Qm95YSBiaW9tYXNhIHJlZmVyZW5jaWFfdjEuMQ==:NTUwNGM4MDctZTczNS00ZDQ3LTgzMmQtOTI2MDllZmQ4MmMw:ZmI4MjFmZDEtMDIyYy00Y2MwLWFhNzMtNGU0ZWI2YzM4YmRj",
+        "@type": "odrl:Offer",
+        "odrl:permission": {
+          "odrl:action": {
+            "@id": "USE"
+          },
+          "odrl:constraint": {
+            "odrl:or": {
+              "odrl:leftOperand": {
+                "@id": "BusinessPartnerNumber"
+              },
+              "odrl:operator": {
+                "@id": "odrl:eq"
+              },
+              "odrl:rightOperand": "BPNL000000000000001"
+            }
+          }
+        },
+        "odrl:prohibition": [],
+        "odrl:obligation": []
+      },
+      "dcat:distribution": [
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AzureStorage-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PULL"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AmazonS3-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        }
+      ],
+      "name": "Boya biomasa referencia_v1.1",
+      "description": "Registro de datos de biomasa obtenidos mediante una boya ecosonda autónoma Satlink SLX fondeada en el puerto de Badalona. La planilla recoge las estimaciones de biomasa, la fecha, la hora y la biomasa en los distintos rangos de profundidad.",
+      "id": "5504c807-e735-4d47-832d-92609efd82c0"
+    },
+    {
+      "@id": "e74cc7e4-deb5-4dea-8d30-239e08642518",
+      "@type": "dcat:Dataset",
+      "odrl:hasPolicy": {
+        "@id": "Qm95YSBtaWNyb3Bsw6FzdGljb3MgcmVmZXJlbmNpYV92MS4x:ZTc0Y2M3ZTQtZGViNS00ZGVhLThkMzAtMjM5ZTA4NjQyNTE4:NGEwYmJiNzQtZGYxMS00M2Y4LWE0ZDEtNTkxN2I5M2E5OTgx",
+        "@type": "odrl:Offer",
+        "odrl:permission": {
+          "odrl:action": {
+            "@id": "USE"
+          },
+          "odrl:constraint": {
+            "odrl:or": {
+              "odrl:leftOperand": {
+                "@id": "BusinessPartnerNumber"
+              },
+              "odrl:operator": {
+                "@id": "odrl:eq"
+              },
+              "odrl:rightOperand": "BPNL000000000000001"
+            }
+          }
+        },
+        "odrl:prohibition": [],
+        "odrl:obligation": []
+      },
+      "dcat:distribution": [
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AzureStorage-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PULL"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AmazonS3-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        }
+      ],
+      "name": "Boya microplásticos referencia_v1.1",
+      "description": "Registro de datos de microplásticos obtenidos mediante una boya de muestreo de referencia. La planilla recoge la caracterización de partículas mediante estereomicroscopía, incluyendo número, forma, tamaño y color y su posterior identificación mediante microFTIR.",
+      "id": "e74cc7e4-deb5-4dea-8d30-239e08642518"
+    },
+    {
       "@id": "bd458468-ba6f-46ea-88b1-6a61ce7d187b",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "T2NlYW5vZ3JhZsOtYSBUZW5lcmlmZV92MS4x:YmQ0NTg0NjgtYmE2Zi00NmVhLTg4YjEtNmE2MWNlN2QxODdi:OWEyYzUzY2EtYjM4ZC00Nzk2LTliNjUtY2Y0ZTMzNDc5ODdm",
+        "@id": "T2NlYW5vZ3JhZsOtYSBUZW5lcmlmZV92MS4x:YmQ0NTg0NjgtYmE2Zi00NmVhLTg4YjEtNmE2MWNlN2QxODdi:YTdjMDAwYTQtOTQxMS00YWYxLWFmZjEtMGRhOGNjNDg3YzMz",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -1168,7 +1334,7 @@
       "@id": "da6a3168-acf3-4c36-a0a3-be806658ddf7",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "T2NlYW5vZ3JhZsOtYSBCYWRhbG9uYV92MS4x:ZGE2YTMxNjgtYWNmMy00YzM2LWEwYTMtYmU4MDY2NThkZGY3:MTU5OGI1OGMtY2U5Yy00NTE0LWFkOTMtMmQ4YzkzNjExODRj",
+        "@id": "T2NlYW5vZ3JhZsOtYSBCYWRhbG9uYV92MS4x:ZGE2YTMxNjgtYWNmMy00YzM2LWEwYTMtYmU4MDY2NThkZGY3:NjlhN2YwM2MtZTY0NS00MjJlLWFmNWUtM2RjYmM5ODdiYTVl",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -1251,7 +1417,7 @@
       "@id": "bc8910ff-face-45be-8e76-540fddeb1a45",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "T2NlYW5vZ3JhZsOtYSBHaWrDs25fdjEuMQ==:YmM4OTEwZmYtZmFjZS00NWJlLThlNzYtNTQwZmRkZWIxYTQ1:ZGJkNjRjNWQtMTI3NS00ZjA2LWEzMGItYjkyNWMzMThlYTY4",
+        "@id": "T2NlYW5vZ3JhZsOtYSBHaWrDs25fdjEuMQ==:YmM4OTEwZmYtZmFjZS00NWJlLThlNzYtNTQwZmRkZWIxYTQ1:ODYzYzM5ZGQtZWMxNi00M2U4LTgzN2MtOWNlM2M1MGRmYzcz",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -1331,10 +1497,259 @@
       "id": "bc8910ff-face-45be-8e76-540fddeb1a45"
     },
     {
+      "@id": "a2a9df15-8f80-4be0-9afd-11f4fe8c92b9",
+      "@type": "dcat:Dataset",
+      "odrl:hasPolicy": {
+        "@id": "RXNxdWVtYSBkYXRvcyBtdWVzdHJhcyBkZSBwZWNlcyBweV9nY21zX3YxLjE=:YTJhOWRmMTUtOGY4MC00YmUwLTlhZmQtMTFmNGZlOGM5MmI5:NTMwNWNkZTAtYjJmYi00N2I1LTg5NjctM2JlYTIzMWZjODIz",
+        "@type": "odrl:Offer",
+        "odrl:permission": {
+          "odrl:action": {
+            "@id": "USE"
+          },
+          "odrl:constraint": {
+            "odrl:or": {
+              "odrl:leftOperand": {
+                "@id": "BusinessPartnerNumber"
+              },
+              "odrl:operator": {
+                "@id": "odrl:eq"
+              },
+              "odrl:rightOperand": "BPNL000000000000001"
+            }
+          }
+        },
+        "odrl:prohibition": [],
+        "odrl:obligation": []
+      },
+      "dcat:distribution": [
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AzureStorage-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PULL"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AmazonS3-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        }
+      ],
+      "name": "Esquema datos muestras de peces py_gcms_v1.1",
+      "description": "Este recurso contiene el esquema de datos para la preparación y estandarización de resultados del monitoreo de microplásticos en muestras de peces analizadas mediante pirólisis-GC/MS. Define la estructura esperada del conjunto de datos, incluyendo variables, unidades y formato, para facilitar la interoperabilidad y la ingestión en el espacio de datos.",
+      "id": "a2a9df15-8f80-4be0-9afd-11f4fe8c92b9"
+    },
+    {
+      "@id": "c1196308-d6b0-4a89-bf26-ae2752e54278",
+      "@type": "dcat:Dataset",
+      "odrl:hasPolicy": {
+        "@id": "RXNxdWVtYSBkYXRvcyByZWNvZ2lkYXMgcGzDoXN0aWNvIGFwcCB1cF92NzAwX3YxLjE=:YzExOTYzMDgtZDZiMC00YTg5LWJmMjYtYWUyNzUyZTU0Mjc4:MTI2MjEzMmItZDUzYi00Y2MxLTkyZTctY2YzYzJlMTlkNThk",
+        "@type": "odrl:Offer",
+        "odrl:permission": {
+          "odrl:action": {
+            "@id": "USE"
+          },
+          "odrl:constraint": {
+            "odrl:or": {
+              "odrl:leftOperand": {
+                "@id": "BusinessPartnerNumber"
+              },
+              "odrl:operator": {
+                "@id": "odrl:eq"
+              },
+              "odrl:rightOperand": "BPNL000000000000001"
+            }
+          }
+        },
+        "odrl:prohibition": [],
+        "odrl:obligation": []
+      },
+      "dcat:distribution": [
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AzureStorage-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PULL"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AmazonS3-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        }
+      ],
+      "name": "Esquema datos recogidas plástico app up_v700_v1.1",
+      "description": "Este recurso contiene el esquema de datos para la preparación y estandarización de resultados de registros de ciencia ciudadana generados mediante la aplicación móvil Universal Plastic v7.0.0, utilizada para registrar limpiezas de plásticos costeros. Define la estructura esperada del conjunto de datos, incluyendo variables, unidades y formatos, con el fin de facilitar la interoperabilidad y la ingestión en el espacio de datos. \n",
+      "id": "c1196308-d6b0-4a89-bf26-ae2752e54278"
+    },
+    {
+      "@id": "b55cfea9-55e7-4d70-919f-33a5b90b4646",
+      "@type": "dcat:Dataset",
+      "odrl:hasPolicy": {
+        "@id": "RXNxdWVtYSBkYXRvcyBhdG1vc2ZlcmEgY3NkX3YxLjE=:YjU1Y2ZlYTktNTVlNy00ZDcwLTkxOWYtMzNhNWI5MGI0NjQ2:NzAzNzkwZTMtZjBiMS00MWI2LTkyZTktZmUzZjQ0ZjYxMjQ1",
+        "@type": "odrl:Offer",
+        "odrl:permission": {
+          "odrl:action": {
+            "@id": "USE"
+          },
+          "odrl:constraint": {
+            "odrl:or": {
+              "odrl:leftOperand": {
+                "@id": "BusinessPartnerNumber"
+              },
+              "odrl:operator": {
+                "@id": "odrl:eq"
+              },
+              "odrl:rightOperand": "BPNL000000000000001"
+            }
+          }
+        },
+        "odrl:prohibition": [],
+        "odrl:obligation": []
+      },
+      "dcat:distribution": [
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AzureStorage-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PULL"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AmazonS3-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        }
+      ],
+      "name": " Esquema datos atmosfera csd_v1.1",
+      "description": "Este recurso contiene el esquema de datos para la preparación y estandarización de datasets de meteorología y oceanografía obtenidos a través de la API de Meteomatics. Define la estructura esperada del conjunto de datos, incluyendo variables, unidades y formato, para facilitar la interoperabilidad y la ingestión en el espacio de datos",
+      "id": "b55cfea9-55e7-4d70-919f-33a5b90b4646"
+    },
+    {
       "@id": "d84307ea-31fb-4862-8648-930cd9011ab6",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "QXRtw7NzZmVyYSBUZW5lcmlmZV92MS4x:ZDg0MzA3ZWEtMzFmYi00ODYyLTg2NDgtOTMwY2Q5MDExYWI2:NThmODkwMWQtNTc4NC00MGI0LTkwYjMtMTdiZjU4MDQ2YjMy",
+        "@id": "QXRtw7NzZmVyYSBUZW5lcmlmZV92MS4x:ZDg0MzA3ZWEtMzFmYi00ODYyLTg2NDgtOTMwY2Q5MDExYWI2:NzcwOTk5NDEtZmVmMS00MTAyLWI3ZjktOTcxNWMxNjA2YTcx",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -1417,7 +1832,7 @@
       "@id": "ec760bbd-d719-4389-ac93-1413cc7a160a",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "QXRtw7NzZmVyYSBCYWRhbG9uYV92MS4x:ZWM3NjBiYmQtZDcxOS00Mzg5LWFjOTMtMTQxM2NjN2ExNjBh:MGNjZDY1ZWItZmUwZS00ZmVjLWFkNzMtODMxYjVjODJhNGQ3",
+        "@id": "QXRtw7NzZmVyYSBCYWRhbG9uYV92MS4x:ZWM3NjBiYmQtZDcxOS00Mzg5LWFjOTMtMTQxM2NjN2ExNjBh:NmUxYmQ3NmMtMzg2Yy00YWNkLWI4YmQtZjdhNTk5NDIyNTMw",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -1500,7 +1915,7 @@
       "@id": "584ff479-aa7b-4645-a841-eb7ff50895ea",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "QXRtw7NzZmVyYSBHaWrDs25fdjEuMQ==:NTg0ZmY0NzktYWE3Yi00NjQ1LWE4NDEtZWI3ZmY1MDg5NWVh:NTYwOWJmM2ItOTMzMy00NTM2LTgzMjYtMjMzZDFhNWY1YTk2",
+        "@id": "QXRtw7NzZmVyYSBHaWrDs25fdjEuMQ==:NTg0ZmY0NzktYWE3Yi00NjQ1LWE4NDEtZWI3ZmY1MDg5NWVh:ZjczMzZhMTQtNzM0YS00ZGE0LTk4MDktYTY3ZGRhNDhkNmJk",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -1583,7 +1998,7 @@
       "@id": "0ba413bc-a382-4b64-901c-b1409680d276",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "T2NlYW5vZ3JhZsOtYSBCbGFuZXNfdjEuMQ==:MGJhNDEzYmMtYTM4Mi00YjY0LTkwMWMtYjE0MDk2ODBkMjc2:ZWE5ZmQxNjQtYjg5Ni00OTk3LTk3ODgtN2VjNjYwYTViNDAx",
+        "@id": "T2NlYW5vZ3JhZsOtYSBCbGFuZXNfdjEuMQ==:MGJhNDEzYmMtYTM4Mi00YjY0LTkwMWMtYjE0MDk2ODBkMjc2:MjdkZTA4NzUtZDczNC00OTljLWE2OTMtYTQyYmIyOGJmNTU1",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -1663,10 +2078,10 @@
       "id": "0ba413bc-a382-4b64-901c-b1409680d276"
     },
     {
-      "@id": "31f505fb-c5af-48e0-9cfb-1e596bd991dd",
+      "@id": "8b21636a-db37-4252-91f7-022562610eb0",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "T2NlYW5vZ3JhZsOtYSBCYXJjZWxvbmEg:MzFmNTA1ZmItYzVhZi00OGUwLTljZmItMWU1OTZiZDk5MWRk:ZWI3MDZiMTItZGJmMy00ZDYyLThjZDMtOWMyMjJhYzZlMmE0",
+        "@id": "RXNxdWVtYSBkYXRvcyBib3lhIG1pY3JvcGzDoXN0aWNvcyBzZWFib3RfdjEuMQ==:OGIyMTYzNmEtZGIzNy00MjUyLTkxZjctMDIyNTYyNjEwZWIw:MWMzY2VlZGUtZWJhMC00MjE5LWI2NGYtNTMwNzY3YTNiNTkz",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -1741,15 +2156,264 @@
           }
         }
       ],
-      "name": "Oceanografía Barcelona",
-      "description": "\nCondiciones oceánicas superficiales diarias para los 7 días previos a cada evento de recogida de playa, obtenidas a partir de los modelos del Servicio de Monitoreo del Océano de Copernicus (CMEMS). Las variables incluyen corrientes superficiales, temperatura y salinidad del mar, parámetros de oleaje (dirección, altura, periodo), deriva de Stokes y viento superficial. Un registro por evento de recogida y sitio. Usar event_date para cruzar con los datos de recogida de playa.\n",
-      "id": "31f505fb-c5af-48e0-9cfb-1e596bd991dd"
+      "name": "Esquema datos boya microplásticos seabot_v1.1",
+      "description": "Este recurso contiene el esquema de datos para la preparación y estandarización de resultados del monitoreo de microplásticos mediante boya SEABOT. Define la estructura esperada del conjunto de datos, incluyendo variables, unidades y formato, para facilitar la interoperabilidad y la ingestión en el espacio de datos\n",
+      "id": "8b21636a-db37-4252-91f7-022562610eb0"
+    },
+    {
+      "@id": "d52a3f0f-ead7-4dd8-8d88-1ed3af965f8a",
+      "@type": "dcat:Dataset",
+      "odrl:hasPolicy": {
+        "@id": "RXNxdWVtYV9kYXRvc19jb250ZXh0b19hbWJpZW50YWxfbWV0ZW9tYXRpY3NfdjEuMQ==:ZDUyYTNmMGYtZWFkNy00ZGQ4LThkODgtMWVkM2FmOTY1Zjhh:ZjIwYTlmYzMtMjA5ZC00Yzc4LThlMTEtMjRkZmMyYWU5OWQ4",
+        "@type": "odrl:Offer",
+        "odrl:permission": {
+          "odrl:action": {
+            "@id": "USE"
+          },
+          "odrl:constraint": {
+            "odrl:or": {
+              "odrl:leftOperand": {
+                "@id": "BusinessPartnerNumber"
+              },
+              "odrl:operator": {
+                "@id": "odrl:eq"
+              },
+              "odrl:rightOperand": "BPNL000000000000001"
+            }
+          }
+        },
+        "odrl:prohibition": [],
+        "odrl:obligation": []
+      },
+      "dcat:distribution": [
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AzureStorage-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PULL"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AmazonS3-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        }
+      ],
+      "name": "Esquema datos contexto ambiental meteomatics_v1.1",
+      "description": " Este recurso contiene el esquema de datos para la preparación y estandarización de datasets de meteorología y oceanografía obtenidos a través de la API de Meteomatics. Define la estructura esperada del conjunto de datos, incluyendo variables, unidades y formato, para facilitar la interoperabilidad y la ingestión en el espacio de datos",
+      "id": "d52a3f0f-ead7-4dd8-8d88-1ed3af965f8a"
+    },
+    {
+      "@id": "81d2972f-aaea-416d-be34-c07803c1b73f",
+      "@type": "dcat:Dataset",
+      "odrl:hasPolicy": {
+        "@id": "UmVjb2dpZGFzIHBsYXlhcyByZWZlcmVuY2lhX3YxLjE=:ODFkMjk3MmYtYWFlYS00MTZkLWJlMzQtYzA3ODAzYzFiNzNm:NjVlMTgyMDctOTZjYy00YmQwLTgzZDYtOTg1ZDk2NjNhZTUw",
+        "@type": "odrl:Offer",
+        "odrl:permission": {
+          "odrl:action": {
+            "@id": "USE"
+          },
+          "odrl:constraint": {
+            "odrl:or": {
+              "odrl:leftOperand": {
+                "@id": "BusinessPartnerNumber"
+              },
+              "odrl:operator": {
+                "@id": "odrl:eq"
+              },
+              "odrl:rightOperand": "BPNL000000000000001"
+            }
+          }
+        },
+        "odrl:prohibition": [],
+        "odrl:obligation": []
+      },
+      "dcat:distribution": [
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AzureStorage-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PULL"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AmazonS3-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        }
+      ],
+      "name": "Recogidas playas referencia_v1.1",
+      "description": "Dataset de ciencia ciudadana generado por la app móvil Universal Plastic v7.0.0, plataforma de economía azul. Permite registrar limpiezas de plásticos costeros capturando kg totales, participantes, duración, distancia y composición (PET/HDPE/PVC/LDPE/PP/PS en %) vía IA en imágenes. Implementa un sistema de dMRV (digital Measurement, Reporting and Verification) para medición, reporte y verificación automatizada y trazable de residuos.\n",
+      "id": "81d2972f-aaea-416d-be34-c07803c1b73f"
+    },
+    {
+      "@id": "9126d037-d7f7-4edc-a905-c7e058ffbe16",
+      "@type": "dcat:Dataset",
+      "odrl:hasPolicy": {
+        "@id": "RW52aXJvbm1lbnRhbCByZWZlcmVuY2lhX3YxLjE=:OTEyNmQwMzctZDdmNy00ZWRjLWE5MDUtYzdlMDU4ZmZiZTE2:OTU4NjdhNTAtMzdkNS00OTc3LTkyZGQtZDA4MGMyOGExYzA4",
+        "@type": "odrl:Offer",
+        "odrl:permission": {
+          "odrl:action": {
+            "@id": "USE"
+          },
+          "odrl:constraint": {
+            "odrl:or": {
+              "odrl:leftOperand": {
+                "@id": "BusinessPartnerNumber"
+              },
+              "odrl:operator": {
+                "@id": "odrl:eq"
+              },
+              "odrl:rightOperand": "BPNL000000000000001"
+            }
+          }
+        },
+        "odrl:prohibition": [],
+        "odrl:obligation": []
+      },
+      "dcat:distribution": [
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AzureStorage-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PULL"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AmazonS3-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        }
+      ],
+      "name": "Environmental referencia_v1.1",
+      "description": "Condiciones meteorológicas y oceanográficas horarias obtenidas a partir de la API de Meteomatics. Las variables incluyen temperatura del aire y del mar, presión atmosférica, humedad, precipitación, radiación solar, viento, nubosidad, oleaje, corrientes marinas e índices climáticos (NAO, SOI). Un registro por hora y punto de monitoreo. Usar Date y Time para cruzar con los datos de boya de biomasa de referencia",
+      "id": "9126d037-d7f7-4edc-a905-c7e058ffbe16"
     },
     {
       "@id": "1bb20528-06a4-4c15-afee-547279f6870e",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "Q29udGV4dG8gYW1iaWVudGFsIHBhcmEgYm95YSBkZSBiaW9tYXNhIEJhZGFsb25hX1YxLjE=:MWJiMjA1MjgtMDZhNC00YzE1LWFmZWUtNTQ3Mjc5ZjY4NzBl:OTQwN2FkMmMtNGFlNy00ODJmLWE2OTktZDUxMjg4YTk2MDNk",
+        "@id": "Q29udGV4dG8gYW1iaWVudGFsIHBhcmEgYm95YSBkZSBiaW9tYXNhIEJhZGFsb25hX1YxLjE=:MWJiMjA1MjgtMDZhNC00YzE1LWFmZWUtNTQ3Mjc5ZjY4NzBl:NWUyZGJkYzItZTU4MC00MDczLWE5NDgtODcwODZiZTExNmEx",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -1832,7 +2496,7 @@
       "@id": "3d8d2868-87e0-45da-a526-6362fcc20a99",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "Q29udGV4dG8gYW1iaWVudGFsIHBhcmEgYm95YSBkZSBiaW9tYXNhIEdpasOzbl92MS4x:M2Q4ZDI4NjgtODdlMC00NWRhLWE1MjYtNjM2MmZjYzIwYTk5:Zjk2MzNjOWItNzQwMi00MTQ0LWI1YTEtMmJiODdiMjdmOGQ5",
+        "@id": "Q29udGV4dG8gYW1iaWVudGFsIHBhcmEgYm95YSBkZSBiaW9tYXNhIEdpasOzbl92MS4x:M2Q4ZDI4NjgtODdlMC00NWRhLWE1MjYtNjM2MmZjYzIwYTk5:OTc0ZDcxOWQtMGI2NS00NWZkLWFhMDEtYjYyMTQ1NTE4ZGVh",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -1912,10 +2576,176 @@
       "id": "3d8d2868-87e0-45da-a526-6362fcc20a99"
     },
     {
+      "@id": "79ef4928-8845-42bb-8752-59f12c7860cf",
+      "@type": "dcat:Dataset",
+      "odrl:hasPolicy": {
+        "@id": "RXNxdWVtYSBkYXRvcyBtdWVzdHJhcyBkZSBhZ3VhIHB5X2djbXNfdjEuMQ==:NzllZjQ5MjgtODg0NS00MmJiLTg3NTItNTlmMTJjNzg2MGNm:ZDM3OGJiZDEtMjQ1OC00YzE0LTg1YTgtNzA0MWZhZGU1OGY2",
+        "@type": "odrl:Offer",
+        "odrl:permission": {
+          "odrl:action": {
+            "@id": "USE"
+          },
+          "odrl:constraint": {
+            "odrl:or": {
+              "odrl:leftOperand": {
+                "@id": "BusinessPartnerNumber"
+              },
+              "odrl:operator": {
+                "@id": "odrl:eq"
+              },
+              "odrl:rightOperand": "BPNL000000000000001"
+            }
+          }
+        },
+        "odrl:prohibition": [],
+        "odrl:obligation": []
+      },
+      "dcat:distribution": [
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AzureStorage-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PULL"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AmazonS3-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        }
+      ],
+      "name": "Esquema datos muestras de agua py_gcms_v1.1",
+      "description": "Este recurso contiene el esquema de datos para la preparación y estandarización de resultados del monitoreo de microplásticos en muestras de agua analizadas mediante pirólisis-GC/MS. Define la estructura esperada del conjunto de datos, incluyendo variables, unidades y formato, para facilitar la interoperabilidad y la ingestión en el espacio de datos.",
+      "id": "79ef4928-8845-42bb-8752-59f12c7860cf"
+    },
+    {
+      "@id": "f2ca0114-fc23-4435-ab73-0fcd94e05261",
+      "@type": "dcat:Dataset",
+      "odrl:hasPolicy": {
+        "@id": "RXNxdWVtYSBkYXRvcyBvY2Vhbm9ncmFmw61hIGNkc2VfdjEuMQ==:ZjJjYTAxMTQtZmMyMy00NDM1LWFiNzMtMGZjZDk0ZTA1MjYx:NjE5OWYxMTMtYjJhYy00MmE5LWI3NGEtZWU0MTQzYmI3MmI0",
+        "@type": "odrl:Offer",
+        "odrl:permission": {
+          "odrl:action": {
+            "@id": "USE"
+          },
+          "odrl:constraint": {
+            "odrl:or": {
+              "odrl:leftOperand": {
+                "@id": "BusinessPartnerNumber"
+              },
+              "odrl:operator": {
+                "@id": "odrl:eq"
+              },
+              "odrl:rightOperand": "BPNL000000000000001"
+            }
+          }
+        },
+        "odrl:prohibition": [],
+        "odrl:obligation": []
+      },
+      "dcat:distribution": [
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AzureStorage-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PULL"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AmazonS3-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        }
+      ],
+      "name": "Esquema datos oceanografía cdse_v1.1",
+      "description": "Este recurso contiene las condiciones oceánicas superficiales diarias registradas en los 7 días previos a cada evento de recogida de playa, obtenidas a partir de los modelos del Servicio de Monitoreo del Océano de Copernicus (CMEMS). Define la estructura del conjunto de datos incluyendo variables de corrientes, temperatura y salinidad del mar, parámetros de oleaje, deriva de Stokes y viento superficial, sus unidades y formato, para facilitar la interoperabilidad y la ingestión en el espacio de datos. Usar event_date para cruzar con los datos de recogida de playa.",
+      "id": "f2ca0114-fc23-4435-ab73-0fcd94e05261"
+    },
+    {
       "@id": "019ee791-f585-46c6-a21b-72e6d35957b4",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "Q29udGV4dG8gYW1iaWVudGFsIHBhcmEgYm95YSBkZSBiaW9tYXNhIEPDoWRpel92MS4x:MDE5ZWU3OTEtZjU4NS00NmM2LWEyMWItNzJlNmQzNTk1N2I0:Y2VlYTEzYWEtZDQ5NS00OGJlLWE5M2UtMjkxZGVkYTExNmU5",
+        "@id": "Q29udGV4dG8gYW1iaWVudGFsIHBhcmEgYm95YSBkZSBiaW9tYXNhIEPDoWRpel92MS4x:MDE5ZWU3OTEtZjU4NS00NmM2LWEyMWItNzJlNmQzNTk1N2I0:OWVjNzc1YzEtMzc0Yi00YzEyLTlmNGEtYzE4OTA4MzUwZmI0",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -1993,255 +2823,6 @@
       "name": "Contexto ambiental para boya de biomasa Cádiz_v1.1",
       "description": "\nCondiciones meteorológicas y oceanográficas horarias obtenidas a partir de la API de Meteomatics. Las variables incluyen temperatura del aire y del mar, presión atmosférica, humedad, precipitación, radiación solar, viento, nubosidad, oleaje, corrientes marinas e índices climáticos (NAO, SOI). Un registro por hora y punto de monitoreo. Usar Date y Time para cruzar con los datos de boya de biomasa en\nen un puerto de Cádiz.\n",
       "id": "019ee791-f585-46c6-a21b-72e6d35957b4"
-    },
-    {
-      "@id": "85add085-d1fb-4774-b8c6-d2de5bea3c1f",
-      "@type": "dcat:Dataset",
-      "odrl:hasPolicy": {
-        "@id": "RW52aXJvbm1lbnRhbF9yZWZlcmVuY2lh:ODVhZGQwODUtZDFmYi00Nzc0LWI4YzYtZDJkZTViZWEzYzFm:NGJmOTM4YWEtMjYxZi00ZmMyLWJhM2MtOTg2OTllN2UxYzNk",
-        "@type": "odrl:Offer",
-        "odrl:permission": {
-          "odrl:action": {
-            "@id": "USE"
-          },
-          "odrl:constraint": {
-            "odrl:or": {
-              "odrl:leftOperand": {
-                "@id": "BusinessPartnerNumber"
-              },
-              "odrl:operator": {
-                "@id": "odrl:eq"
-              },
-              "odrl:rightOperand": "BPNL000000000000001"
-            }
-          }
-        },
-        "odrl:prohibition": [],
-        "odrl:obligation": []
-      },
-      "dcat:distribution": [
-        {
-          "@type": "dcat:Distribution",
-          "dct:format": {
-            "@id": "AzureStorage-PUSH"
-          },
-          "dcat:accessService": {
-            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
-            "@type": "dcat:DataService",
-            "dcat:endpointDescription": "dspace:connector",
-            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
-            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
-          }
-        },
-        {
-          "@type": "dcat:Distribution",
-          "dct:format": {
-            "@id": "HttpData-PULL"
-          },
-          "dcat:accessService": {
-            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
-            "@type": "dcat:DataService",
-            "dcat:endpointDescription": "dspace:connector",
-            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
-            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
-          }
-        },
-        {
-          "@type": "dcat:Distribution",
-          "dct:format": {
-            "@id": "HttpData-PUSH"
-          },
-          "dcat:accessService": {
-            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
-            "@type": "dcat:DataService",
-            "dcat:endpointDescription": "dspace:connector",
-            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
-            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
-          }
-        },
-        {
-          "@type": "dcat:Distribution",
-          "dct:format": {
-            "@id": "AmazonS3-PUSH"
-          },
-          "dcat:accessService": {
-            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
-            "@type": "dcat:DataService",
-            "dcat:endpointDescription": "dspace:connector",
-            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
-            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
-          }
-        }
-      ],
-      "name": "Environmental_referencia",
-      "description": "\n\nCondiciones meteorológicas y oceanográficas horarias obtenidas a partir de la API de Meteomatics. Las variables incluyen temperatura del aire y del mar, presión atmosférica, humedad, precipitación, radiación solar, viento, nubosidad, oleaje, corrientes marinas e índices climáticos (NAO, SOI). Un registro por hora y punto de monitoreo. Usar Date y Time para cruzar con los datos de boya de biomasa de referencia",
-      "id": "85add085-d1fb-4774-b8c6-d2de5bea3c1f"
-    },
-    {
-      "@id": "fdd003f7-0ff5-402f-ba01-e7712f36f985",
-      "@type": "dcat:Dataset",
-      "odrl:hasPolicy": {
-        "@id": "UmVjb2dpZGFzX3BsYXlhc19yZWZlcmVuY2lh:ZmRkMDAzZjctMGZmNS00MDJmLWJhMDEtZTc3MTJmMzZmOTg1:N2E0ZmUxYTAtNjZmYy00MjI2LWExNzgtNDI0MTQxZjkwZmNm",
-        "@type": "odrl:Offer",
-        "odrl:permission": {
-          "odrl:action": {
-            "@id": "USE"
-          },
-          "odrl:constraint": {
-            "odrl:or": {
-              "odrl:leftOperand": {
-                "@id": "BusinessPartnerNumber"
-              },
-              "odrl:operator": {
-                "@id": "odrl:eq"
-              },
-              "odrl:rightOperand": "BPNL000000000000001"
-            }
-          }
-        },
-        "odrl:prohibition": [],
-        "odrl:obligation": []
-      },
-      "dcat:distribution": [
-        {
-          "@type": "dcat:Distribution",
-          "dct:format": {
-            "@id": "AzureStorage-PUSH"
-          },
-          "dcat:accessService": {
-            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
-            "@type": "dcat:DataService",
-            "dcat:endpointDescription": "dspace:connector",
-            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
-            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
-          }
-        },
-        {
-          "@type": "dcat:Distribution",
-          "dct:format": {
-            "@id": "HttpData-PULL"
-          },
-          "dcat:accessService": {
-            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
-            "@type": "dcat:DataService",
-            "dcat:endpointDescription": "dspace:connector",
-            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
-            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
-          }
-        },
-        {
-          "@type": "dcat:Distribution",
-          "dct:format": {
-            "@id": "HttpData-PUSH"
-          },
-          "dcat:accessService": {
-            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
-            "@type": "dcat:DataService",
-            "dcat:endpointDescription": "dspace:connector",
-            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
-            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
-          }
-        },
-        {
-          "@type": "dcat:Distribution",
-          "dct:format": {
-            "@id": "AmazonS3-PUSH"
-          },
-          "dcat:accessService": {
-            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
-            "@type": "dcat:DataService",
-            "dcat:endpointDescription": "dspace:connector",
-            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
-            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
-          }
-        }
-      ],
-      "name": "Recogidas_playas_referencia",
-      "description": "Dataset de ciencia ciudadana generado por la app móvil Universal Plastic v7.0.0, plataforma de economía azul. Permite registrar limpiezas de plásticos costeros capturando kg totales, participantes, duración, distancia y composición (PET/HDPE/PVC/LDPE/PP/PS en %) vía IA en imágenes. Implementa un sistema de dMRV (digital Measurement, Reporting and Verification) para medición, reporte y verificación automatizada y trazable de residuos.   \n\n",
-      "id": "fdd003f7-0ff5-402f-ba01-e7712f36f985"
-    },
-    {
-      "@id": "e22252f6-8099-4714-8666-fbc541818a3a",
-      "@type": "dcat:Dataset",
-      "odrl:hasPolicy": {
-        "@id": "Qm95YV9iaW9tYXNhX3JlZmVyZW5jaWE=:ZTIyMjUyZjYtODA5OS00NzE0LTg2NjYtZmJjNTQxODE4YTNh:NDE0ZGQxNjQtYzIxOS00ODA4LThiYzQtYzhhOWVhY2JlZTdj",
-        "@type": "odrl:Offer",
-        "odrl:permission": {
-          "odrl:action": {
-            "@id": "USE"
-          },
-          "odrl:constraint": {
-            "odrl:or": {
-              "odrl:leftOperand": {
-                "@id": "BusinessPartnerNumber"
-              },
-              "odrl:operator": {
-                "@id": "odrl:eq"
-              },
-              "odrl:rightOperand": "BPNL000000000000001"
-            }
-          }
-        },
-        "odrl:prohibition": [],
-        "odrl:obligation": []
-      },
-      "dcat:distribution": [
-        {
-          "@type": "dcat:Distribution",
-          "dct:format": {
-            "@id": "AzureStorage-PUSH"
-          },
-          "dcat:accessService": {
-            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
-            "@type": "dcat:DataService",
-            "dcat:endpointDescription": "dspace:connector",
-            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
-            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
-          }
-        },
-        {
-          "@type": "dcat:Distribution",
-          "dct:format": {
-            "@id": "HttpData-PULL"
-          },
-          "dcat:accessService": {
-            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
-            "@type": "dcat:DataService",
-            "dcat:endpointDescription": "dspace:connector",
-            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
-            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
-          }
-        },
-        {
-          "@type": "dcat:Distribution",
-          "dct:format": {
-            "@id": "HttpData-PUSH"
-          },
-          "dcat:accessService": {
-            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
-            "@type": "dcat:DataService",
-            "dcat:endpointDescription": "dspace:connector",
-            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
-            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
-          }
-        },
-        {
-          "@type": "dcat:Distribution",
-          "dct:format": {
-            "@id": "AmazonS3-PUSH"
-          },
-          "dcat:accessService": {
-            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
-            "@type": "dcat:DataService",
-            "dcat:endpointDescription": "dspace:connector",
-            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
-            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
-          }
-        }
-      ],
-      "name": "Boya_biomasa_referencia",
-      "description": "Registro de datos de biomasa obtenidos mediante una boya ecosonda autónoma Satlink SLX de referencia. La planilla recoge las estimaciones de biomasa, la fecha, la hora y la biomasa en los distintos rangos de profundidad.",
-      "id": "e22252f6-8099-4714-8666-fbc541818a3a"
     }
   ],
   "dcat:catalog": [],

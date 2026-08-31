@@ -7,6 +7,7 @@ import {
   ASSET_MAP,
   REFERENCE_ASSETS,
   dcatTypeFromName,
+  fold,
   isNonDataName,
   providerFolderFor,
   suggestMapping,
@@ -213,7 +214,11 @@ async function main(): Promise<void> {
     // A calibration series names its category but no place, because it measures
     // nowhere. That is exactly what tells it apart from a dataset whose place we
     // simply failed to read.
-    if (/referencia\.?\s*$/i.test(name.trim()) && hint.datasetType) {
+    // Tested on the folded name, not the raw one: the republication appended
+    // `_v1.1` to every series, and a rule anchored at the end of the raw name
+    // stopped matching all five at once. `fold` strips the version suffix, which
+    // is the whole reason it exists.
+    if (/referencia\.?$/i.test(fold(name)) && hint.datasetType) {
       reference.push({ id: entry.ref.id, name, datasetType: hint.datasetType });
       continue;
     }
@@ -237,6 +242,12 @@ async function main(): Promise<void> {
   const removed = [...known].filter((id) => !rows.some((r) => r.id === id));
   const knownReference = new Set(Object.keys(REFERENCE_ASSETS));
   const addedReference = reference.filter((r) => !knownReference.has(r.id));
+  // Checked separately because the calibration series live in their own table.
+  // Left out, a republication that changed all five ids would report nothing
+  // missing while the reference tier quietly emptied.
+  const removedReference = [...knownReference].filter(
+    (id) => !reference.some((r) => r.id === id),
+  );
 
   // An asset kept its id and changed its name. Invisible in the added/removed
   // counts, and the one case that needs a human: a rename is usually harmless,
@@ -262,7 +273,7 @@ async function main(): Promise<void> {
     `resolved ${rows.length}  ·  reference ${reference.length}  ·  non-data ${nonData.length}  ·  unresolved ${unresolved.length}`,
   );
   console.log(
-    `new ids ${added.length + addedReference.length}  ·  ids no longer offered ${removed.length}  ·  renamed ${renamed.length}  ·  reclassified ${reclassified.length}\n`,
+    `new ids ${added.length + addedReference.length}  ·  ids no longer offered ${removed.length + removedReference.length}  ·  renamed ${renamed.length}  ·  reclassified ${reclassified.length}\n`,
   );
 
   for (const r of added)
@@ -274,6 +285,8 @@ async function main(): Promise<void> {
       `  + ${r.datasetType.padEnd(28)} ${'reference'.padEnd(10)} ${r.name}`,
     );
   for (const id of removed) console.log(`  - ${ASSET_MAP[id].name} (${id})`);
+  for (const id of removedReference)
+    console.log(`  - referencia ${REFERENCE_ASSETS[id]} (${id})`);
   for (const { row, was } of renamed) {
     console.log(
       `  ~ ${row.datasetType.padEnd(28)} ${row.place.padEnd(10)} ${was}\n` +

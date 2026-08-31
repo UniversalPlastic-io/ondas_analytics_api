@@ -302,17 +302,44 @@ export const ASSET_MAP: Record<string, MappedAsset> = {
  * observations and no location.
  *
  * They are not merely skipped, though. Each provider publishes one DCAT document
- * per dataset, and that document is the schema the dataset is validated against
- * — until now read from the bundled copies in `metadata/DCAT/`, which can drift
- * from what the provider actually published and which do not exist at all for
- * `atmosfera_previa_evento` and `oceanografia_previa_evento`. So the table
- * records **which type each one describes**, and the validator prefers the
- * published document over the bundled one.
- *
- * `dcatFor` is null for a metadata document that is not a per-type DCAT: still
- * skipped, but nothing claims to know what it validates.
+ * per dataset, and that document is the schema the dataset is validated against.
+ * `dcatFor` says which type each one describes; null means it is a metadata
+ * document that is not a per-type DCAT, still skipped but claiming nothing.
  */
-export const NON_DATA_ASSETS: Record<string, NonDataAsset> = {};
+export const NON_DATA_ASSETS: Record<string, NonDataAsset> = {
+  'b55cfea9-55e7-4d70-919f-33a5b90b4646': {
+    name: ' Esquema datos atmosfera csd_v1.1',
+    dcatFor: 'atmosfera_previa_evento',
+  },
+  '7008b00b-3f42-4469-9422-8b4cf5838ff7': {
+    name: 'Esquema boya biomasa slx+_v1.1',
+    dcatFor: 'boya_biomasa_slx+',
+  },
+  '8b21636a-db37-4252-91f7-022562610eb0': {
+    name: 'Esquema datos boya microplásticos seabot_v1.1',
+    dcatFor: 'boya_microplasticos_seabot',
+  },
+  'd52a3f0f-ead7-4dd8-8d88-1ed3af965f8a': {
+    name: 'Esquema datos contexto ambiental meteomatics_v1.1',
+    dcatFor: 'environmental_boya',
+  },
+  '79ef4928-8845-42bb-8752-59f12c7860cf': {
+    name: 'Esquema datos muestras de agua py_gcms_v1.1',
+    dcatFor: 'muestras_de_agua_py_gcms',
+  },
+  'a2a9df15-8f80-4be0-9afd-11f4fe8c92b9': {
+    name: 'Esquema datos muestras de peces py_gcms_v1.1',
+    dcatFor: 'muestras_de_peces_py_gcms',
+  },
+  'f2ca0114-fc23-4435-ab73-0fcd94e05261': {
+    name: 'Esquema datos oceanografía cdse_v1.1',
+    dcatFor: 'oceanografia_previa_evento',
+  },
+  'c1196308-d6b0-4a89-bf26-ae2752e54278': {
+    name: 'Esquema datos recogidas plástico app up_v700_v1.1',
+    dcatFor: 'recogidas_playa',
+  },
+};
 
 /**
  * The calibration series, by asset id. Regenerate with
@@ -332,11 +359,11 @@ export const NON_DATA_ASSETS: Record<string, NonDataAsset> = {};
  * them out, since the tier is derived from the provider folder.
  */
 export const REFERENCE_ASSETS: Record<string, DatasetType> = {
-  'e22252f6-8099-4714-8666-fbc541818a3a': 'boya_biomasa_slx+', // Boya_biomasa_referencia
-  'c1c71785-6da1-4d8f-a796-df566b8e4f9d': 'boya_microplasticos_seabot', // Boya_microplasticos_referencia.
-  '85add085-d1fb-4774-b8c6-d2de5bea3c1f': 'environmental_boya', // Environmental_referencia
-  'a69dc135-4dbc-4285-bb71-5fad09793ccf': 'muestras_de_agua_py_gcms', // muestras_de_agua_referencia
-  'fdd003f7-0ff5-402f-ba01-e7712f36f985': 'recogidas_playa', // Recogidas_playas_referencia
+  '5504c807-e735-4d47-832d-92609efd82c0': 'boya_biomasa_slx+', // Boya biomasa referencia_v1.1
+  'e74cc7e4-deb5-4dea-8d30-239e08642518': 'boya_microplasticos_seabot', // Boya microplásticos referencia_v1.1
+  '9126d037-d7f7-4edc-a905-c7e058ffbe16': 'environmental_boya', // Environmental referencia_v1.1
+  '9c8e0b78-aa4f-4bb5-bffd-243b62154959': 'muestras_de_agua_py_gcms', // Muestras de agua referencia_v1.1
+  '81d2972f-aaea-416d-be34-c07803c1b73f': 'recogidas_playa', // Recogidas playas referencia_v1.1
 };
 /** Filename/name fragment → dataset type, for suggesting an entry only. */
 const TYPE_HINTS: Array<[RegExp, DatasetType]> = [
