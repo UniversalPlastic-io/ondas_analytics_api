@@ -58,8 +58,8 @@ export default function App() {
   );
 
   const [location, setLocation] = useState<{ lat: number; lon: number }>({
-    lat: 41.4342,
-    lon: 2.2433,
+    lat: 43.5721,
+    lon: -5.7212,
   });
   const [radiusKm, setRadiusKm] = useState<number>(25);
 

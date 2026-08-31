@@ -33,8 +33,8 @@
                   "summary": "Demo anual (genera plots WebP + PDF)",
                   "value": {
                     "location": {
-                      "lat": 41.4342,
-                      "lon": 2.2433
+                      "lat": 43.5721,
+                      "lon": -5.7212
                     },
                     "area": {
                       "type": "radius_km",
@@ -64,8 +64,8 @@
                   "summary": "Anual (solo JSON con datos para plots, sin ficheros)",
                   "value": {
                     "location": {
-                      "lat": 41.4342,
-                      "lon": 2.2433
+                      "lat": 43.5721,
+                      "lon": -5.7212
                     },
                     "area": {
                       "type": "radius_km",
@@ -96,8 +96,8 @@
                   "description": "Usa valores por defecto del API: dateRangeApplied se rellena con un rango predefinido, aggregation por defecto es raw, sin datos para plots y sin ficheros.",
                   "value": {
                     "location": {
-                      "lat": 41.4342,
-                      "lon": 2.2433
+                      "lat": 43.5721,
+                      "lon": -5.7212
                     },
                     "area": {
                       "type": "radius_km",
@@ -112,8 +112,8 @@
                   "summary": "Agregación mensual (serie más corta, útil para overview)",
                   "value": {
                     "location": {
-                      "lat": 41.4342,
-                      "lon": 2.2433
+                      "lat": 43.5721,
+                      "lon": -5.7212
                     },
                     "area": {
                       "type": "radius_km",
@@ -145,8 +145,8 @@
                   "summary": "Solo análisis concretos (sin datos de plots)",
                   "value": {
                     "location": {
-                      "lat": 41.4342,
-                      "lon": 2.2433
+                      "lat": 43.5721,
+                      "lon": -5.7212
                     },
                     "area": {
                       "type": "radius_km",
@@ -172,8 +172,8 @@
                   "summary": "Solo JSON para plots (rango corto, sin ficheros)",
                   "value": {
                     "location": {
-                      "lat": 41.4342,
-                      "lon": 2.2433
+                      "lat": 43.5721,
+                      "lon": -5.7212
                     },
                     "area": {
                       "type": "radius_km",
@@ -201,8 +201,8 @@
                   "description": "Nota: savePlotsWebp implica datos para plots internamente. Aunque se omita dataFormattedForPlots, la respuesta puede incluirlo porque es necesario para generar ficheros.",
                   "value": {
                     "location": {
-                      "lat": 41.4342,
-                      "lon": 2.2433
+                      "lat": 43.5721,
+                      "lon": -5.7212
                     },
                     "area": {
                       "type": "radius_km",
@@ -228,8 +228,8 @@
                   "summary": "Forzar export fresh (sin caché) + generar ficheros",
                   "value": {
                     "location": {
-                      "lat": 41.4342,
-                      "lon": 2.2433
+                      "lat": 43.5721,
+                      "lon": -5.7212
                     },
                     "area": {
                       "type": "radius_km",
@@ -260,8 +260,8 @@
                   "description": "Ejecuta esta request dos veces. La segunda debería devolver meta.cache.hit=true (mismos location/area/analyses/dateRange/aggregation/options).",
                   "value": {
                     "location": {
-                      "lat": 41.4342,
-                      "lon": 2.2433
+                      "lat": 43.5721,
+                      "lon": -5.7212
                     },
                     "area": {
                       "type": "radius_km",
@@ -292,8 +292,8 @@
                   "summary": "Bypass caché (recalcula siempre, pero devuelve meta de caché)",
                   "value": {
                     "location": {
-                      "lat": 41.4342,
-                      "lon": 2.2433
+                      "lat": 43.5721,
+                      "lon": -5.7212
                     },
                     "area": {
                       "type": "radius_km",
@@ -319,8 +319,8 @@
                   "description": "Fuerza un recálculo y guarda el resultado en caché para reutilización futura (salvo si savePlotsWebp=true, que salta la caché).",
                   "value": {
                     "location": {
-                      "lat": 41.4342,
-                      "lon": 2.2433
+                      "lat": 43.5721,
+                      "lon": -5.7212
                     },
                     "area": {
                       "type": "radius_km",
@@ -346,8 +346,8 @@
                   "summary": "Warnings desactivados (includeWarnings=false)",
                   "value": {
                     "location": {
-                      "lat": 41.4342,
-                      "lon": 2.2433
+                      "lat": 43.5721,
+                      "lon": -5.7212
                     },
                     "area": {
                       "type": "radius_km",
@@ -372,8 +372,8 @@
                   "summary": "Ejecución rápida (solo JSON, sin ficheros)",
                   "value": {
                     "location": {
-                      "lat": 41.4342,
-                      "lon": 2.2433
+                      "lat": 43.5721,
+                      "lon": -5.7212
                     },
                     "area": {
                       "type": "radius_km",

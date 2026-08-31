@@ -296,12 +296,20 @@ curl -s -X POST http://localhost:3000/v1/analyses/run \
   -H "Authorization: Bearer $TOKEN" \
   -H 'Content-Type: application/json' \
   -d '{
-        "location": { "lat": 41.4342, "lon": 2.2433 },
+        "location": { "lat": 43.5721, "lon": -5.7212 },
         "area": { "type": "radius_km", "value": 25 },
         "analyses": ["all"],
         "dateRange": { "start": "2025-01-01", "end": "2025-12-31" }
       }'
 ```
+
+El punto del ejemplo es Gijón, costa cantábrica. Merece la pena saber lo que
+devuelve hoy: allí hay boya de biomasa, boya de microplásticos, contexto
+ambiental y muestras de agua, pero **ninguna recogida de playa** —
+`Recogidas playas Gijón_v1.1` no se republicó—, así que esa categoría se responde
+con la serie de calibración y `meta.datasetsUsed.coastal_cleanup` sale a 0. Es el
+comportamiento correcto y el ejemplo lo enseña: la costa cantábrica no toma
+prestadas las cifras de Badalona.
 
 `POST /v1/auth/login` devuelve `{ access_token, token_type, expires_in, username, user }`.
 

@@ -385,7 +385,7 @@ export class AnalysesController {
       "7_plasticPressureComposition": {
         "waterMpPerL": 0.42,
         "coastKgPerKm": 18.3,
-        "location": "lat=41.4342,lon=2.2433"
+        "location": "lat=43.5721,lon=-5.7212"
       }
     }
   }
@@ -486,8 +486,8 @@ export class AnalysesController {
   "dataFormattedForPlots": {
     "plots": {
       "10_spatialDistributionOfImpact": {
-        "lon": [2.2433],
-        "lat": [41.4342],
+        "lon": [-5.7212],
+        "lat": [43.5721],
         "impactValues": [0.47]
       }
     }
@@ -680,7 +680,7 @@ export class AnalysesController {
       fullYearWithPlots: {
         summary: 'Demo anual (genera plots WebP + PDF)',
         value: {
-          location: { lat: 41.4342, lon: 2.2433 },
+          location: { lat: 43.5721, lon: -5.7212 },
           area: { type: 'radius_km', value: 25 },
           analyses: ['all'],
           dateRange: { start: '2025-01-01', end: '2025-12-31' },
@@ -696,7 +696,7 @@ export class AnalysesController {
       fullYearJsonPlotsOnly: {
         summary: 'Anual (solo JSON con datos para plots, sin ficheros)',
         value: {
-          location: { lat: 41.4342, lon: 2.2433 },
+          location: { lat: 43.5721, lon: -5.7212 },
           area: { type: 'radius_km', value: 25 },
           analyses: ['all'],
           dateRange: { start: '2025-01-01', end: '2025-12-31' },
@@ -714,7 +714,7 @@ export class AnalysesController {
         description:
           'Usa valores por defecto del API: dateRangeApplied se rellena con un rango predefinido, aggregation por defecto es raw, sin datos para plots y sin ficheros.',
         value: {
-          location: { lat: 41.4342, lon: 2.2433 },
+          location: { lat: 43.5721, lon: -5.7212 },
           area: { type: 'radius_km', value: 25 },
           analyses: ['all'],
         },
@@ -722,7 +722,7 @@ export class AnalysesController {
       monthlyAggregation: {
         summary: 'Agregación mensual (serie más corta, útil para overview)',
         value: {
-          location: { lat: 41.4342, lon: 2.2433 },
+          location: { lat: 43.5721, lon: -5.7212 },
           area: { type: 'radius_km', value: 50 },
           analyses: ['basic_contamination', 'eco_risk'],
           dateRange: { start: '2025-01-01', end: '2025-12-31' },
@@ -738,7 +738,7 @@ export class AnalysesController {
       specificAnalysesOnly: {
         summary: 'Solo análisis concretos (sin datos de plots)',
         value: {
-          location: { lat: 41.4342, lon: 2.2433 },
+          location: { lat: 43.5721, lon: -5.7212 },
           area: { type: 'radius_km', value: 25 },
           analyses: ['trophic_transfer', 'plastic_origin'],
           dateRange: { start: '2025-06-01', end: '2025-06-30' },
@@ -751,7 +751,7 @@ export class AnalysesController {
       plotsDataOnlyShortRange: {
         summary: 'Solo JSON para plots (rango corto, sin ficheros)',
         value: {
-          location: { lat: 41.4342, lon: 2.2433 },
+          location: { lat: 43.5721, lon: -5.7212 },
           area: { type: 'radius_km', value: 15 },
           analyses: ['all'],
           dateRange: { start: '2025-03-01', end: '2025-03-31' },
@@ -768,7 +768,7 @@ export class AnalysesController {
         description:
           'Nota: savePlotsWebp implica datos para plots internamente. Aunque se omita dataFormattedForPlots, la respuesta puede incluirlo porque es necesario para generar ficheros.',
         value: {
-          location: { lat: 41.4342, lon: 2.2433 },
+          location: { lat: 43.5721, lon: -5.7212 },
           area: { type: 'radius_km', value: 25 },
           analyses: ['all'],
           dateRange: { start: '2025-01-01', end: '2025-01-31' },
@@ -782,7 +782,7 @@ export class AnalysesController {
       forceFreshExport: {
         summary: 'Forzar export fresh (sin caché) + generar ficheros',
         value: {
-          location: { lat: 41.4342, lon: 2.2433 },
+          location: { lat: 43.5721, lon: -5.7212 },
           area: { type: 'radius_km', value: 10 },
           analyses: ['all'],
           dateRange: { start: '2025-03-01', end: '2025-03-31' },
@@ -801,7 +801,7 @@ export class AnalysesController {
         description:
           'Ejecuta esta request dos veces. La segunda debería devolver meta.cache.hit=true (mismos location/area/analyses/dateRange/aggregation/options).',
         value: {
-          location: { lat: 41.4342, lon: 2.2433 },
+          location: { lat: 43.5721, lon: -5.7212 },
           area: { type: 'radius_km', value: 25 },
           analyses: ['all'],
           dateRange: { start: '2025-01-01', end: '2025-12-31' },
@@ -818,7 +818,7 @@ export class AnalysesController {
         summary:
           'Bypass caché (recalcula siempre, pero devuelve meta de caché)',
         value: {
-          location: { lat: 41.4342, lon: 2.2433 },
+          location: { lat: 43.5721, lon: -5.7212 },
           area: { type: 'radius_km', value: 25 },
           analyses: ['all'],
           dateRange: { start: '2025-01-01', end: '2025-12-31' },
@@ -833,7 +833,7 @@ export class AnalysesController {
         description:
           'Fuerza un recálculo y guarda el resultado en caché para reutilización futura (salvo si savePlotsWebp=true, que salta la caché).',
         value: {
-          location: { lat: 41.4342, lon: 2.2433 },
+          location: { lat: 43.5721, lon: -5.7212 },
           area: { type: 'radius_km', value: 25 },
           analyses: ['eco_risk'],
           dateRange: { start: '2025-01-01', end: '2025-12-31' },
@@ -846,7 +846,7 @@ export class AnalysesController {
       warningsOff: {
         summary: 'Warnings desactivados (includeWarnings=false)',
         value: {
-          location: { lat: 41.4342, lon: 2.2433 },
+          location: { lat: 43.5721, lon: -5.7212 },
           area: { type: 'radius_km', value: 25 },
           analyses: ['basic_contamination'],
           dateRange: { start: '2025-01-01', end: '2025-01-30' },
@@ -859,7 +859,7 @@ export class AnalysesController {
       quickRunNoFiles: {
         summary: 'Ejecución rápida (solo JSON, sin ficheros)',
         value: {
-          location: { lat: 41.4342, lon: 2.2433 },
+          location: { lat: 43.5721, lon: -5.7212 },
           area: { type: 'radius_km', value: 25 },
           analyses: ['basic_contamination'],
           options: { includeWarnings: true },
