@@ -9,6 +9,12 @@ which is a *cleanup-aggregate* map (kg per cleanup site). See §8 for that varia
 > Status: design only. Mirrors the `overview/` module patterns. Build when the
 > dashboard's map view is needed.
 
+> **Historical.** Written before the API consumed the data space. `GET /v1/map/points`
+> now serves the read model built by the sync, and the inventory is the catalog the
+> providers publish, not a bucket listing. Kept as the record of the design; the
+> current behaviour is in [`dataspace-sync.md`](dataspace-sync.md) and
+> [`openapi.json`](openapi.json).
+
 ---
 
 ## 1. Goal
@@ -215,9 +221,8 @@ read. One HTTP GET per file (cached).
 
 ### Option A — static manifest (recommended to start)
 
-A `MAP_CATALOGUE` constant listing every file (extends today's
-[`s3-catalogue.ts`](../src/api-v1/analyses/s3-catalogue.ts), which only has the 4
-types the analytics use). Source the list directly from the mapping doc's
+A `MAP_CATALOGUE` constant listing every file (extends the then-current
+`s3-catalogue.ts`, since removed, which only had the 4 types the analytics use). Source the list directly from the mapping doc's
 per-ocean tables. Each entry: `{ ocean, provider, datasetType, url, name }`.
 The endpoint then fetches each file's metadata to fill records/dateRange/units.
 

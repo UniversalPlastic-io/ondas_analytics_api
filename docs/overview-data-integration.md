@@ -6,6 +6,13 @@ in the Overview endpoint. Today the overview is derived **only** from
 source — biomass buoys, environmental buoys, microplastics buoys, atmospheric /
 oceanographic windows, or future water / fish samples.
 
+> **Historical.** Written before the API consumed the data space. The per-file
+> `S3_CATALOGUE` this guide extends no longer exists: a dataset now reaches the
+> overview by being offered in a provider's catalog, classified in
+> [`asset-map.ts`](../src/api-v1/dataspace/source/asset-map.ts) and ingested by the
+> sync. The steps below still describe the shape of the change inside `overview/`,
+> but step 1 no longer applies. See [`dataspace-sync.md`](dataspace-sync.md).
+
 ---
 
 ## 1. Data flow (today)
@@ -29,9 +36,8 @@ OverviewService.get()                       src/api-v1/overview/overview.service
         kpis · series (bucketSeries) · plasticTypes · topLocations
 ```
 
-Every S3 url lives in one place: **`S3_CATALOGUE`**
-([`src/api-v1/analyses/s3-catalogue.ts`](../src/api-v1/analyses/s3-catalogue.ts)),
-keyed by `CatalogType`. A request `location` (or campaign site) selects the
+Every S3 url lived in one place: **`S3_CATALOGUE`** (`src/api-v1/analyses/s3-catalogue.ts`,
+since removed), keyed by `CatalogType`. A request `location` (or campaign site) selects the
 nearest entry of a given type by equirectangular distance.
 
 ---
@@ -59,8 +65,7 @@ source you are adding:
 
 ### Step 1 — Add catalogue entries
 
-Add the new type to the union and the files to the array in
-[`s3-catalogue.ts`](../src/api-v1/analyses/s3-catalogue.ts):
+Add the new type to the union and the files to the array in `s3-catalogue.ts`:
 
 ```ts
 export type CatalogType =
@@ -236,7 +241,7 @@ buckets + the empty/`null` fallback. Add one e2e assertion in
 
 | File | Change |
 |---|---|
-| [`src/api-v1/analyses/s3-catalogue.ts`](../src/api-v1/analyses/s3-catalogue.ts) | add type + entries |
+| `src/api-v1/analyses/s3-catalogue.ts` (removed) | add type + entries |
 | [`src/api-v1/analyses/analyses-s3.ts`](../src/api-v1/analyses/analyses-s3.ts) | add parser (or a new `reports`/`overview` loader module) |
 | [`src/api-v1/overview/overview.types.ts`](../src/api-v1/overview/overview.types.ts) | extend `OverviewResponse` |
 | [`src/api-v1/overview/overview.swagger.dto.ts`](../src/api-v1/overview/overview.swagger.dto.ts) | mirror the new field |

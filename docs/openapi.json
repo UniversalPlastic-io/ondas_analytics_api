@@ -2148,7 +2148,7 @@
             "example": [
               "innoceana"
             ],
-            "description": "Every spelling of this org dataProviderId found in its files",
+            "description": "Every spelling of this org dataProviderId found in its published datasets",
             "type": "array",
             "items": {
               "type": "string"
@@ -2158,7 +2158,7 @@
             "example": [
               "innoceana"
             ],
-            "description": "S3 provider folders owned by this org (public/{ocean}/{folder}/)",
+            "description": "Provider folders owned by this org. A folder is the normalised name of a participant in the space, and it is what scopes a non-admin sync",
             "type": "array",
             "items": {
               "type": "string"

@@ -11,14 +11,18 @@ export class Organization {
   slug!: string;
 
   /**
-   * Every spelling of this org's `dataProviderId` found in the live files.
-   * The bucket contains `universal_plastic`, `universalplastic` and
-   * ``universal`plastic`` for the same participant.
+   * Every spelling of this org's `dataProviderId` found in the datasets it
+   * publishes. The same participant appears as `universal_plastic`,
+   * `universalplastic` and ``universal`plastic`` across its own files.
    */
   @Prop({ type: [String], default: [] })
   dataProviderIds!: string[];
 
-  /** S3 provider folder names owned by this org (`public/{ocean}/{folder}/`). */
+  /**
+   * Provider folders owned by this org. A folder is the normalised name of a
+   * participant in the space, as `providerFolderFor` derives it, and it is what
+   * scopes a sync run for a non-admin caller.
+   */
   @Prop({ type: [String], default: [] })
   providerFolders!: string[];
 

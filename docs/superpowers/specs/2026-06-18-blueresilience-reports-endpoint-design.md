@@ -59,7 +59,8 @@ to `providers`.
 
 ## 3. Request Type (`reports.types.ts`)
 
-Based on §17 of `docs/blueresilience-api.md`.
+Based on §17 of the Blue Resilience OS data reference (`docs/blueresilience-api.md`,
+since removed from this repository: it documented a different frontend).
 
 ```ts
 type ReportType = 'monthly' | 'annual' | 'campaign' | 'location' | 'evidence' | 'custom';
