@@ -5,15 +5,18 @@ Versionado según [SemVer](https://semver.org/lang/es/).
 
 ---
 
-## [Sin publicar]
+## [1.1.0] — 2026-09-01
 
-Veinticuatro commits desde `v1.1.0`. El cambio de fondo es que **la fuente de datos
-pasa a ser el espacio de datos** y no un bucket de objetos, y con él llegan las
-tres consecuencias que ocupan el resto de esta sección: cómo se eligen los
-datasets que responden una consulta, de dónde sale el esquema con que se validan,
-y que el API deja de ser sólo consumidor. Y por debajo de las tres, la condición
-que les faltaba: la transferencia del espacio, que se daba por inservible, sí
-resuelve — había que reintentar la negociación, no arreglar el activo.
+El cambio de fondo de esta versión es que **la fuente de datos pasa a ser el
+espacio de datos** y no un bucket de objetos, y con él llegan las tres
+consecuencias que ocupan la mayor parte de las notas: cómo se eligen los datasets
+que responden una consulta, de dónde sale el esquema con que se validan, y que el
+API deja de ser sólo consumidor. Y por debajo de las tres, la condición que les
+faltaba: la transferencia del espacio, que se daba por inservible, sí resuelve —
+había que reintentar la negociación, no arreglar el activo.
+
+Incorpora además la monitorización del servicio y el informe de validación de
+precisión, que es la evidencia con la que se mide el criterio R4.1.
 
 ### Cambios que rompen
 
@@ -74,6 +77,20 @@ resuelve — había que reintentar la negociación, no arreglar el activo.
   nombre un tipo de dataset o un emplazamiento distintos de los que la tabla
   registra significa que ese activo dejó de ser lo que decíamos que era, y
   escribirlo sin mirar es cómo un indicador acaba contaminado en silencio.
+- **Monitorización.** Métricas Prometheus en `GET /metrics`: latencia y códigos
+  por plantilla de ruta, ingestas por desenlace, observaciones escritas, avisos
+  de validación, analíticas ejecutadas por tipo y activos vigentes en el modelo
+  de lectura. Prometheus y Grafana en el perfil `monitoring` de
+  `docker-compose.yml`, con el cuadro de mando versionado y provisionado, y guía
+  en [`docs/deployment/03-monitoring.md`](docs/deployment/03-monitoring.md).
+  Se mide sobre el evento `finish` de la respuesta y no con un interceptor,
+  porque las guardas se ejecutan antes que los interceptores: así las peticiones
+  rechazadas por autenticación o rol también quedan contadas.
+- **Informe de validación.** `npm run validate:precision` mide fidelidad de
+  ingesta, exactitud de agregación, reproducibilidad, cobertura de consulta y
+  concordancia entre fuentes independientes, y falla con código distinto de cero
+  ante cualquier regresión. Resultados en
+  [`docs/validacion-precision.md`](docs/validacion-precision.md).
 
 ### Corregido
 
@@ -123,6 +140,13 @@ resuelve — había que reintentar la negociación, no arreglar el activo.
   100 km: `MAX_OFFSHORE_KM` no se puede estrechar sin mover el punto, y un
   vértice retocado lo dejaría fuera sin que nadie lo notara. Una prueba lo afirma
   ahora.
+- **La lista de polímeros de la boya no era determinista.** La agregación que la
+  produce ordenaba por número de detecciones sin criterio de desempate, así que
+  dos peticiones idénticas devolvían los polímeros de igual frecuencia en orden
+  distinto. El índice de Jaccard no se veía afectado, por ser una operación de
+  conjuntos, pero la respuesta publicada cambiaba entre ejecuciones. Lo detectó
+  la comprobación de reproducibilidad del informe de validación en su primera
+  ejecución.
 
 ### Documentación
 
@@ -137,37 +161,6 @@ resuelve — había que reintentar la negociación, no arreglar el activo.
   análisis generado como activo propio.
 - Retirada la documentación que describía la lectura del bucket y los diseños
   previos al espacio de datos: describía un sistema que ya no es este.
-
----
-
-## [1.1.0] — 2026-08-29
-
-### Añadido
-
-- **Monitorización.** Métricas Prometheus en `GET /metrics`: latencia y códigos
-  por plantilla de ruta, ingestas por desenlace, observaciones escritas, avisos
-  de validación, analíticas ejecutadas por tipo y activos vigentes en el modelo
-  de lectura. Prometheus y Grafana en el perfil `monitoring` de
-  `docker-compose.yml`, con el cuadro de mando versionado y provisionado, y guía
-  en [`docs/deployment/03-monitoring.md`](docs/deployment/03-monitoring.md).
-  Se mide sobre el evento `finish` de la respuesta y no con un interceptor,
-  porque las guardas se ejecutan antes que los interceptores: así las peticiones
-  rechazadas por autenticación o rol también quedan contadas.
-- **Informe de validación.** `npm run validate:precision` mide fidelidad de
-  ingesta, exactitud de agregación, reproducibilidad, cobertura de consulta y
-  concordancia entre fuentes independientes, y falla con código distinto de cero
-  ante cualquier regresión. Resultados en
-  [`docs/validacion-precision.md`](docs/validacion-precision.md).
-
-### Corregido
-
-- **La lista de polímeros de la boya no era determinista.** La agregación que la
-  produce ordenaba por número de detecciones sin criterio de desempate, así que
-  dos peticiones idénticas devolvían los polímeros de igual frecuencia en orden
-  distinto. El índice de Jaccard no se veía afectado, por ser una operación de
-  conjuntos, pero la respuesta publicada cambiaba entre ejecuciones. Lo detectó
-  la comprobación de reproducibilidad del informe de validación en su primera
-  ejecución.
 
 ---
 
