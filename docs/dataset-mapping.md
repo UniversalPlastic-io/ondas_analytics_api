@@ -451,22 +451,28 @@ folder is `sin-ubicar`, never a real basin guessed by default.
 
 ---
 
-## Duplicates still published
+## Superseded assets
 
-`Oceanografía Barcelona` and `Recogidas playas Barcelona ` are the pre-incident
-assets, offered next to their `_v1.1` replacements. Both pairs sit at the same
-station coordinates, so `nearest()` — which orders by distance — picks between
-them arbitrarily.
+A provider republishing a dataset does not always withdraw the old asset. The
+`_v1.1` round left two behind:
 
-That matters more than it looks. If the old asset is the one whose content was
-lost, a Barcelona request for that category transfers an asset with no
-observations, the loader returns null, and the category falls back to the
-calibration series **even though a good `_v1.1` asset exists**. The result is
-correct-looking and silently substituted.
+| Still offered | Superseded by |
+|---|---|
+| `Oceanografía Barcelona` (`31f505fb`) | `Oceanografía Barcelona_v1.1` |
+| `Recogidas playas Barcelona ` (`0ac35a36`, Innoceana) | `Recogidas playas Barcelona_v1.1` |
 
-The fix is to unpublish the two old assets. Doing it in code instead would mean
-trying more than one observed asset before falling back, which changes what
-"nearest" means for every category.
+`parseCatalog` ignores them and says so once per scan. The rule is per provider
+and by version number: among assets whose names fold to the same thing, the
+highest version wins, and a name with no suffix sorts below every version.
+
+Why it is worth doing rather than waiting for them to be unpublished: both pairs
+sit at the same station coordinates, so `nearest()` — which orders by distance —
+picked between them arbitrarily. The older asset is the one the incident emptied,
+so about half the time a category found an asset with no observations, fell
+through to the calibration series, and reported a substituted figure with a good
+asset sitting beside it. Correct-looking, and silent.
+
+They should still be unpublished; the rule is a guard, not a fix.
 
 ---
 

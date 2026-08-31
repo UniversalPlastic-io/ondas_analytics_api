@@ -1,4 +1,5 @@
 import { SourceEntry, SourceRef } from './dataspace-source';
+import { compareVersions, fold, versionOf } from './asset-map';
 
 /**
  * Parsing of the connector's DCAT catalog, and construction of the contract
@@ -172,7 +173,60 @@ export function parseCatalog(
     });
   }
 
-  return { entries, warnings };
+  return supersede(entries, provider.name, warnings);
+}
+
+/**
+ * Drops an asset a later version of itself supersedes.
+ *
+ * A provider republishing a dataset does not always withdraw the old asset: the
+ * `_v1.1` round left `Oceanografía Barcelona` offered next to
+ * `Oceanografía Barcelona_v1.1`. Both carry the same dataset type and the same
+ * station coordinates, so `nearest()` — which orders by distance — picks between
+ * them arbitrarily. And the older one is the one whose content the incident
+ * lost, so about half the time a category would find an asset with no
+ * observations, fall through to the calibration series, and report a substituted
+ * figure while a good asset sat beside it.
+ *
+ * Only within one provider's catalog. Two participants publishing a same-named
+ * dataset is a different matter — possibly an upload error, but not ours to
+ * silently resolve, and dropping one would discard a participant's data.
+ */
+function supersede(
+  entries: SourceEntry[],
+  providerName: string,
+  warnings: string[],
+): ParsedCatalog {
+  const best = new Map<string, SourceEntry>();
+  const superseded: SourceEntry[] = [];
+
+  for (const entry of entries) {
+    const key = fold(entry.ref.label);
+    const held = best.get(key);
+    if (!held) {
+      best.set(key, entry);
+      continue;
+    }
+    const newer =
+      compareVersions(versionOf(entry.ref.label), versionOf(held.ref.label)) >
+      0;
+    best.set(key, newer ? entry : held);
+    superseded.push(newer ? held : entry);
+  }
+
+  for (const dropped of superseded) {
+    const kept = best.get(fold(dropped.ref.label))!;
+    warnings.push(
+      `${providerName} still offers "${dropped.ref.label}" (${dropped.ref.id}); ` +
+        `superseded by "${kept.ref.label}" and ignored. Unpublish it.`,
+    );
+  }
+
+  // Input order preserved: the catalog order is what the fixtures record.
+  return {
+    entries: entries.filter((e) => !superseded.includes(e)),
+    warnings,
+  };
 }
 
 /**

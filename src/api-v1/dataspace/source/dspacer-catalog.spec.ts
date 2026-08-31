@@ -96,13 +96,110 @@ describe('dataProviders', () => {
   });
 });
 
+describe('parseCatalog superseding', () => {
+  const provider = {
+    bpn: 'BPNL1',
+    name: 'Universal Plastic',
+    direction: 'http://p/dsp',
+    type: 'Dataprovider',
+  };
+  const dataset = (id: string, name: string) => ({
+    '@id': id,
+    name,
+    'odrl:hasPolicy': { '@id': 'offer', 'odrl:permission': {} },
+  });
+
+  it('ignores an asset a later version of itself supersedes', () => {
+    // The failure: both sit at the same station coordinates, so `nearest()`
+    // picks between them by distance and the tie is arbitrary. The older one is
+    // the one the incident emptied, so a category would find an asset with no
+    // observations about half the time, fall through to calibration, and report
+    // a substituted figure with a good asset next to it.
+    const { entries, warnings } = parseCatalog(
+      {
+        'dcat:dataset': [
+          dataset('old', 'Oceanografía Barcelona'),
+          dataset('new', 'Oceanografía Barcelona_v1.1'),
+        ],
+      },
+      provider,
+    );
+    expect(entries.map((e) => e.ref.id)).toEqual(['new']);
+    expect(warnings).toHaveLength(1);
+    expect(warnings[0]).toMatch(/still offers "Oceanografía Barcelona"/);
+    expect(warnings[0]).toMatch(/Unpublish it/);
+  });
+
+  it('keeps the later version whichever order the catalog lists them in', () => {
+    for (const order of [
+      ['Recogidas playas Blanes_v1.1', 'Recogidas playas Blanes'],
+      ['Recogidas playas Blanes', 'Recogidas playas Blanes_v1.1'],
+    ]) {
+      const { entries } = parseCatalog(
+        { 'dcat:dataset': order.map((n, i) => dataset(String(i), n)) },
+        provider,
+      );
+      expect(entries).toHaveLength(1);
+      expect(entries[0].ref.label).toBe('Recogidas playas Blanes_v1.1');
+    }
+  });
+
+  it('compares versions as numbers, so v1.10 beats v1.9', () => {
+    const { entries } = parseCatalog(
+      {
+        'dcat:dataset': [
+          dataset('a', 'Atmósfera Gijón_v1.9'),
+          dataset('b', 'Atmósfera Gijón_v1.10'),
+        ],
+      },
+      provider,
+    );
+    expect(entries[0].ref.label).toBe('Atmósfera Gijón_v1.10');
+  });
+
+  it('leaves distinct datasets alone, and the whitespace variants of one name', () => {
+    const { entries, warnings } = parseCatalog(
+      {
+        'dcat:dataset': [
+          dataset('a', 'Atmósfera Gijón_v1.1'),
+          dataset('b', 'Oceanografía Gijón_v1.1'),
+          dataset('c', 'Boya biomasa Gijón_v1.1'),
+        ],
+      },
+      provider,
+    );
+    expect(entries).toHaveLength(3);
+    expect(warnings).toEqual([]);
+  });
+
+  it('does not resolve a clash between two providers', () => {
+    // Two participants offering a same-named dataset may be an upload error, but
+    // it is not ours to silently resolve: dropping one discards a participant's
+    // data, and the two catalogs are read separately anyway.
+    const a = parseCatalog(
+      { 'dcat:dataset': [dataset('a', 'Recogidas playas Barcelona_v1.1')] },
+      provider,
+    );
+    const b = parseCatalog(
+      { 'dcat:dataset': [dataset('b', 'Recogidas playas Barcelona_v1.1')] },
+      { ...provider, name: 'Innoceana', bpn: 'BPNL2' },
+    );
+    expect(a.entries).toHaveLength(1);
+    expect(b.entries).toHaveLength(1);
+    expect([...a.warnings, ...b.warnings]).toEqual([]);
+  });
+});
+
 describe('parseCatalog', () => {
   it('reads a real provider catalog', () => {
     // Asserted by shape, not by a list of names: providers republish, and a
     // fixture recaptured after a republication round would fail a literal list
     // without anything being wrong.
     const { entries, warnings } = parseCatalog(innoceana, innoceanaProvider);
-    expect(warnings).toEqual([]);
+    // Innoceana still offers the pre-incident `Recogidas playas Barcelona`
+    // alongside its `_v1.1`, so one supersede warning is the correct outcome
+    // here. Anything else would be a parse problem.
+    for (const w of warnings) expect(w).toMatch(/superseded by/);
     expect(entries.length).toBeGreaterThan(0);
     for (const e of entries) {
       expect(e.ref.id).toMatch(/^[0-9a-f-]{36}$/);

@@ -84,13 +84,6 @@ export const ASSET_MAP: Record<string, MappedAsset> = {
   },
 
   // ---- innoceana
-  '0ac35a36-2493-4e0e-a695-229fc559921c': {
-    datasetType: 'recogidas_playa',
-    ocean: 'mediterraneo',
-    place: 'barcelona',
-    providerFolder: 'innoceana',
-    name: 'Recogidas playas Barcelona ',
-  },
   'b91d0d36-d8db-4427-9b04-36a1f7a367e2': {
     datasetType: 'recogidas_playa',
     ocean: 'mediterraneo',
@@ -235,13 +228,6 @@ export const ASSET_MAP: Record<string, MappedAsset> = {
     providerFolder: 'universal_plastic',
     name: 'Oceanografía Barcelona_v1.1',
   },
-  '31f505fb-c5af-48e0-9cfb-1e596bd991dd': {
-    datasetType: 'oceanografia_previa_evento',
-    ocean: 'mediterraneo',
-    place: 'barcelona',
-    providerFolder: 'universal_plastic',
-    name: 'Oceanografía Barcelona',
-  },
   '0ba413bc-a382-4b64-901c-b1409680d276': {
     datasetType: 'oceanografia_previa_evento',
     ocean: 'mediterraneo',
@@ -334,6 +320,27 @@ const TYPE_HINTS: Array<[RegExp, DatasetType]> = [
  * series as "Boya microplásticos Cádiz", republished.
  */
 const VERSION_SUFFIX = /[\s_-]*v\.?\s*\d+(?:[._]\d+)*\s*$/i;
+
+/**
+ * The version an asset's name declares, as comparable numbers.
+ *
+ * `[]` when the name carries no suffix, which sorts below every version: an
+ * asset republished as `_v1.1` supersedes the one published without a suffix.
+ */
+export function versionOf(name: string): number[] {
+  const match = VERSION_SUFFIX.exec(name.trim());
+  if (!match) return [];
+  return (match[0].match(/\d+/g) ?? []).map(Number);
+}
+
+/** Compares two version lists. Positive when `a` is the later one. */
+export function compareVersions(a: number[], b: number[]): number {
+  for (let i = 0; i < Math.max(a.length, b.length); i += 1) {
+    const diff = (a[i] ?? 0) - (b[i] ?? 0);
+    if (diff !== 0) return diff;
+  }
+  return 0;
+}
 
 /** Lowercased, accent-stripped, whitespace-collapsed, version-stripped. */
 export function fold(name: string): string {
