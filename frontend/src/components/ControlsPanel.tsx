@@ -46,8 +46,8 @@ const ALL_ANALYSES: AnalysisId[] = [
 
 function defaultValues(): DashboardFormValues {
   return {
-    lat: 40.4168,
-    lon: -3.7038,
+    lat: 41.4342,
+    lon: 2.2433,
     radiusKm: 25,
     dateStart: '2025-01-01',
     dateEnd: '2025-12-31',

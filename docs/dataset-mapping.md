@@ -384,31 +384,40 @@ per category.
 
 ---
 
-### Nearest dataset selected per reference location
+### Which dataset answers a request
 
-Selection is equirectangular nearest-neighbour, independently per dataset type,
-over the read model — not over a file listing. The table is a snapshot of the
-current coverage, computed from the station reference points: publish a dataset
-closer to a location and the winner changes, with no code change. Distances are
-shown where the winner is not the location itself.
+Selection is by **coast**, not by distance. A request is assigned to one of three
+coastlines — Mediterranean, Atlantic (Gulf of Cádiz and the Canaries) or
+Cantabrian — and only datasets on that coast may answer it. Within the coast, the
+nearest one wins. A coast with no dataset of a category falls back to the
+calibration series; it never borrows from another sea.
 
-| Request location | `boya_biomasa` → biomass base | `recogidas_playa` → kg base, coast km | `environmental_boya` → env factor | `boya_microplasticos` → buoy polymers | `muestras_de_agua` → `mp_per_L` |
+The rule lives in [`coastline.ts`](../src/api-v1/dataspace/coastline.ts), which
+matches a point against a polyline of coastal vertices per coast. A point more
+than 100 km from all of them belongs to no coast, and `POST /v1/analyses/run`
+answers **400** rather than serving figures from the least-distant sea.
+
+| Request location | `boya_biomasa` | `recogidas_playa` | `environmental_boya` | `boya_microplasticos` | `muestras_de_agua` |
 |---|---|---|---|---|---|
-| **Badalona** (41.43, 2.24) | Badalona | Badalona | Badalona | Badalona | Badalona |
-| **Barcelona** (41.67, 2.79) | Badalona (52 km) | Barcelona | Badalona (52 km) | Badalona (52 km) | Badalona (52 km) |
-| **Blanes** (41.68, 2.79) | Badalona (53 km) | Blanes | Badalona (53 km) | Badalona (53 km) | Badalona (53 km) |
-| **Cádiz** (36.53, -6.29) | Cádiz | Badalona (917 km) | Cádiz | Cádiz | Gijón (785 km) |
-| **Tenerife** (28.19, -16.66) | Cádiz (1 345 km) | Tenerife | Cádiz (1 345 km) | Cádiz (1 345 km) | Tenerife |
-| **Gijón** (43.57, -5.72) | Gijón | Badalona (695 km) | Gijón | Gijón | Gijón |
+| **Badalona** · mediterránea | Badalona | Badalona | Badalona | Badalona | Badalona |
+| **Barcelona** · mediterránea | Badalona (52 km) | Barcelona | Badalona (52 km) | Badalona (52 km) | Badalona (52 km) |
+| **Blanes** · mediterránea | Badalona (53 km) | Blanes | Badalona (53 km) | Badalona (53 km) | Badalona (53 km) |
+| **Cádiz** · atlántica | Cádiz | Tenerife (1 345 km) | Cádiz | Cádiz | Tenerife (1 345 km) |
+| **Tenerife** · atlántica | Cádiz (1 345 km) | Tenerife | Cádiz (1 345 km) | Cádiz (1 345 km) | Tenerife |
+| **Gijón** · cantábrica | Gijón | **calibración** | Gijón | Gijón | Gijón |
 
-One gap dominates this table: **`recogidas_playa` no longer covers Gijón**. It did
-before the republication round; `Recogidas playas Gijón_v1.1` was never published,
-so a request at Gijón now takes its cleanup figures from Badalona, 695 km away,
-and Cádiz from Badalona at 917 km. Every indicator built on `kgTotal` — the
-coastal pressure index among them — is affected at both locations. At those
-distances the value is a coverage artefact rather than a local measurement, which
-is why every response reports the datasets it actually used in
-`meta.datasetsUsed`.
+Two things to read off it. The Cantabrian coast has no `recogidas_playa` at all —
+`Recogidas playas Gijón_v1.1` was never republished — so a cleanup request at
+Gijón is answered by the calibration series and says so, instead of quietly
+taking Badalona's figures from another sea. And the Atlantic coast spans the
+mainland and the Canaries, so Cádiz and Tenerife answer for each other across
+1 345 km: same water body, but the distance is worth knowing when reading the
+result.
+
+Galicia is on the Cantabrian coast, which is a decision rather than a fact of
+geography: it faces the Atlantic, but it is one continuous northern coast and
+Gijón is both the nearest data and the same body of water. Treating it as
+Atlantic would reach for Cádiz, 900 km south, for every Galician request.
 
 ---
 

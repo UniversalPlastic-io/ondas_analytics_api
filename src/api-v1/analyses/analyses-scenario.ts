@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { AssetFilter, AssetsRepository } from '../dataspace/assets.repository';
 import { ObservationsRepository } from '../dataspace/observations.repository';
-import { WATER_POLYMER_FIELDS } from '../dataspace/dataspace.constants';
+import { Ocean, WATER_POLYMER_FIELDS } from '../dataspace/dataspace.constants';
 
 /**
  * The data inputs the analyses engine calibrates its plots with.
@@ -9,11 +9,11 @@ import { WATER_POLYMER_FIELDS } from '../dataspace/dataspace.constants';
  * Same shape and same arithmetic as the previous S3-reading loader; the values
  * now come from Mongo, so no request touches the bucket.
  *
- * Each input is looked up in two tiers: the datasets participants observed, and
- * failing those the reference series (src/api-v1/dataspace/reference-datasets.ts).
- * The tiers are asked in that order rather than together because `nearest()`
- * orders by distance alone and would otherwise prefer a reference series over a
- * real buoy further away.
+ * Each input is looked up in two tiers: the datasets participants observed on
+ * the coast the request belongs to, and failing those the calibration series
+ * (src/api-v1/dataspace/reference-datasets.ts). The tiers are asked in that
+ * order rather than together because `nearest()` orders by distance alone and
+ * would otherwise prefer a calibration series over a real buoy further away.
  */
 
 export type BiomassData = {
@@ -83,34 +83,52 @@ export class ScenarioLoader {
     private readonly observations: ObservationsRepository,
   ) {}
 
-  /** Loads every data input for a location, each independently optional. */
-  async load(loc: { lat: number; lon: number }): Promise<S3Scenario> {
+  /**
+   * Loads every data input for a location, each independently optional.
+   *
+   * `coast` restricts the observed datasets to the stretch of coast the point
+   * belongs to. Without it the nearest-neighbour search is unbounded, and a
+   * request at Gijón for a category with no Cantabrian dataset silently answers
+   * with Badalona's, 695 km away and in another sea.
+   */
+  async load(
+    loc: { lat: number; lon: number },
+    coast: Ocean | null,
+  ): Promise<S3Scenario> {
+    const tiered = <T>(load: (tier: AssetFilter) => Promise<T | null>) =>
+      this.tiered(coast, load).catch(() => null);
+
     const [biomass, kgTotal, envFactor, buoyPolymers, water] =
       await Promise.all([
-        this.tiered((tier) => this.loadBiomass(loc, tier)).catch(() => null),
-        this.tiered((tier) => this.loadKgTotal(loc, tier)).catch(() => null),
-        this.tiered((tier) => this.loadEnvFactor(loc, tier)).catch(() => null),
-        this.tiered((tier) => this.loadBuoyPolymers(loc, tier)).catch(
-          () => null,
-        ),
-        this.tiered((tier) => this.loadWaterSamples(loc, tier)).catch(
-          () => null,
-        ),
+        tiered((tier) => this.loadBiomass(loc, tier)),
+        tiered((tier) => this.loadKgTotal(loc, tier)),
+        tiered((tier) => this.loadEnvFactor(loc, tier)),
+        tiered((tier) => this.loadBuoyPolymers(loc, tier)),
+        tiered((tier) => this.loadWaterSamples(loc, tier)),
       ]);
     return { biomass, kgTotal, envFactor, buoyPolymers, water };
   }
 
   /**
-   * Runs a loader against the observed datasets, then against the reference
-   * series if that produced nothing.
+   * Runs a loader against the coast's observed datasets, then against the
+   * calibration series if that produced nothing.
    *
    * The whole loader is retried, not just the asset lookup, so an observed
    * dataset that exists but holds no usable observations falls back too.
+   *
+   * The fallback is deliberately **not** restricted to the coast. A calibration
+   * series measures nowhere — it is filed under one basin only because an asset
+   * needs coordinates — and restricting it by coast would leave the Cantabrian
+   * and Atlantic requests with no fallback at all, which is the exact gap the
+   * reference tier exists to cover.
    */
   private async tiered<T>(
+    coast: Ocean | null,
     load: (tier: AssetFilter) => Promise<T | null>,
   ): Promise<T | null> {
-    const observed = await load({ tier: 'observed' });
+    const observed = await load(
+      coast ? { tier: 'observed', ocean: coast } : { tier: 'observed' },
+    );
     if (observed !== null) return observed;
     return load({ tier: 'reference' });
   }

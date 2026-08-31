@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, QueryFilter, Types } from 'mongoose';
 import { Asset, AssetDocument, AssetTier } from './schemas/asset.schema';
+import { coastFor } from './coastline';
 
 export interface AssetFilter {
   /**
@@ -121,19 +122,21 @@ export class AssetsRepository {
   }
 
   /**
-   * The ocean basin a point belongs to, taken from the nearest observed asset.
+   * The basin a point belongs to.
    *
-   * This used to be decided by a table of twelve coordinates with the basin
-   * parsed back out of a hardcoded storage URL, which meant generated output was
-   * filed according to a copy of the inventory that nothing kept in step with
-   * the real one. The read model already knows where every asset is.
+   * Decided by the coastline, not by the nearest asset. Asking the read model
+   * meant an unbounded nearest-neighbour search: a point off Gijón with no
+   * Cantabrian asset nearby was filed under whichever basin happened to hold the
+   * closest one, so where an analysis was archived depended on what participants
+   * had published that week. The coast a point is on does not.
    *
-   * Returns null when nothing can place the point, so the caller decides what to
-   * do rather than being handed a default that looks like an answer.
+   * Kept async: it is awaited at three call sites and used to hit the database.
+   *
+   * Returns null when the point is on no covered coast, so the caller decides
+   * what to do rather than being handed a default that looks like an answer.
    */
   async oceanFor(loc: { lat: number; lon: number }): Promise<string | null> {
-    const nearest = await this.nearest({ tier: 'observed' }, loc);
-    return nearest?.ocean ?? null;
+    return Promise.resolve(coastFor(loc)?.coast ?? null);
   }
 
   /**

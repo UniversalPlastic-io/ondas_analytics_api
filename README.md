@@ -141,6 +141,17 @@ otras. El mapa, los KPIs del cuadro de mando y los informes las excluyen
 explícitamente: describen mediciones de un sitio, y una serie de calibración no
 lo es.
 
+La selección es **por costa**, no por distancia. Una consulta se asigna a una de
+las tres costas —mediterránea, atlántica (golfo de Cádiz y Canarias) o
+cantábrica— y sólo los datasets de esa costa pueden responderla; dentro de la
+costa gana el más cercano. Si esa costa no tiene ningún dataset de una categoría,
+esa categoría cae a la serie de calibración: nunca se toma prestado de otro mar.
+La regla está en
+[coastline.ts](src/api-v1/dataspace/coastline.ts), que compara el punto con una
+polilínea de vértices costeros por costa. Un punto a más de 100 km de todas ellas
+no pertenece a ninguna, y `POST /v1/analyses/run` responde **400** en lugar de
+servir cifras del mar menos lejano.
+
 El nivel no se deduce de quién publica el activo, sino de su asset id, en la
 tabla `REFERENCE_ASSETS` de
 [asset-map.ts](src/api-v1/dataspace/source/asset-map.ts). Tiene que ser así:
@@ -285,7 +296,7 @@ curl -s -X POST http://localhost:3000/v1/analyses/run \
   -H "Authorization: Bearer $TOKEN" \
   -H 'Content-Type: application/json' \
   -d '{
-        "location": { "lat": 40.4168, "lon": -3.7038 },
+        "location": { "lat": 41.4342, "lon": 2.2433 },
         "area": { "type": "radius_km", "value": 25 },
         "analyses": ["all"],
         "dateRange": { "start": "2025-01-01", "end": "2025-12-31" }

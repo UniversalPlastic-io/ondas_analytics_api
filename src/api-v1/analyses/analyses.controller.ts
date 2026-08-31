@@ -9,11 +9,21 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiBody,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import type { Request } from 'express';
 import { AnalysesService } from './analyses.service';
 import { AnalysesRunRequest, AnalysesRunResponse } from './analyses.types';
-import { AnalysesRunRequestDto, AnalysesRunResponseDto } from './analyses.swagger.dto';
+import {
+  AnalysesRunRequestDto,
+  AnalysesRunResponseDto,
+} from './analyses.swagger.dto';
 import { UserJwtAuthGuard } from '../identity/auth.guards';
 
 function publicBaseUrlFromReq(req: Request): string {
@@ -33,7 +43,9 @@ export class AnalysesController {
   indicesHtml(): string {
     // Static HTML (kept lightweight on purpose).
     // Note: this page is intentionally standalone (no JS/CSS frameworks).
-    const basePath = (process.env.PUBLIC_API_BASE_PATH ?? '').trim().replace(/\/+$/g, '');
+    const basePath = (process.env.PUBLIC_API_BASE_PATH ?? '')
+      .trim()
+      .replace(/\/+$/g, '');
     return `<!doctype html>
 <html lang="es">
   <head>
@@ -373,7 +385,7 @@ export class AnalysesController {
       "7_plasticPressureComposition": {
         "waterMpPerL": 0.42,
         "coastKgPerKm": 18.3,
-        "location": "lat=40.4168,lon=-3.7038"
+        "location": "lat=41.4342,lon=2.2433"
       }
     }
   }
@@ -474,8 +486,8 @@ export class AnalysesController {
   "dataFormattedForPlots": {
     "plots": {
       "10_spatialDistributionOfImpact": {
-        "lon": [-3.7038],
-        "lat": [40.4168],
+        "lon": [2.2433],
+        "lat": [41.4342],
         "impactValues": [0.47]
       }
     }
@@ -651,14 +663,24 @@ export class AnalysesController {
   @UseGuards(UserJwtAuthGuard)
   @ApiBearerAuth('portal-jwt')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Ejecutar analíticas y (opcionalmente) generar plots' })
+  @ApiOperation({
+    summary: 'Ejecutar analíticas y (opcionalmente) generar plots',
+  })
+  @ApiBadRequestResponse({
+    description:
+      'La coordenada no está a menos de 100 km de ninguna costa cubierta ' +
+      '(mediterránea, atlántica —golfo de Cádiz y Canarias— o cantábrica). ' +
+      'Sólo los datasets de la costa a la que pertenece un punto pueden ' +
+      'responder por él, así que un punto sin costa no tiene ninguno, y la ' +
+      'petición se rechaza en vez de responderse con cifras de otro mar.',
+  })
   @ApiBody({
     type: AnalysesRunRequestDto,
     examples: {
       fullYearWithPlots: {
         summary: 'Demo anual (genera plots WebP + PDF)',
         value: {
-          location: { lat: 40.4168, lon: -3.7038 },
+          location: { lat: 41.4342, lon: 2.2433 },
           area: { type: 'radius_km', value: 25 },
           analyses: ['all'],
           dateRange: { start: '2025-01-01', end: '2025-12-31' },
@@ -674,7 +696,7 @@ export class AnalysesController {
       fullYearJsonPlotsOnly: {
         summary: 'Anual (solo JSON con datos para plots, sin ficheros)',
         value: {
-          location: { lat: 40.4168, lon: -3.7038 },
+          location: { lat: 41.4342, lon: 2.2433 },
           area: { type: 'radius_km', value: 25 },
           analyses: ['all'],
           dateRange: { start: '2025-01-01', end: '2025-12-31' },
@@ -692,7 +714,7 @@ export class AnalysesController {
         description:
           'Usa valores por defecto del API: dateRangeApplied se rellena con un rango predefinido, aggregation por defecto es raw, sin datos para plots y sin ficheros.',
         value: {
-          location: { lat: 40.4168, lon: -3.7038 },
+          location: { lat: 41.4342, lon: 2.2433 },
           area: { type: 'radius_km', value: 25 },
           analyses: ['all'],
         },
@@ -700,7 +722,7 @@ export class AnalysesController {
       monthlyAggregation: {
         summary: 'Agregación mensual (serie más corta, útil para overview)',
         value: {
-          location: { lat: 40.4168, lon: -3.7038 },
+          location: { lat: 41.4342, lon: 2.2433 },
           area: { type: 'radius_km', value: 50 },
           analyses: ['basic_contamination', 'eco_risk'],
           dateRange: { start: '2025-01-01', end: '2025-12-31' },
@@ -716,7 +738,7 @@ export class AnalysesController {
       specificAnalysesOnly: {
         summary: 'Solo análisis concretos (sin datos de plots)',
         value: {
-          location: { lat: 40.4168, lon: -3.7038 },
+          location: { lat: 41.4342, lon: 2.2433 },
           area: { type: 'radius_km', value: 25 },
           analyses: ['trophic_transfer', 'plastic_origin'],
           dateRange: { start: '2025-06-01', end: '2025-06-30' },
@@ -729,7 +751,7 @@ export class AnalysesController {
       plotsDataOnlyShortRange: {
         summary: 'Solo JSON para plots (rango corto, sin ficheros)',
         value: {
-          location: { lat: 40.4168, lon: -3.7038 },
+          location: { lat: 41.4342, lon: 2.2433 },
           area: { type: 'radius_km', value: 15 },
           analyses: ['all'],
           dateRange: { start: '2025-03-01', end: '2025-03-31' },
@@ -746,7 +768,7 @@ export class AnalysesController {
         description:
           'Nota: savePlotsWebp implica datos para plots internamente. Aunque se omita dataFormattedForPlots, la respuesta puede incluirlo porque es necesario para generar ficheros.',
         value: {
-          location: { lat: 40.4168, lon: -3.7038 },
+          location: { lat: 41.4342, lon: 2.2433 },
           area: { type: 'radius_km', value: 25 },
           analyses: ['all'],
           dateRange: { start: '2025-01-01', end: '2025-01-31' },
@@ -760,7 +782,7 @@ export class AnalysesController {
       forceFreshExport: {
         summary: 'Forzar export fresh (sin caché) + generar ficheros',
         value: {
-          location: { lat: 40.4168, lon: -3.7038 },
+          location: { lat: 41.4342, lon: 2.2433 },
           area: { type: 'radius_km', value: 10 },
           analyses: ['all'],
           dateRange: { start: '2025-03-01', end: '2025-03-31' },
@@ -774,11 +796,12 @@ export class AnalysesController {
         },
       },
       cacheHitSecondCall: {
-        summary: 'Cache hit (ejecuta esto DESPUÉS de ejecutar la misma request una vez)',
+        summary:
+          'Cache hit (ejecuta esto DESPUÉS de ejecutar la misma request una vez)',
         description:
           'Ejecuta esta request dos veces. La segunda debería devolver meta.cache.hit=true (mismos location/area/analyses/dateRange/aggregation/options).',
         value: {
-          location: { lat: 40.4168, lon: -3.7038 },
+          location: { lat: 41.4342, lon: 2.2433 },
           area: { type: 'radius_km', value: 25 },
           analyses: ['all'],
           dateRange: { start: '2025-01-01', end: '2025-12-31' },
@@ -792,9 +815,10 @@ export class AnalysesController {
         },
       },
       cacheBypassAlwaysRecompute: {
-        summary: 'Bypass caché (recalcula siempre, pero devuelve meta de caché)',
+        summary:
+          'Bypass caché (recalcula siempre, pero devuelve meta de caché)',
         value: {
-          location: { lat: 40.4168, lon: -3.7038 },
+          location: { lat: 41.4342, lon: 2.2433 },
           area: { type: 'radius_km', value: 25 },
           analyses: ['all'],
           dateRange: { start: '2025-01-01', end: '2025-12-31' },
@@ -809,7 +833,7 @@ export class AnalysesController {
         description:
           'Fuerza un recálculo y guarda el resultado en caché para reutilización futura (salvo si savePlotsWebp=true, que salta la caché).',
         value: {
-          location: { lat: 40.4168, lon: -3.7038 },
+          location: { lat: 41.4342, lon: 2.2433 },
           area: { type: 'radius_km', value: 25 },
           analyses: ['eco_risk'],
           dateRange: { start: '2025-01-01', end: '2025-12-31' },
@@ -822,7 +846,7 @@ export class AnalysesController {
       warningsOff: {
         summary: 'Warnings desactivados (includeWarnings=false)',
         value: {
-          location: { lat: 40.4168, lon: -3.7038 },
+          location: { lat: 41.4342, lon: 2.2433 },
           area: { type: 'radius_km', value: 25 },
           analyses: ['basic_contamination'],
           dateRange: { start: '2025-01-01', end: '2025-01-30' },
@@ -835,7 +859,7 @@ export class AnalysesController {
       quickRunNoFiles: {
         summary: 'Ejecución rápida (solo JSON, sin ficheros)',
         value: {
-          location: { lat: 40.4168, lon: -3.7038 },
+          location: { lat: 41.4342, lon: 2.2433 },
           area: { type: 'radius_km', value: 25 },
           analyses: ['basic_contamination'],
           options: { includeWarnings: true },
@@ -844,8 +868,12 @@ export class AnalysesController {
     },
   })
   @ApiOkResponse({ type: AnalysesRunResponseDto })
-  run(@Body() body: AnalysesRunRequest, @Req() req: Request): Promise<AnalysesRunResponse> {
-    return this.analyses.run(body, { publicBaseUrl: publicBaseUrlFromReq(req) });
+  run(
+    @Body() body: AnalysesRunRequest,
+    @Req() req: Request,
+  ): Promise<AnalysesRunResponse> {
+    return this.analyses.run(body, {
+      publicBaseUrl: publicBaseUrlFromReq(req),
+    });
   }
 }
-
