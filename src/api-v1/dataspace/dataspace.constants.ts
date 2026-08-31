@@ -83,7 +83,7 @@ export const WATER_POLYMER_FIELDS: Array<{ field: string; code: string }> = [
   { field: 'Polyvinyl alcohol', code: 'PVA' },
 ];
 
-/** Marker label + colour per category (mirrors docs/map-endpoint-design.md §3.5). */
+/** Marker label + colour per category, as `GET /v1/map/points` serves them. */
 export const CATEGORY_META: Record<Category, { label: string; color: string }> =
   {
     cleanup: { label: 'Coastal cleanup', color: '#00003F' },

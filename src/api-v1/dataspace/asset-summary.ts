@@ -4,7 +4,9 @@ import { CanonicalObservation } from './normalize';
 /**
  * Headline numbers stored on the asset at ingest time, so the map popup and the
  * dataset list never aggregate observations on the read path.
- * Shapes mirror docs/map-endpoint-design.md §3.4.
+ *
+ * The shapes are the map contract: what changes here changes `MapPointDto`, so
+ * regenerate docs/openapi.json when it does.
  */
 
 function round(n: number, d = 2): number {
