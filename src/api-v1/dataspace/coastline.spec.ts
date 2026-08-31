@@ -87,6 +87,30 @@ describe('coastFor', () => {
     expect(offshore.distanceKm).toBeLessThanOrEqual(MAX_OFFSHORE_KM);
   });
 
+  it('keeps the precision-report grid inside the tolerance', () => {
+    // The six points `scripts/validate-precision.ts` queries. They are the
+    // evidence E4.1 cites for R4.1, and the report fails outright if one of them
+    // starts returning 400 — so a change to the coastline that pushes one out
+    // has to fail here instead, where the cause is obvious.
+    //
+    // "Mediterráneo abierto" sits 98.7 km out, 1.3 km inside the tolerance. That
+    // is the margin: it is thin on purpose, because the point exists to exercise
+    // open water, but it means MAX_OFFSHORE_KM cannot be tightened without
+    // moving it.
+    const grid = [
+      { name: 'Badalona', lat: 41.4469, lon: 2.2475 },
+      { name: 'Barcelona', lat: 41.3874, lon: 2.1686 },
+      { name: 'Tenerife', lat: 28.1876, lon: -16.6596 },
+      { name: 'Gijón', lat: 43.5322, lon: -5.6611 },
+      { name: 'Mediterráneo abierto', lat: 40.5, lon: 2.5 },
+      { name: 'Costa Brava', lat: 41.9, lon: 3.16 },
+    ];
+    const rejected = grid
+      .filter((p) => coastFor(p) === null)
+      .map((p) => p.name);
+    expect(rejected).toEqual([]);
+  });
+
   it('holds the calibration series coordinates on a coast', () => {
     // Not required for the fallback to work — the reference tier is never
     // filtered by coast — but a series filed on no coast at all would be a sign
