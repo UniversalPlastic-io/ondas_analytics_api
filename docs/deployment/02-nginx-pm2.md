@@ -20,7 +20,7 @@ flowchart LR
   end
   WEB -->|proxy_pass| PM2
   PM2 --> DB[("MongoDB Atlas")]
-  PM2 --> S3[("Bucket del espacio de datos")]
+  PM2 --> DSP[("Conector del espacio de datos<br/>D-Spacer")]
   USER["Navegador"] -->|HTTPS| WEB
 ```
 

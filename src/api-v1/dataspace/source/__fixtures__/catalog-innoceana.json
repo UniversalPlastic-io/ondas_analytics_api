@@ -1,193 +1,276 @@
 {
- "@id": "32093646-bed6-4dbc-8451-e67a8f431976",
- "@type": "dcat:Catalog",
- "dcat:dataset": [
-  {
-   "@id": "ddadf21b-0c4d-40c8-97d7-e5cf902a5024",
-   "@type": "dcat:Dataset",
-   "odrl:hasPolicy": {
-    "@id": "UmVjb2dpZGFzIHBsYXlhcyBUZW5lcmlmZQ==:ZGRhZGYyMWItMGM0ZC00MGM4LTk3ZDctZTVjZjkwMmE1MDI0:NDUwNDI0MjctOGJiYi00NDY2LTgzMDctZWRjYjA1NDcwYjdl",
-    "@type": "odrl:Offer",
-    "odrl:permission": {
-     "odrl:action": {
-      "@id": "USE"
-     },
-     "odrl:constraint": {
-      "odrl:or": {
-       "odrl:leftOperand": {
-        "@id": "BusinessPartnerNumber"
-       },
-       "odrl:operator": {
-        "@id": "odrl:eq"
-       },
-       "odrl:rightOperand": "BPNL000000000001"
-      }
-     }
-    },
-    "odrl:prohibition": [],
-    "odrl:obligation": []
-   },
-   "dcat:distribution": [
+  "@id": "5082b7ac-c918-420d-8056-6928a05d26db",
+  "@type": "dcat:Catalog",
+  "dcat:dataset": [
     {
-     "@type": "dcat:Distribution",
-     "dct:format": {
-      "@id": "AzureStorage-PUSH"
-     },
-     "dcat:accessService": {
-      "@id": "b80b4381-4c1c-48c3-9091-3996c176d6e4",
-      "@type": "dcat:DataService",
-      "dcat:endpointDescription": "dspace:connector",
-      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
-      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
-     }
+      "@id": "0ac35a36-2493-4e0e-a695-229fc559921c",
+      "@type": "dcat:Dataset",
+      "odrl:hasPolicy": {
+        "@id": "UmVjb2dpZGFzIHBsYXlhcyBCYXJjZWxvbmEg:MGFjMzVhMzYtMjQ5My00ZTBlLWE2OTUtMjI5ZmM1NTk5MjFj:OWJmZmNjMTAtMzUzYy00MzA0LWI3ZjQtODQ2NzMyZDA5MzM5",
+        "@type": "odrl:Offer",
+        "odrl:permission": {
+          "odrl:action": {
+            "@id": "USE"
+          },
+          "odrl:constraint": {
+            "odrl:or": {
+              "odrl:leftOperand": {
+                "@id": "BusinessPartnerNumber"
+              },
+              "odrl:operator": {
+                "@id": "odrl:eq"
+              },
+              "odrl:rightOperand": "BPNL000000000000001"
+            }
+          }
+        },
+        "odrl:prohibition": [],
+        "odrl:obligation": []
+      },
+      "dcat:distribution": [
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AzureStorage-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "b80b4381-4c1c-48c3-9091-3996c176d6e4",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-2-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-2-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PULL"
+          },
+          "dcat:accessService": {
+            "@id": "b80b4381-4c1c-48c3-9091-3996c176d6e4",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-2-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-2-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "b80b4381-4c1c-48c3-9091-3996c176d6e4",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-2-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-2-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AmazonS3-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "b80b4381-4c1c-48c3-9091-3996c176d6e4",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-2-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-2-controlplane.tx.test/api/v1/dsp"
+          }
+        }
+      ],
+      "name": "Recogidas playas Barcelona ",
+      "description": "Dataset de ciencia ciudadana generado por la app móvil Universal Plastic v7.0.0, plataforma de economía azul. Permite registrar limpiezas de plásticos costeros capturando kg totales, participantes, duración, distancia y composición (PET/HDPE/PVC/LDPE/PP/PS en %) vía IA en imágenes. Implementa un sistema de dMRV (digital Measurement, Reporting and Verification) para medición, reporte y verificación automatizada y trazable de residuos.  ",
+      "id": "0ac35a36-2493-4e0e-a695-229fc559921c"
     },
     {
-     "@type": "dcat:Distribution",
-     "dct:format": {
-      "@id": "HttpData-PULL"
-     },
-     "dcat:accessService": {
-      "@id": "b80b4381-4c1c-48c3-9091-3996c176d6e4",
-      "@type": "dcat:DataService",
-      "dcat:endpointDescription": "dspace:connector",
-      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
-      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
-     }
+      "@id": "f2aec864-8a58-42d9-9231-19cad86968fc",
+      "@type": "dcat:Dataset",
+      "odrl:hasPolicy": {
+        "@id": "UmVjb2dpZGFzIHBsYXlhcyBUZW5lcmlmZV92MS4x:ZjJhZWM4NjQtOGE1OC00MmQ5LTkyMzEtMTljYWQ4Njk2OGZj:YjIxYTNjNTktYWY4MS00ZDgwLWJkNWYtZDkzNWUyYjBjYmJl",
+        "@type": "odrl:Offer",
+        "odrl:permission": {
+          "odrl:action": {
+            "@id": "USE"
+          },
+          "odrl:constraint": {
+            "odrl:or": {
+              "odrl:leftOperand": {
+                "@id": "BusinessPartnerNumber"
+              },
+              "odrl:operator": {
+                "@id": "odrl:eq"
+              },
+              "odrl:rightOperand": "BPNL000000000000001"
+            }
+          }
+        },
+        "odrl:prohibition": [],
+        "odrl:obligation": []
+      },
+      "dcat:distribution": [
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AzureStorage-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "b80b4381-4c1c-48c3-9091-3996c176d6e4",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-2-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-2-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PULL"
+          },
+          "dcat:accessService": {
+            "@id": "b80b4381-4c1c-48c3-9091-3996c176d6e4",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-2-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-2-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "b80b4381-4c1c-48c3-9091-3996c176d6e4",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-2-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-2-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AmazonS3-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "b80b4381-4c1c-48c3-9091-3996c176d6e4",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-2-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-2-controlplane.tx.test/api/v1/dsp"
+          }
+        }
+      ],
+      "name": "Recogidas playas Tenerife_v1.1 ",
+      "description": "Dataset de ciencia ciudadana generado por la app móvil Universal Plastic v7.0.0, plataforma de economía azul. Permite registrar limpiezas de plásticos costeros capturando kg totales, participantes, duración, distancia y composición (PET/HDPE/PVC/LDPE/PP/PS en %) vía IA en imágenes. Implementa un sistema de dMRV (digital Measurement, Reporting and Verification) para medición, reporte y verificación automatizada y trazable de residuos.   ",
+      "id": "f2aec864-8a58-42d9-9231-19cad86968fc"
     },
     {
-     "@type": "dcat:Distribution",
-     "dct:format": {
-      "@id": "HttpData-PUSH"
-     },
-     "dcat:accessService": {
-      "@id": "b80b4381-4c1c-48c3-9091-3996c176d6e4",
-      "@type": "dcat:DataService",
-      "dcat:endpointDescription": "dspace:connector",
-      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
-      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
-     }
-    },
-    {
-     "@type": "dcat:Distribution",
-     "dct:format": {
-      "@id": "AmazonS3-PUSH"
-     },
-     "dcat:accessService": {
-      "@id": "b80b4381-4c1c-48c3-9091-3996c176d6e4",
-      "@type": "dcat:DataService",
-      "dcat:endpointDescription": "dspace:connector",
-      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
-      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
-     }
+      "@id": "b91d0d36-d8db-4427-9b04-36a1f7a367e2",
+      "@type": "dcat:Dataset",
+      "odrl:hasPolicy": {
+        "@id": "UmVjb2dpZGFzIHBsYXlhcyBCYXJjZWxvbmFfdjEuMQ==:YjkxZDBkMzYtZDhkYi00NDI3LTliMDQtMzZhMWY3YTM2N2Uy:ZmI3NDEyYWYtYWVlYi00OTdiLTgyYzQtZWVmOGJlZDBjMjdi",
+        "@type": "odrl:Offer",
+        "odrl:permission": {
+          "odrl:action": {
+            "@id": "USE"
+          },
+          "odrl:constraint": {
+            "odrl:or": {
+              "odrl:leftOperand": {
+                "@id": "BusinessPartnerNumber"
+              },
+              "odrl:operator": {
+                "@id": "odrl:eq"
+              },
+              "odrl:rightOperand": "BPNL000000000000001"
+            }
+          }
+        },
+        "odrl:prohibition": [],
+        "odrl:obligation": []
+      },
+      "dcat:distribution": [
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AzureStorage-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "b80b4381-4c1c-48c3-9091-3996c176d6e4",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-2-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-2-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PULL"
+          },
+          "dcat:accessService": {
+            "@id": "b80b4381-4c1c-48c3-9091-3996c176d6e4",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-2-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-2-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "b80b4381-4c1c-48c3-9091-3996c176d6e4",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-2-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-2-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AmazonS3-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "b80b4381-4c1c-48c3-9091-3996c176d6e4",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-2-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-2-controlplane.tx.test/api/v1/dsp"
+          }
+        }
+      ],
+      "name": "Recogidas playas Barcelona_v1.1",
+      "description": "Dataset de ciencia ciudadana generado por la app móvil Universal Plastic v7.0.0, plataforma de economía azul. Permite registrar limpiezas de plásticos costeros capturando kg totales, participantes, duración, distancia y composición (PET/HDPE/PVC/LDPE/PP/PS en %) vía IA en imágenes. Implementa un sistema de dMRV (digital Measurement, Reporting and Verification) para medición, reporte y verificación automatizada y trazable de residuos.   ",
+      "id": "b91d0d36-d8db-4427-9b04-36a1f7a367e2"
     }
-   ],
-   "name": "Recogidas playas Tenerife",
-   "description": "Dataset de ciencia ciudadana generado por la app móvil Universal Plastic v7.0.0, plataforma de economía azul. Permite registrar limpiezas de plásticos costeros capturando kg totales, participantes, duración, distancia y composición (PET/HDPE/PVC/LDPE/PP/PS en %) vía IA en imágenes. Implementa un sistema de dMRV (digital Measurement, Reporting and Verification) para medición, reporte y verificación automatizada y trazable de residuos.  ",
-   "id": "ddadf21b-0c4d-40c8-97d7-e5cf902a5024"
+  ],
+  "dcat:catalog": [],
+  "dcat:distribution": [],
+  "dcat:service": {
+    "@id": "b80b4381-4c1c-48c3-9091-3996c176d6e4",
+    "@type": "dcat:DataService",
+    "dcat:endpointDescription": "dspace:connector",
+    "dcat:endpointUrl": "http://dataprovider-2-controlplane.tx.test/api/v1/dsp",
+    "dcat:endpointURL": "http://dataprovider-2-controlplane.tx.test/api/v1/dsp"
   },
-  {
-   "@id": "0ac35a36-2493-4e0e-a695-229fc559921c",
-   "@type": "dcat:Dataset",
-   "odrl:hasPolicy": {
-    "@id": "UmVjb2dpZGFzIHBsYXlhcyBCYXJjZWxvbmEg:MGFjMzVhMzYtMjQ5My00ZTBlLWE2OTUtMjI5ZmM1NTk5MjFj:NDRlYWM0OTEtNGRkZi00OTNlLTlmZDItNzk5MjVmMTUzYzhk",
-    "@type": "odrl:Offer",
-    "odrl:permission": {
-     "odrl:action": {
-      "@id": "USE"
-     },
-     "odrl:constraint": {
-      "odrl:or": {
-       "odrl:leftOperand": {
-        "@id": "BusinessPartnerNumber"
-       },
-       "odrl:operator": {
-        "@id": "odrl:eq"
-       },
-       "odrl:rightOperand": "BPNL000000000001"
-      }
-     }
-    },
-    "odrl:prohibition": [],
-    "odrl:obligation": []
-   },
-   "dcat:distribution": [
-    {
-     "@type": "dcat:Distribution",
-     "dct:format": {
-      "@id": "AzureStorage-PUSH"
-     },
-     "dcat:accessService": {
-      "@id": "b80b4381-4c1c-48c3-9091-3996c176d6e4",
-      "@type": "dcat:DataService",
-      "dcat:endpointDescription": "dspace:connector",
-      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
-      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
-     }
-    },
-    {
-     "@type": "dcat:Distribution",
-     "dct:format": {
-      "@id": "HttpData-PULL"
-     },
-     "dcat:accessService": {
-      "@id": "b80b4381-4c1c-48c3-9091-3996c176d6e4",
-      "@type": "dcat:DataService",
-      "dcat:endpointDescription": "dspace:connector",
-      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
-      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
-     }
-    },
-    {
-     "@type": "dcat:Distribution",
-     "dct:format": {
-      "@id": "HttpData-PUSH"
-     },
-     "dcat:accessService": {
-      "@id": "b80b4381-4c1c-48c3-9091-3996c176d6e4",
-      "@type": "dcat:DataService",
-      "dcat:endpointDescription": "dspace:connector",
-      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
-      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
-     }
-    },
-    {
-     "@type": "dcat:Distribution",
-     "dct:format": {
-      "@id": "AmazonS3-PUSH"
-     },
-     "dcat:accessService": {
-      "@id": "b80b4381-4c1c-48c3-9091-3996c176d6e4",
-      "@type": "dcat:DataService",
-      "dcat:endpointDescription": "dspace:connector",
-      "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
-      "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
-     }
-    }
-   ],
-   "name": "Recogidas playas Barcelona ",
-   "description": "Dataset de ciencia ciudadana generado por la app móvil Universal Plastic v7.0.0, plataforma de economía azul. Permite registrar limpiezas de plásticos costeros capturando kg totales, participantes, duración, distancia y composición (PET/HDPE/PVC/LDPE/PP/PS en %) vía IA en imágenes. Implementa un sistema de dMRV (digital Measurement, Reporting and Verification) para medición, reporte y verificación automatizada y trazable de residuos.  ",
-   "id": "0ac35a36-2493-4e0e-a695-229fc559921c"
+  "dspace:participantId": "BPNL000000000000002",
+  "@context": {
+    "tx": "https://w3id.org/tractusx/v0.0.1/ns/",
+    "tx-auth": "https://w3id.org/tractusx/auth/",
+    "cx-policy": "https://w3id.org/catenax/policy/",
+    "dcat": "http://www.w3.org/ns/dcat#",
+    "dct": "http://purl.org/dc/terms/",
+    "odrl": "http://www.w3.org/ns/odrl/2/",
+    "dspace": "https://w3id.org/dspace/v0.8/",
+    "@vocab": "https://w3id.org/edc/v0.0.1/ns/",
+    "edc": "https://w3id.org/edc/v0.0.1/ns/"
   }
- ],
- "dcat:catalog": [],
- "dcat:distribution": [],
- "dcat:service": {
-  "@id": "b80b4381-4c1c-48c3-9091-3996c176d6e4",
-  "@type": "dcat:DataService",
-  "dcat:endpointDescription": "dspace:connector",
-  "dcat:endpointUrl": "http://provider-controlplane.example/api/v1/dsp",
-  "dcat:endpointURL": "http://provider-controlplane.example/api/v1/dsp"
- },
- "dspace:participantId": "BPNL000000000002",
- "@context": {
-  "tx": "https://w3id.org/tractusx/v0.0.1/ns/",
-  "tx-auth": "https://w3id.org/tractusx/auth/",
-  "cx-policy": "https://w3id.org/catenax/policy/",
-  "dcat": "http://www.w3.org/ns/dcat#",
-  "dct": "http://purl.org/dc/terms/",
-  "odrl": "http://www.w3.org/ns/odrl/2/",
-  "dspace": "https://w3id.org/dspace/v0.8/",
-  "@vocab": "https://w3id.org/edc/v0.0.1/ns/",
-  "edc": "https://w3id.org/edc/v0.0.1/ns/"
- }
 }

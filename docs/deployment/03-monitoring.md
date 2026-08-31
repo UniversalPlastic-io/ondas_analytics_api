@@ -55,7 +55,8 @@ ningún 401 ni 403, que son justo los códigos que interesa vigilar.
 
 La etiqueta `route` es la **plantilla de ruta** (`/v1/sync/runs/:id`), nunca la
 URL solicitada. Etiquetar por la URL real crearía una serie temporal por cada
-identificador y clave de bucket consultados, y acabaría tumbando Prometheus. Lo
+identificador de ejecución y de activo consultados, y acabaría tumbando
+Prometheus. Lo
 que no casa con ninguna ruta se agrupa en una única serie `unmatched`.
 
 ### Espacio de datos

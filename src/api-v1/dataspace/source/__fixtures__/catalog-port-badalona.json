@@ -1,0 +1,193 @@
+{
+  "@id": "c8f76089-dc72-4774-9014-6094dec9867d",
+  "@type": "dcat:Catalog",
+  "dcat:dataset": [
+    {
+      "@id": "16bd8652-058f-4198-adf8-31dc86ff5527",
+      "@type": "dcat:Dataset",
+      "odrl:hasPolicy": {
+        "@id": "Qm95YSBtaWNyb3Bsw6FzdGljb3MgQmFkYWxvbmFfdjEuMQ==:MTZiZDg2NTItMDU4Zi00MTk4LWFkZjgtMzFkYzg2ZmY1NTI3:YTc5YzVlM2MtNjY0OC00NWUxLTlmZjQtMmIzMWU3NTcyMWQ5",
+        "@type": "odrl:Offer",
+        "odrl:permission": {
+          "odrl:action": {
+            "@id": "USE"
+          },
+          "odrl:constraint": {
+            "odrl:or": {
+              "odrl:leftOperand": {
+                "@id": "BusinessPartnerNumber"
+              },
+              "odrl:operator": {
+                "@id": "odrl:eq"
+              },
+              "odrl:rightOperand": "BPNL000000000000001"
+            }
+          }
+        },
+        "odrl:prohibition": [],
+        "odrl:obligation": []
+      },
+      "dcat:distribution": [
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AzureStorage-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "8310e3e6-e7c4-4774-8d18-c38722d4b52a",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-4-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-4-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PULL"
+          },
+          "dcat:accessService": {
+            "@id": "8310e3e6-e7c4-4774-8d18-c38722d4b52a",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-4-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-4-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "8310e3e6-e7c4-4774-8d18-c38722d4b52a",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-4-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-4-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AmazonS3-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "8310e3e6-e7c4-4774-8d18-c38722d4b52a",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-4-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-4-controlplane.tx.test/api/v1/dsp"
+          }
+        }
+      ],
+      "name": "Boya microplásticos Badalona_v1.1",
+      "description": "Registro de datos de microplásticos obtenidos mediante una boya de muestreo. La planilla recoge la caracterización de partículas mediante estereomicroscopía, incluyendo número, forma, tamaño y color y su posterior identificación mediante microFTIR",
+      "id": "16bd8652-058f-4198-adf8-31dc86ff5527"
+    },
+    {
+      "@id": "8e1dd22c-f922-4a0a-b31d-3c00ad060cf0",
+      "@type": "dcat:Dataset",
+      "odrl:hasPolicy": {
+        "@id": "Qm95YSBiaW9tYXNhIEJhZGFsb25hX3YxLjE=:OGUxZGQyMmMtZjkyMi00YTBhLWIzMWQtM2MwMGFkMDYwY2Yw:ZDEyNjZmNDItZDQ3NS00MWU4LThmMTctMWM4YTk0NzBhNzc5",
+        "@type": "odrl:Offer",
+        "odrl:permission": {
+          "odrl:action": {
+            "@id": "USE"
+          },
+          "odrl:constraint": {
+            "odrl:or": {
+              "odrl:leftOperand": {
+                "@id": "BusinessPartnerNumber"
+              },
+              "odrl:operator": {
+                "@id": "odrl:eq"
+              },
+              "odrl:rightOperand": "BPNL000000000000001"
+            }
+          }
+        },
+        "odrl:prohibition": [],
+        "odrl:obligation": []
+      },
+      "dcat:distribution": [
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AzureStorage-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "8310e3e6-e7c4-4774-8d18-c38722d4b52a",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-4-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-4-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PULL"
+          },
+          "dcat:accessService": {
+            "@id": "8310e3e6-e7c4-4774-8d18-c38722d4b52a",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-4-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-4-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "8310e3e6-e7c4-4774-8d18-c38722d4b52a",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-4-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-4-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AmazonS3-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "8310e3e6-e7c4-4774-8d18-c38722d4b52a",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-4-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-4-controlplane.tx.test/api/v1/dsp"
+          }
+        }
+      ],
+      "name": "Boya biomasa Badalona_v1.1",
+      "description": "Registro de datos de biomasa obtenidos mediante una boya ecosonda autónoma Satlink SLX fondeada en el puerto de Badalona. La planilla recoge las estimaciones de biomasa, la fecha, la hora y la biomasa en los distintos rangos de profundidad.",
+      "id": "8e1dd22c-f922-4a0a-b31d-3c00ad060cf0"
+    }
+  ],
+  "dcat:catalog": [],
+  "dcat:distribution": [],
+  "dcat:service": {
+    "@id": "8310e3e6-e7c4-4774-8d18-c38722d4b52a",
+    "@type": "dcat:DataService",
+    "dcat:endpointDescription": "dspace:connector",
+    "dcat:endpointUrl": "http://dataprovider-4-controlplane.tx.test/api/v1/dsp",
+    "dcat:endpointURL": "http://dataprovider-4-controlplane.tx.test/api/v1/dsp"
+  },
+  "dspace:participantId": "BPNS000000000000004",
+  "@context": {
+    "tx": "https://w3id.org/tractusx/v0.0.1/ns/",
+    "tx-auth": "https://w3id.org/tractusx/auth/",
+    "cx-policy": "https://w3id.org/catenax/policy/",
+    "dcat": "http://www.w3.org/ns/dcat#",
+    "dct": "http://purl.org/dc/terms/",
+    "odrl": "http://www.w3.org/ns/odrl/2/",
+    "dspace": "https://w3id.org/dspace/v0.8/",
+    "@vocab": "https://w3id.org/edc/v0.0.1/ns/",
+    "edc": "https://w3id.org/edc/v0.0.1/ns/"
+  }
+}

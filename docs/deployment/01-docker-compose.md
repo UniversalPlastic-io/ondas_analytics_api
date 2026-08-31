@@ -80,16 +80,19 @@ porque `seed` y `backfill` se ejecutan con `ts-node`:
 # Organizaciones y usuarios. Imprime la contraseña del administrador UNA vez.
 docker compose run --rm seed
 
-# Carga del read model desde el bucket del espacio de datos.
+# Carga del read model desde el catálogo del espacio de datos.
 docker compose run --rm backfill
 ```
 
 > **Anota la contraseña que imprime `seed`.** No se vuelve a mostrar. Si se
 > pierde, restablécela con `docker compose run --rm seed npm run users:reset`.
 
-`backfill` lee los activos por HTTPS público, así que funciona sin credencial de
-AWS. Si el entorno no tiene permiso `s3:ListBucket`, el escaneo recurre al
-inventario incluido en el código y lo indica en los avisos de la ejecución.
+`backfill` ejecuta el mismo escaneo que expone `POST /v1/sync/scan`, como actor
+administrador, así que necesita las cuatro variables `DSPACER_*`: sin ellas no
+hay catálogo que leer y el comando falla en el arranque. Cada activo se obtiene
+negociando su contrato con el conector de su proveedor, de modo que el tiempo del
+comando lo marca el número de activos ofrecidos, no el tamaño de los ficheros.
+Los proveedores que fallen se aíslan y se reportan en los avisos de la ejecución.
 
 ## 5. Verificación
 

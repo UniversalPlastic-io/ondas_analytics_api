@@ -1,7 +1,7 @@
 # Data space sync + identity — operations
 
 How to run the ONDAs API now that it serves Blue Resilience from Mongo.
-Design rationale: [`superpowers/specs/2026-08-19-dataspace-sync-and-identity-design.md`](superpowers/specs/2026-08-19-dataspace-sync-and-identity-design.md).
+Design rationale: [`dspacer-integration.md`](dspacer-integration.md).
 
 ---
 

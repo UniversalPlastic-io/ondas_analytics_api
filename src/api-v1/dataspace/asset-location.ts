@@ -20,27 +20,32 @@ export interface Correction {
 /**
  * Corrections by asset id.
  *
- * Keyed by id rather than by name because the id is the only stable handle: a
- * provider can rename an asset at any time, and a correction that silently
- * stopped applying would put a marker back in the sea off West Africa without
- * anything failing.
+ * Keyed by id rather than by name because within one publication the id is the
+ * only stable handle: a provider can rename an asset at any time, and a
+ * correction that silently stopped applying would put a marker back in the sea
+ * off West Africa without anything failing.
+ *
+ * The trade-off is that republishing changes the id, and these keys must then be
+ * refreshed with the table — `npm run assets:refresh` reports the new ids. The
+ * corrections below have not been re-verified against the republished data,
+ * because transfers do not resolve yet: they are kept because the defect they
+ * describe is in the source file, not in the publication.
  */
 export const CORRECTIONS: Record<string, Correction> = {
-  // Innoceana — Recogidas playas Tenerife
-  'ddadf21b-0c4d-40c8-97d7-e5cf902a5024': {
+  // Innoceana — Recogidas playas Tenerife_v1.1
+  'f2aec864-8a58-42d9-9231-19cad86968fc': {
     location: { lat: 28.1876084, lon: -16.6595858 },
     note: 'coords corrected 31.483,-11.926 → Tenerife (28.188,-16.660)',
   },
-  // Gijon Surf Hostel — Recogidas playas Gijón
-  '54c625fb-285c-40dd-be28-75c6806ddd71': {
-    location: { lat: 43.5721291, lon: -5.7212135 },
-    note: 'coords corrected 31.483,-11.926 → Gijón (43.572,-5.721)',
-  },
-  // Universal Plastic — Boya biomasa Gijón
-  '71034599-0830-44a8-a4bd-5f7aea885536': {
+  // Universal Plastic — Boya biomasa Gijón_v1.1
+  'c8ef3fe3-c966-4e63-a003-f3615ad94c71': {
     lonSign: -1,
     note: 'location.lon corrected +5.679 → -5.679',
   },
+  // Gijón's cleanup dataset carried the same wrong coordinates as Tenerife's,
+  // but it was not republished in the `_v1.1` round: no asset in the space is
+  // a `recogidas_playa` for Gijón any more. The correction is re-added, keyed
+  // by the new id, when the provider publishes it again.
 };
 
 /** Distance beyond which an asset's own coordinates are rejected for its station. */

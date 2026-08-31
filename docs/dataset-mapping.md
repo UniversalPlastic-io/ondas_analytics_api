@@ -1,33 +1,15 @@
 # Dataset Mapping
 
-> **Scope.** The dataset types, their schemas, units and known data-quality issues
-> below are **independent of where the data comes from** — they describe what a
-> participant publishes, not how it is fetched. They are the reference for the
-> container validation and the field normalizer.
+> **Scope.** The dataset types below, their schemas, units and known data-quality
+> issues, describe **what a participant publishes** — not how it is fetched. They
+> are the reference for the container validation and the field normalizer, and
+> they hold whichever way the data reaches us.
 >
-> The sections marked *(legacy source layout)* describe the object-storage layout
-> that preceded consumption through the data space connector. They are kept because
-> the read model still carries the corrections derived from them, and because they
-> document the provenance of every dataset currently ingested. The current flow is
-> in [dspacer-integration.md](dspacer-integration.md).
-
-**Bucket:** `universalplastic-sedia`  
-**Region:** `eu-central-1`  
-**Base URL:** `https://universalplastic-sedia.s3.eu-central-1.amazonaws.com/public/`
-
----
-
-## Ocean Mapping Strategy *(legacy source layout)*
-
-When a location is received (lat/lon), the API selects the closest ocean basin and loads data from the corresponding S3 prefix.
-
-| Ocean | S3 Prefix | Coverage |
-|-------|-----------|----------|
-| Mediterráneo | `public/mediterraneo/` | Barcelona, Badalona, Blanes |
-| Atlántico | `public/atlantico/` | Cádiz, Tenerife (Canary Islands) |
-| Cantábrico | `public/catambrico/` | Gijón |
-
-> **Note:** the S3 prefix uses `catambrico` (typo), not `cantabrico`.
+> How it reaches us is in [dspacer-integration.md](dspacer-integration.md): the
+> API negotiates a contract per asset with each provider's connector. There is no
+> path, prefix or folder to look up here; the catalog is the inventory, and the
+> mapping from asset id to dataset type lives in
+> [`asset-map.ts`](../src/api-v1/dataspace/source/asset-map.ts).
 
 ---
 
@@ -69,7 +51,7 @@ Two dataset formats exist:
 
 ### `recogidas_playa` — Coastal plastic cleanup (App UP v7)
 
-**Metadata schema:** [`recogidas_plastico_app_up_v700_v1.jsonld`](https://universalplastic-sedia.s3.eu-central-1.amazonaws.com/public/metadatos/recogidas_plastico_app_up_v700_v1.jsonld)  
+**Metadata schema:** [`recogidas_plastico_app_up_v700_v1.jsonld`](../metadata/DCAT/recogidas_plastico_app_up_v700.jsonld)  
 **Format:** `rows` — one record per cleanup event  
 **Date format:** `YYYY-MM-DD`
 
@@ -106,7 +88,7 @@ Two dataset formats exist:
 
 ### `boya_biomasa_slx+` — Fish biomass buoy (Satlink SLX+)
 
-**Metadata schema:** [`boya_biomasa_slx+_v1.jsonld`](https://universalplastic-sedia.s3.eu-central-1.amazonaws.com/public/metadatos/boya_biomasa_slx%2B_v1.jsonld)  
+**Metadata schema:** [`boya_biomasa_slx+_v1.jsonld`](../metadata/DCAT/boya_biomasa_slx+.jsonld)  
 **Format:** `rows` — multiple readings per day  
 **Date format:** `YYYY-MM-DD`
 
@@ -133,7 +115,7 @@ High-frequency data: many readings per day, 868–3611 records per file.
 
 ### `boya_microplasticos_seabot` — Microplastics buoy (Seabot / µFTIR)
 
-**Metadata schema:** [`boya_microplasticos_seabot_v1.jsonld`](https://universalplastic-sedia.s3.eu-central-1.amazonaws.com/public/metadatos/boya_microplasticos_seabot_v1.jsonld)  
+**Metadata schema:** [`boya_microplasticos_seabot_v1.jsonld`](../metadata/DCAT/boya_microplasticos_seabot.jsonld)  
 **Format:** `rows` — one record per plastic particle detected  
 **Date format:** `DD-MM-YYYY` ← differs from all other datasets
 
@@ -161,7 +143,7 @@ Polymer identification method: micro-Fourier Transform Infrared Spectroscopy (µ
 
 ### `atmosfera_previa_evento` — Atmospheric data, pre-event window (ERA5 / CDS)
 
-**Metadata schema:** [`atmosfera_cds_v1.jsonld`](https://universalplastic-sedia.s3.eu-central-1.amazonaws.com/public/metadatos/atmosfera_cds_v1.jsonld)  
+**Metadata schema:** `atmosfera_cds_v1.jsonld` *(published in the space; not versioned in this repository)*  
 **Format:** `rows` — **nested structure**: each top-level record represents one cleanup event with 7 days of prior daily atmospheric readings embedded inside  
 **Date format:** `YYYY-MM-DD`
 
@@ -211,7 +193,7 @@ One top-level record per cleanup event; nested `records` array has 7–8 daily e
 
 ### `oceanografia_previa_evento` — Oceanographic data, pre-event window (Copernicus Marine / CMEMS)
 
-**Metadata schema:** [`oceanografia_cdse_v1.jsonld`](https://universalplastic-sedia.s3.eu-central-1.amazonaws.com/public/metadatos/oceanografia_cdse_v1.jsonld)  
+**Metadata schema:** `oceanografia_cdse_v1.jsonld` *(published in the space; not versioned in this repository)*  
 **Format:** `rows` — same **nested structure** as `atmosfera_previa_evento`  
 **Date format:** `YYYY-MM-DD`
 
@@ -257,7 +239,7 @@ One top-level record per cleanup event; nested `records` array has 7–8 daily e
 
 ### `environmental_boya` — Environmental/met-ocean buoy (Meteomatics)
 
-**Metadata schema:** [`environmental_meteomatics_v1.jsonld`](https://universalplastic-sedia.s3.eu-central-1.amazonaws.com/public/metadatos/environmental_meteomatics_v1.jsonld)  
+**Metadata schema:** [`environmental_meteomatics_v1.jsonld`](../metadata/DCAT/meteorología_cdse_vl.jsonld)  
 **Format:** `columnar` — parallel arrays indexed by `Date` + `Time`  
 **Date format:** `YYYY-MM-DD`, **Time:** `HH:MM:SS`
 
@@ -304,134 +286,49 @@ High-frequency: hourly readings, 1537–3865 records per file. This is the riche
 
 ---
 
-## Datasets by Ocean and Provider
-
-### Mediterráneo
-
-| File | datasetType | Provider ID | Location (lat, lon) | Records | Date range | Format |
-|------|-------------|-------------|---------------------|---------|------------|--------|
-| `innoceana/recogidas_playas_barcelona.json` | `recogidas_playa` | `innoceana` | 41.670, 2.790 | 2 | 2025-09-20 → 2025-11-10 | rows |
-| `port_badalona/boya_biomasa_badalona.json` | `boya_biomasa_slx+` | `portbadalona` | 41.434, 2.243 | 3611 | 2025-12-06 → 2026-05-11 | rows |
-| `port_badalona/boya_microplasticos_badalona.json` | `boya_microplasticos_seabot` | `portbadalona` | 41.434, 2.243 | 105 | 2026-02-18 (single day) | rows |
-| `universal_plastic/atmosfera_badalona.json` | `atmosfera_previa_evento` | `universal_plastic` | 41.438, 2.244 | 1 event | 2025-10-31 → 2025-11-07 | rows (nested) |
-| `universal_plastic/atmosfera_barcelona.json` | `atmosfera_previa_evento` | `universal_plastic` | — | 1 event | 2025-11-03 → 2025-11-10 | rows (nested) |
-| `universal_plastic/atmosfera_blanes.json` | `atmosfera_previa_evento` | `universal_plastic` | — | 1 event | 2026-01-08 → 2026-01-15 | rows (nested) |
-| `universal_plastic/environmental_badalona.json` | `environmental_boya` | `universal_plastic` | 41.434, 2.243 | 3865 | 2025-11-28 → 2026-05-08 | columnar |
-| `universal_plastic/oceanografia_badalona.json` | `oceanografia_previa_evento` | `universal_plastic` | 41.438, 2.244 | 1 event | 2025-10-31 → 2025-11-07 | rows (nested) |
-| `universal_plastic/oceanografia_barcelona.json` | `oceanografia_previa_evento` | `universal_plastic` | — | 1 event | 2025-11-03 → 2025-11-10 | rows (nested) |
-| `universal_plastic/oceanografia_blanes.json` | `oceanografia_previa_evento` | `universal_plastic` | — | 1 event | 2026-01-08 → 2026-01-15 | rows (nested) |
-| `universal_plastic/recogidas_playas_badalona.json` | `recogidas_playa` | `universal\`plastic` ⚠ | 41.438, 2.244 | 1 | 2025-11-07 | rows |
-| `universal_plastic/recogidas_playas_blanes.json` | `recogidas_playa` | `universal\`plastic` ⚠ | — | 1 | 2026-01-15 | rows |
-
----
-
-### Atlántico
-
-| File | datasetType | Provider ID | Location (lat, lon) | Records | Date range | Format |
-|------|-------------|-------------|---------------------|---------|------------|--------|
-| `innoceana/recogidas_playa_tenerife.json` | `recogidas_playa` | `innoceana` | 31.483, -11.926 ⚠ | 8 | 2025-04-10 → 2025-11-10 | rows |
-| `universal_plastic/atmosfera_tenerife.json` | `atmosfera_previa_evento` | `universal_plastic` | 28.188, -16.660 | 7 events | 2025-04-03 → 2026-04-07 | rows (nested) |
-| `universal_plastic/boya_biomasa_cadiz.json` | `boya_biomasa_slx+` | `universalplastic` | 36.396, -6.208 | 1544 | 2026-03-10 → 2026-05-11 | rows |
-| `universal_plastic/environmental_cadiz.json` | `environmental_boya` | `universal_plastic` | 36.530, -6.290 | 1537 | 2026-03-05 → 2026-05-08 | columnar |
-| `universal_plastic/oceanografia_tenerife.json` | `oceanografia_previa_evento` | `universal_plastic` | 28.188, -16.660 | 7 events | 2025-04-03 → 2026-04-07 | rows (nested) |
-
----
-
-### Cantábrico (`catambrico/`)
-
-| File | datasetType | Provider ID | Location (lat, lon) | Records | Date range | Format |
-|------|-------------|-------------|---------------------|---------|------------|--------|
-| `gijon_surf_hostel/recogidas_playas_gijon.json` | `recogidas_playa` | `gijonsurfhostel` | 31.483, -11.926 ⚠ | 8 | 2025-04-10 → 2025-11-10 | rows |
-| `universal_plastic/atmosfera_gijon.json` | `atmosfera_previa_evento` | `universal_plastic` | 43.572, -5.721 | 8 events | 2025-07-01 → 2026-04-27 | rows (nested) |
-| `universal_plastic/boya_biomasa_gijon.json` | `boya_biomasa_slx+` | `universalplastic` | 43.568, 5.679 ⚠ | 868 | 2026-01-21 → 2026-05-10 | rows |
-| `universal_plastic/environmental_gijon.json` | `environmental_boya` | `universal_plastic` | 43.575, -5.650 | 3457 | 2025-12-15 → 2026-05-08 | columnar |
-| `universal_plastic/oceanografia_gijon.json` | `oceanografia_previa_evento` | `universal_plastic` | 43.572, -5.721 | 8 events | 2025-07-01 → 2026-04-27 | rows (nested) |
-
----
-
 ## Metadata Schemas (DCAT/JSON-LD)
 
-Stored under `public/metadatos/`. Describe the expected fields and units for each dataset type. The instance metadata (publisher, license, spatial, temporal) travels inside each data file's `metadata` block.
+Each dataset type has a DCAT/JSON-LD schema describing its expected fields and
+units. Six of them are versioned in [`metadata/DCAT/`](../metadata/DCAT/) and
+linked below; the providers also publish them as assets in the space, where the
+sync recognises them by name (`esquema_datos*`, `metadatos*`) and skips them, so
+they never become assets with no observations. The *instance* metadata —
+publisher, license, spatial and temporal coverage — travels inside each dataset's
+own `metadata` block, not in the schema.
 
-| File | Dataset type | Fields described | Has data files? |
+| Schema | Dataset type | Fields described | Places offered |
 |------|-------------|-----------------|----------------|
-| [`atmosfera_cds_v1.jsonld`](https://universalplastic-sedia.s3.eu-central-1.amazonaws.com/public/metadatos/atmosfera_cds_v1.jsonld) | `atmosfera_previa_evento` | air_temperature, wind, pressure, humidity, precipitation, solar radiation, cloud cover, NAO/SOI | Yes — all 3 oceans |
-| [`oceanografia_cdse_v1.jsonld`](https://universalplastic-sedia.s3.eu-central-1.amazonaws.com/public/metadatos/oceanografia_cdse_v1.jsonld) | `oceanografia_previa_evento` | ocean currents, SST, salinity, wave height/period/direction, Stokes drift | Yes — all 3 oceans |
-| [`environmental_meteomatics_v1.jsonld`](https://universalplastic-sedia.s3.eu-central-1.amazonaws.com/public/metadatos/environmental_meteomatics_v1.jsonld) | `environmental_boya` | Combined met-ocean: humidity, cloud, precipitation, wind, solar, UV, pressure, temp, SST, salinity, swell, waves, currents, NAO/SO | Yes — Badalona, Cádiz, Gijón |
-| [`boya_biomasa_slx+_v1.jsonld`](https://universalplastic-sedia.s3.eu-central-1.amazonaws.com/public/metadatos/boya_biomasa_slx%2B_v1.jsonld) | `boya_biomasa_slx+` | Fish biomass by depth layer (Tonnes), Satlink SLX+ acoustic echosounder | Yes — Badalona, Cádiz, Gijón |
-| [`boya_microplasticos_seabot_v1.jsonld`](https://universalplastic-sedia.s3.eu-central-1.amazonaws.com/public/metadatos/boya_microplasticos_seabot_v1.jsonld) | `boya_microplasticos_seabot` | Per-particle: Size, Form, Polymer type (µFTIR), Colour | Yes — Badalona only |
-| [`recogidas_plastico_app_up_v700_v1.jsonld`](https://universalplastic-sedia.s3.eu-central-1.amazonaws.com/public/metadatos/recogidas_plastico_app_up_v700_v1.jsonld) | `recogidas_playa` | Date, GPS start/end, plastic weight (kg), participants, distance, duration, polymer composition (%) | Yes — all 3 oceans |
-| [`muestras_de_agua_py_gcms_v1.jsonld`](https://universalplastic-sedia.s3.eu-central-1.amazonaws.com/public/metadatos/muestras_de_agua_py_gcms_v1.jsonld) | *(future)* water samples | Per-polymer concentration in water (μg/L): PE, PP, PS, PVC, PET, PA, PC, PU, ABS, PMMA, POM | **No data files yet** |
-| [`muestras_de_peces_py_gcms_v1.jsonld`](https://universalplastic-sedia.s3.eu-central-1.amazonaws.com/public/metadatos/muestras_de_peces_py_gcms_v1.jsonld) | *(future)* fish samples | Per-polymer concentration in fish tissue (μg/g): same polymer list as water samples | **No data files yet** |
-
----
-
-## Folder Structure *(legacy source layout)*
-
-```
-public/
-├── metadatos/
-│   ├── atmosfera_cds_v1.jsonld
-│   ├── boya_biomasa_slx+_v1.jsonld
-│   ├── boya_microplasticos_seabot_v1.jsonld
-│   ├── environmental_meteomatics_v1.jsonld
-│   ├── muestras_de_agua_py_gcms_v1.jsonld       ← no data files yet
-│   ├── muestras_de_peces_py_gcms_v1.jsonld      ← no data files yet
-│   ├── oceanografia_cdse_v1.jsonld
-│   └── recogidas_plastico_app_up_v700_v1.jsonld
-│
-├── mediterraneo/
-│   ├── innoceana/
-│   │   └── recogidas_playas_barcelona.json       (2 records)
-│   ├── port_badalona/
-│   │   ├── boya_biomasa_badalona.json            (3611 records, hourly)
-│   │   └── boya_microplasticos_badalona.json     (105 particles, 1 day)
-│   └── universal_plastic/
-│       ├── atmosfera_badalona.json               (1 event, 8 nested days)
-│       ├── atmosfera_barcelona.json              (1 event, 8 nested days)
-│       ├── atmosfera_blanes.json                 (1 event, 8 nested days)
-│       ├── environmental_badalona.json           (3865 records, hourly, columnar)
-│       ├── oceanografia_badalona.json            (1 event, 8 nested days)
-│       ├── oceanografia_barcelona.json           (1 event, 8 nested days)
-│       ├── oceanografia_blanes.json              (1 event, 8 nested days)
-│       ├── recogidas_playas_badalona.json        (1 record)
-│       └── recogidas_playas_blanes.json          (1 record)
-│
-├── atlantico/
-│   ├── innoceana/
-│   │   └── recogidas_playa_tenerife.json         (8 records)
-│   └── universal_plastic/
-│       ├── atmosfera_tenerife.json               (7 events, 8 nested days each)
-│       ├── boya_biomasa_cadiz.json               (1544 records, hourly)
-│       ├── environmental_cadiz.json              (1537 records, hourly, columnar)
-│       └── oceanografia_tenerife.json            (7 events, 8 nested days each)
-│
-└── catambrico/                                   ← note: typo in bucket
-    ├── gijon_surf_hostel/
-    │   └── recogidas_playas_gijon.json           (8 records)
-    └── universal_plastic/
-        ├── atmosfera_gijon.json                  (8 events, 8 nested days each)
-        ├── boya_biomasa_gijon.json               (868 records, hourly, +extra depth layer)
-        ├── environmental_gijon.json              (3457 records, hourly, columnar)
-        └── oceanografia_gijon.json              (8 events, 8 nested days each)
-```
+| `atmosfera_cds_v1.jsonld` *(published in the space; not versioned in this repository)* | `atmosfera_previa_evento` | air_temperature, wind, pressure, humidity, precipitation, solar radiation, cloud cover, NAO/SOI | Badalona, Barcelona, Blanes, Gijón, Tenerife |
+| `oceanografia_cdse_v1.jsonld` *(published in the space; not versioned in this repository)* | `oceanografia_previa_evento` | ocean currents, SST, salinity, wave height/period/direction, Stokes drift | Badalona, Barcelona, Gijón, Tenerife |
+| [`environmental_meteomatics_v1.jsonld`](../metadata/DCAT/meteorología_cdse_vl.jsonld) | `environmental_boya` | Combined met-ocean: humidity, cloud, precipitation, wind, solar, UV, pressure, temp, SST, salinity, swell, waves, currents, NAO/SO | Badalona, Cádiz, Gijón |
+| [`boya_biomasa_slx+_v1.jsonld`](../metadata/DCAT/boya_biomasa_slx+.jsonld) | `boya_biomasa_slx+` | Fish biomass by depth layer (Tonnes), Satlink SLX+ acoustic echosounder | Badalona, Cádiz, Gijón |
+| [`boya_microplasticos_seabot_v1.jsonld`](../metadata/DCAT/boya_microplasticos_seabot.jsonld) | `boya_microplasticos_seabot` | Per-particle: Size, Form, Polymer type (µFTIR), Colour | Badalona, Cádiz, Gijón |
+| [`recogidas_plastico_app_up_v700_v1.jsonld`](../metadata/DCAT/recogidas_plastico_app_up_v700.jsonld) | `recogidas_playa` | Date, GPS start/end, plastic weight (kg), participants, distance, duration, polymer composition (%) | Badalona, Barcelona, Blanes, Tenerife |
+| [`muestras_de_agua_py_gcms_v1.jsonld`](../metadata/DCAT/muestras_de_agua_py_gcms.jsonld) | `muestras_de_agua_py_gcms` | Per-polymer concentration in water (μg/L): PE, PP, PS, PVC, PET, PA, PC, PU, ABS, PMMA, POM | Badalona, Gijón, Tenerife |
+| [`muestras_de_peces_py_gcms_v1.jsonld`](../metadata/DCAT/muestras_de_peces_py_gcms.jsonld) | `muestras_de_peces_py_gcms` | Per-polymer concentration in fish tissue (μg/g): same polymer list as water samples | Badalona, Gijón, Tenerife |
 
 ---
 
 ## Data Quality Issues Found
 
-| File | Issue |
-|------|-------|
-| `port_badalona/boya_microplasticos_badalona.json` | Date format is `DD-MM-YYYY` instead of `YYYY-MM-DD` |
-| `atlantico/innoceana/recogidas_playa_tenerife.json` | `location` field shows `{ lat: 31.483, lon: -11.926 }` — coordinates in the Atlantic Ocean, not Tenerife (28.1°N, 16.6°W) |
-| `catambrico/gijon_surf_hostel/recogidas_playas_gijon.json` | Same wrong coordinates as above (`lat: 31.483, lon: -11.926`), identical data to Tenerife file |
-| `catambrico/universal_plastic/boya_biomasa_gijon.json` | `location.lon = 5.679` (positive), should be `-5.679` for Gijón |
-| `mediterraneo/universal_plastic/recogidas_playas_badalona.json` | `dataProviderId` is `"universal\`plastic"` (backtick typo) |
-| `mediterraneo/universal_plastic/recogidas_playas_blanes.json` | Same backtick typo in `dataProviderId` |
-| `atlantico/universal_plastic/boya_biomasa_cadiz.json` | `dataProviderId` is `"universalplastic"` (no underscore) |
-| `catambrico/universal_plastic/boya_biomasa_gijon.json` | Same — `dataProviderId` is `"universalplastic"` (no underscore) |
-| `mediterraneo/port_badalona/boya_biomasa_badalona.json` | `dataProviderId` is `"portbadalona"` (no underscore) |
-| Multiple atmosfera/oceanografia files | `dateRange.start` is after `dateRange.end` in some cases (data entry error) |
+Keyed by dataset and place, because a provider can republish an asset under a new
+name at any time. The three coordinate defects are corrected at ingest by
+[`asset-location.ts`](../src/api-v1/dataspace/asset-location.ts), which is keyed
+by asset id and records every deviation as a warning; the identifier spellings are
+resolved by the organization's `dataProviderIds`.
+
+| Dataset | Place | Issue |
+|---|---|---|
+| `boya_microplasticos_seabot` | Badalona | Date format is `DD-MM-YYYY` instead of `YYYY-MM-DD` |
+| `recogidas_playa` (Innoceana) | Tenerife | `location` reads `{ lat: 31.483, lon: -11.926 }` — open Atlantic, ~1 000 km from Tenerife (28.1°N, 16.6°W) |
+| `recogidas_playa` (Gijón Surf Hostel) | Gijón | Same wrong coordinates, and the records are identical to the Tenerife dataset |
+| `boya_biomasa_slx+` | Gijón | `location.lon = 5.679` (positive); Gijón is at `-5.679` |
+| `recogidas_playa` | Badalona | `dataProviderId` is ``universal`plastic`` (backtick typo) |
+| `recogidas_playa` | Blanes | Same backtick typo |
+| `boya_biomasa_slx+` | Cádiz | `dataProviderId` is `universalplastic` (no underscore) |
+| `boya_biomasa_slx+` | Gijón | Same — `universalplastic` |
+| `boya_biomasa_slx+` | Badalona | `dataProviderId` is `portbadalona` (no underscore) |
+| `atmosfera_previa_evento`, `oceanografia_previa_evento` | several | `dateRange.start` after `dateRange.end` in some events |
 
 ---
 
@@ -441,79 +338,127 @@ Three categories are used below:
 
 | Symbol | Meaning |
 |--------|---------|
-| **Real** | Value taken directly from an S3 file with no modification |
-| **S3-calibrated** | Synthetic time series whose mean and std are seeded from real S3 statistics; individual daily values include random noise |
-| **Synthetic** | Entirely generated from a hash-seeded PRNG; no S3 data involved |
+| **Real** | Value taken from an ingested dataset with no modification |
+| **Calibrated** | Synthetic daily series whose mean and standard deviation are seeded from a real ingested dataset; individual daily values carry pseudo-random noise |
+| **Synthetic** | Entirely generated from a hash-seeded PRNG; no observed data involved |
+
+Every **Calibrated** row falls back to **Synthetic** when no dataset of that type
+is within reach of the requested point. Which way it went for a given run is
+readable in the response: `meta.datasetsUsed` counts the datasets actually used
+per category.
 
 ### Per-plot breakdown
 
-| # | Plot name | Variable | S3 dataset type | Data status |
+| # | Plot name | Variable | Dataset type | Data status |
 |---|-----------|----------|----------------|-------------|
-| 1 | Mean Microplastics Concentration | `mp_per_L` | — | **Synthetic** |
-| 2 | Microplastics Over Time | `mp_per_L` series | — | **Synthetic** |
-| 3 | BCF Distribution | `mp_per_L`, fish factor | — | **Synthetic** |
-| 4 | Water vs Fish Microplastics | `mp_per_L`, `mp_per_kg_fish` | — | **Synthetic** |
+| 1 | Mean Microplastics Concentration | `mp_per_L` | `muestras_de_agua_py_gcms` | **Calibrated** |
+| 2 | Microplastics Over Time | `mp_per_L` series | `muestras_de_agua_py_gcms` | **Calibrated** |
+| 3 | BCF Distribution | `mp_per_L`, fish factor | `muestras_de_agua_py_gcms` | **Calibrated** (fish factor synthetic) |
+| 4 | Water vs Fish Microplastics | `mp_per_L`, `mp_per_kg_fish` | `muestras_de_agua_py_gcms` | **Calibrated** (`mp_per_kg_fish` synthetic) |
 | 5 | Polymer Correlation | polymer composition % | — | **Synthetic** |
-| 6 | Exposure Index | `mp_per_L` | — | **Synthetic** |
-| 6 | Exposure Index | `biomass` (daily Tonnes) | `boya_biomasa_slx+` | **S3-calibrated** |
-| 7 | Plastic Pressure Composition | `mp_per_L` | — | **Synthetic** |
-| 7 | Plastic Pressure Composition | `kgTotal`, `coastLengthKm` | `recogidas_playa` | **S3-calibrated** |
-| 8 | Coastal Pressure Index (IPC) | `kgTotal`, `coastLengthKm` | `recogidas_playa` | **S3-calibrated** |
-| 8 | Coastal Pressure Index (IPC) | `envFactor` (from `wind_speed`) | `environmental_boya` | **S3-calibrated** |
-| 9 | Coastal Source Index (CSI) | `mp_per_L` | — | **Synthetic** |
-| 9 | Coastal Source Index (CSI) | `kgTotal` | `recogidas_playa` | **S3-calibrated** |
-| 10 | Spatial Distribution of Impact | `mp_per_L` (mean) | — | **Synthetic** |
-| 11 | Basic Contamination Summary | `mp_per_L` mean/std/cv | — | **Synthetic** |
+| 6 | Exposure Index | `mp_per_L` | `muestras_de_agua_py_gcms` | **Calibrated** |
+| 6 | Exposure Index | `biomass` (daily Tonnes) | `boya_biomasa_slx+` | **Calibrated** |
+| 7 | Plastic Pressure Composition | `mp_per_L` | `muestras_de_agua_py_gcms` | **Calibrated** |
+| 7 | Plastic Pressure Composition | `kgTotal`, `coastLengthKm` | `recogidas_playa` | **Calibrated** |
+| 8 | Coastal Pressure Index (IPC) | `kgTotal`, `coastLengthKm` | `recogidas_playa` | **Calibrated** |
+| 8 | Coastal Pressure Index (IPC) | `envFactor` (from `wind_speed`) | `environmental_boya` | **Calibrated** |
+| 9 | Coastal Source Index (CSI) | `mp_per_L` | `muestras_de_agua_py_gcms` | **Calibrated** |
+| 9 | Coastal Source Index (CSI) | `kgTotal` | `recogidas_playa` | **Calibrated** |
+| 10 | Spatial Distribution of Impact | `mp_per_L` (mean) | `muestras_de_agua_py_gcms` | **Calibrated** |
+| 11 | Basic Contamination Summary | `mp_per_L` mean/std/cv | `muestras_de_agua_py_gcms` | **Calibrated** |
 | 12 | Buoy vs Water Concordance | `buoyPolymers` | `boya_microplasticos_seabot` | **Real** |
-| 12 | Buoy vs Water Concordance | `waterPolymers` | — | **Synthetic** |
+| 12 | Buoy vs Water Concordance | `waterPolymers` | `muestras_de_agua_py_gcms` | **Real** |
 | 13 | Water vs Fish Polymer Similarity | polymer composition % | — | **Synthetic** |
 
-> `mp_per_L` is kept synthetic for all plots because no `muestras_de_agua_py_gcms` data files exist yet in S3.
+> **`mp_per_L` changed status.** It used to be synthetic in every plot, because no
+> `muestras_de_agua_py_gcms` dataset was published anywhere. One is now offered in
+> the space (Gijón), and the engine already reads it: when a water-sample dataset
+> is near the requested point, the series is centred on its real mean with its real
+> standard deviation as the half-width, and `waterPolymers` is the observed polymer
+> list rather than a drawn one. Without one, `mp_per_L` falls back to a value
+> derived from the coordinates and the radius — see the comment at
+> [`analyses.service.ts`](../src/api-v1/analyses/analyses.service.ts) where
+> `s3MpBase` is resolved. The precision report has not yet been re-run against
+> this: [`validacion-precision.md`](validacion-precision.md) still describes the
+> earlier state.
 
 ---
 
 ### Nearest dataset selected per reference location
 
-The API uses equirectangular nearest-neighbor matching independently per dataset type. The table below shows which S3 file is selected for each of the six known geographic locations.
+Selection is equirectangular nearest-neighbour, independently per dataset type,
+over the read model — not over a file listing. The table is a snapshot of the
+current coverage, computed from the station reference points: publish a dataset
+closer to a location and the winner changes, with no code change. Distances are
+shown where the winner is not the location itself.
 
-| Request location | `boya_biomasa` → biomass base | `recogidas_playa` → kg base, coast km | `environmental_boya` → env factor | `boya_microplasticos` → buoy polymers |
-|---|---|---|---|---|
-| **Badalona** (41.43, 2.24) | `boya_biomasa_badalona` | `recogidas_playas_badalona` | `environmental_badalona` | `boya_microplasticos_badalona` |
-| **Barcelona** (41.67, 2.79) | `boya_biomasa_badalona` | `recogidas_playas_barcelona` | `environmental_badalona` | `boya_microplasticos_badalona` |
-| **Blanes** (41.68, 2.80) | `boya_biomasa_badalona` | `recogidas_playas_blanes` | `environmental_badalona` | `boya_microplasticos_badalona` |
-| **Cádiz** (36.53, -6.29) | `boya_biomasa_cadiz` | `recogidas_playas_gijon` ¹ | `environmental_cadiz` | `boya_microplasticos_badalona` |
-| **Tenerife** (28.19, -16.66) | `boya_biomasa_cadiz` ² | `recogidas_playa_tenerife` | `environmental_cadiz` ² | `boya_microplasticos_badalona` |
-| **Gijón** (43.57, -5.72) | `boya_biomasa_gijon` | `recogidas_playas_gijon` | `environmental_gijon` | `boya_microplasticos_badalona` |
+| Request location | `boya_biomasa` → biomass base | `recogidas_playa` → kg base, coast km | `environmental_boya` → env factor | `boya_microplasticos` → buoy polymers | `muestras_de_agua` → `mp_per_L` |
+|---|---|---|---|---|---|
+| **Badalona** (41.43, 2.24) | Badalona | Badalona | Badalona | Badalona | Badalona |
+| **Barcelona** (41.67, 2.79) | Badalona (52 km) | Barcelona | Badalona (52 km) | Badalona (52 km) | Badalona (52 km) |
+| **Blanes** (41.68, 2.79) | Badalona (53 km) | Blanes | Badalona (53 km) | Badalona (53 km) | Badalona (53 km) |
+| **Cádiz** (36.53, -6.29) | Cádiz | Badalona (917 km) | Cádiz | Cádiz | Gijón (785 km) |
+| **Tenerife** (28.19, -16.66) | Cádiz (1 345 km) | Tenerife | Cádiz (1 345 km) | Cádiz (1 345 km) | Tenerife |
+| **Gijón** (43.57, -5.72) | Gijón | Badalona (695 km) | Gijón | Gijón | Gijón |
 
-¹ Gijón is the nearest cleanup site to Cádiz (~787 km) because no `recogidas_playa` file exists for the Atlantic coast of mainland Spain.  
-² No `boya_biomasa` or `environmental_boya` exists for Tenerife/Canaries; Cádiz is the nearest Atlantic file (~1 090 km).  
-`boya_microplasticos` data exists only for Badalona — all locations fall back to it.
+One gap dominates this table: **`recogidas_playa` no longer covers Gijón**. It did
+before the republication round; `Recogidas playas Gijón_v1.1` was never published,
+so a request at Gijón now takes its cleanup figures from Badalona, 695 km away,
+and Cádiz from Badalona at 917 km. Every indicator built on `kgTotal` — the
+coastal pressure index among them — is affected at both locations. At those
+distances the value is a coverage artefact rather than a local measurement, which
+is why every response reports the datasets it actually used in
+`meta.datasetsUsed`.
 
 ---
 
 ### Analysis archive upload path
 
-When `options.savePlotsWebp: true`, the full result is also uploaded to the data bucket. The ocean is determined by the same nearest-neighbor logic applied to the whole catalogue:
+The only object storage left in this document, and it is a **write**: the API
+archives what it produces. Nothing is ever read back from it.
+
+With `options.savePlotsWebp: true` the full result is uploaded under the basin of
+the requested point:
 
 ```
-s3://universalplastic-sedia/public/{ocean}/universal_plastic/analise-{requestId}/
+public/{ocean}/universal_plastic/analise-{YYYY-MM-DD}/
   report.pdf     ← all 13 plots, one page each
   result.json    ← full API response JSON
 ```
+
+The folder is dated, not per request, so two runs on the same day and the same
+basin overwrite each other. The basin comes from `AssetsRepository.oceanFor()`,
+which asks the read model for
+the nearest **observed** dataset and returns its ocean. Calibration series are
+excluded on purpose: one of them sits in open water off the Balearics and would
+file Atlantic runs under the Mediterranean. When nothing places the point the
+folder is `sin-ubicar`, never a real basin guessed by default.
 
 | Ocean | Covers locations |
 |-------|-----------------|
 | `mediterraneo` | Badalona, Barcelona, Blanes |
 | `atlantico` | Cádiz, Tenerife |
 | `catambrico` | Gijón |
+| `sin-ubicar` | anything the read model cannot place |
 
 ---
 
 ## Known Gaps
 
-- **Water samples** (`muestras_de_agua_py_gcms`) and **fish samples** (`muestras_de_peces_py_gcms`) have metadata schemas but no data files in any ocean.
-- **Microplastics buoy** (`boya_microplasticos_seabot`) data only exists for Badalona (Mediterráneo) — missing for Atlántico and Cantábrico.
-- **bcss** provider folder is referenced in the path convention but has no files in any ocean.
-- Atlántico has no atmospheric data for Cádiz, and no coastal cleanup for Cádiz.
+- **Water samples** (`muestras_de_agua_py_gcms`) and **fish samples**
+  (`muestras_de_peces_py_gcms`) are both published for Badalona, Gijón and
+  Tenerife. The engine reads the water series; the fish series is not wired into
+  any indicator yet (`meta.datasetsUsed.fish_samples` is hard-coded to 0).
+- **Microplastics buoy** (`boya_microplasticos_seabot`) now covers Badalona, Cádiz and Gijón; the Canaries have none.
+- **BCSS** is a participant in the space and its connector answers, but it offers no dataset to us.
+- Cádiz has no atmospheric or oceanographic data, and **no location on the Atlantic
+  or Cantabrian coast has a cleanup dataset any more**: `recogidas_playa` covers
+  Badalona, Barcelona, Blanes and Tenerife only.
+- **Blanes has no `oceanografia_previa_evento`.** The asset was not republished;
+  its contract offer is attached to the *Atmósfera Blanes* asset instead, which
+  therefore carries two offers. Consuming the second would return atmospheric data
+  under an oceanographic name.
+- The **schema assets** (`esquema_datos*`, `metadatos*`) were not restored in the
+  republication round. The sync still recognises and skips them by name.
 - `atmosfera_previa_evento` and `oceanografia_previa_evento` contain very few events per location (1–8 cleanup events); they are event-relative snapshots, not continuous time series.
 - The `environmental_boya` files are the only true continuous time-series covering months of hourly data and combining both atmospheric and oceanographic variables.

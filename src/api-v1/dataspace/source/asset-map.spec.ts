@@ -79,7 +79,6 @@ describe('classifyEntry against the live catalogs', () => {
   it('classifies every dataset offered by every provider', () => {
     const unresolved: string[] = [];
     let classified = 0;
-    let skipped = 0;
 
     for (const [file, name] of [
       ['catalog-innoceana.json', 'Innoceana'],
@@ -88,19 +87,33 @@ describe('classifyEntry against the live catalogs', () => {
     ] as const) {
       for (const entry of entriesFrom(file, name)) {
         const res = classifyEntry(entry);
-        if (res.skipped) skipped += 1;
-        else if (res.classified) classified += 1;
+        if (res.skipped) continue;
+        if (res.classified) classified += 1;
         else unresolved.push(`${entry.provider}/${entry.ref.label}`);
       }
     }
 
-    expect(unresolved).toEqual([]);
+    // UP publishes five calibration series with no place in their name — they
+    // are not measurements of anywhere — so the table cannot key them by
+    // station. They are the only assets allowed to go unresolved; anything else
+    // appearing here is a dataset the read model would silently drop.
+    expect(unresolved.map((u) => u.replace(/^.*\//, '').trim()).sort()).toEqual(
+      [
+        'Boya_biomasa_referencia',
+        'Boya_microplasticos_referencia.',
+        'Environmental_referencia',
+        'Recogidas_playas_referencia',
+        'muestras_de_agua_referencia',
+      ].sort(),
+    );
     expect(classified).toBeGreaterThan(0);
-    expect(skipped).toBeGreaterThan(0);
   });
 
   it('resolves a third-party dataset to the right type and place', () => {
-    const [tenerife] = entriesFrom('catalog-innoceana.json', 'Innoceana');
+    const tenerife = entriesFrom('catalog-innoceana.json', 'Innoceana').find(
+      (e) => /recogidas playas tenerife/i.test(e.ref.label),
+    )!;
+    expect(tenerife).toBeDefined();
     const { classified, warning } = classifyEntry(tenerife);
     expect(warning).toBeNull();
     expect(classified).toMatchObject({
@@ -114,16 +127,31 @@ describe('classifyEntry against the live catalogs', () => {
   });
 
   it('skips schema and metadata assets silently', () => {
-    const entries = entriesFrom(
+    // The `_v1.1` republication round did not restore the schema assets, so the
+    // live catalogs currently hold none. The rule still has to hold: they were
+    // there before and will be again, and ingesting one would create an asset
+    // with no observations and no location.
+    for (const label of [
+      'esquema_datos_recogidas_plastico_app_up_v700_v1',
+      'metadatos_boya_biomasa_slx+',
+    ]) {
+      const res = classifyEntry({
+        ref: { id: '00000000-0000-4000-8000-00000000000e', label },
+        provider: 'Universal Plastic',
+        formats: [],
+      });
+      expect(res.skipped).toBe(true);
+      expect(res.classified).toBeNull();
+      expect(res.warning).toBeNull();
+    }
+
+    const offered = entriesFrom(
       'catalog-universal-plastic.json',
       'Universal Plastic',
     );
-    const schema = entries.find((e) => /esquema|metadatos/i.test(e.ref.label));
-    expect(schema).toBeDefined();
-    const res = classifyEntry(schema!);
-    expect(res.skipped).toBe(true);
-    expect(res.classified).toBeNull();
-    expect(res.warning).toBeNull();
+    expect(
+      offered.filter((e) => /esquema|metadatos/i.test(e.ref.label)),
+    ).toEqual([]);
   });
 });
 
@@ -171,8 +199,12 @@ describe('classifyEntry on assets the table does not cover', () => {
   });
 
   it('marks a republished asset as unchanged in kind, not as a new dataset type', () => {
-    const base = classifyEntry(unknown('Boya microplásticos Cádiz')).classified!;
-    const republished = classifyEntry(unknown('Boya microplásticos  Cádiz_v1.1')).classified!;
+    const base = classifyEntry(
+      unknown('Boya microplásticos Cádiz'),
+    ).classified!;
+    const republished = classifyEntry(
+      unknown('Boya microplásticos  Cádiz_v1.1'),
+    ).classified!;
     expect(republished.datasetType).toBe(base.datasetType);
     expect(republished.place).toBe(base.place);
     expect(republished.ocean).toBe(base.ocean);

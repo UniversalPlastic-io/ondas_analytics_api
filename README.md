@@ -243,6 +243,7 @@ vez**. Guárdala antes de cerrar la terminal, o regenérala después con
 | `npm run backfill` | Carga inicial del read model desde el catálogo del espacio de datos |
 | `npm run reference:generate` | Regenera las series de referencia en `output/reference/` |
 | `npm run assets:refresh` | Compara `ASSET_MAP` con el catálogo real (`-- --write` para reescribirla) |
+| `npm run fixtures:refresh` | Recaptura los catálogos reales sobre los que corren las pruebas de `dataspace/source` |
 | `npm run openapi:generate` | Regenera `docs/openapi.json` a partir de los decoradores |
 | `npm run validate:precision` | Informe de validación: fidelidad de ingesta, exactitud de agregación, reproducibilidad y cobertura |
 | `npm run users:export` · `npm run users:reset` | Exportar usuarios / restablecer contraseña |

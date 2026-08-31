@@ -196,9 +196,10 @@ describe('DspacerSource.get', () => {
 describe('DspacerSource.classify', () => {
   it('classifies a real catalog entry', async () => {
     const { entries } = await source().list();
-    const tenerife = entries.find(
-      (e) => e.ref.id === 'ddadf21b-0c4d-40c8-97d7-e5cf902a5024',
+    const tenerife = entries.find((e) =>
+      /recogidas playas tenerife/i.test(e.ref.label),
     )!;
+    expect(tenerife).toBeDefined();
     expect(source().classify(tenerife)).toMatchObject({
       datasetType: 'recogidas_playa',
       ocean: 'atlantico',

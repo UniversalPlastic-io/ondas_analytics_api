@@ -1,0 +1,193 @@
+{
+  "@id": "612af11a-a210-41e8-90ce-6c2cac3dc298",
+  "@type": "dcat:Catalog",
+  "dcat:dataset": [
+    {
+      "@id": "61dbcb02-3b44-410f-a26b-5a8f52d69f14",
+      "@type": "dcat:Dataset",
+      "odrl:hasPolicy": {
+        "@id": "TXVlc3RyYXMgYWd1YSBHaWrDs25fdjEuMQ==:NjFkYmNiMDItM2I0NC00MTBmLWEyNmItNWE4ZjUyZDY5ZjE0:ZmIxOTc5N2YtZjNkYy00ZDIxLTgxNWUtZTcwZDFlMmIzNjI1",
+        "@type": "odrl:Offer",
+        "odrl:permission": {
+          "odrl:action": {
+            "@id": "USE"
+          },
+          "odrl:constraint": {
+            "odrl:or": {
+              "odrl:leftOperand": {
+                "@id": "BusinessPartnerNumber"
+              },
+              "odrl:operator": {
+                "@id": "odrl:eq"
+              },
+              "odrl:rightOperand": "BPNL000000000000001"
+            }
+          }
+        },
+        "odrl:prohibition": [],
+        "odrl:obligation": []
+      },
+      "dcat:distribution": [
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AzureStorage-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "1528fda7-cca4-490f-af92-003d886f63c3",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-5-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-5-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PULL"
+          },
+          "dcat:accessService": {
+            "@id": "1528fda7-cca4-490f-af92-003d886f63c3",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-5-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-5-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "1528fda7-cca4-490f-af92-003d886f63c3",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-5-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-5-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AmazonS3-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "1528fda7-cca4-490f-af92-003d886f63c3",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-5-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-5-controlplane.tx.test/api/v1/dsp"
+          }
+        }
+      ],
+      "name": "Muestras agua Gijón_v1.1",
+      "description": "Concentración de microplásticos en muestras de agua, expresada en microgramos por litro (µg/L). Incluye 12 tipos de polímeros plásticos: Polietileno, Polipropileno, Poliestireno, Cloruro de polivinilo, Tereftalato de polietileno, Poliamida, Policarbonato, Poliuretano, Poli(metacrilato de metilo), Acrilonitrilo-butadieno-estireno, Acetato de polivinilo y Alcohol polivinílico. ",
+      "id": "61dbcb02-3b44-410f-a26b-5a8f52d69f14"
+    },
+    {
+      "@id": "18fb392a-70e6-4769-a102-7eefe14e8f20",
+      "@type": "dcat:Dataset",
+      "odrl:hasPolicy": {
+        "@id": "IFJlY29naWRhcyBwbGF5YXMgQmFyY2Vsb25hX3YxLjE=:MThmYjM5MmEtNzBlNi00NzY5LWExMDItN2VlZmUxNGU4ZjIw:YjFkMDRkNGQtMDE2MS00N2NjLThjNjMtOWQ3NmI2ZDQxYzc4",
+        "@type": "odrl:Offer",
+        "odrl:permission": {
+          "odrl:action": {
+            "@id": "USE"
+          },
+          "odrl:constraint": {
+            "odrl:or": {
+              "odrl:leftOperand": {
+                "@id": "BusinessPartnerNumber"
+              },
+              "odrl:operator": {
+                "@id": "odrl:eq"
+              },
+              "odrl:rightOperand": "BPNL000000000000001"
+            }
+          }
+        },
+        "odrl:prohibition": [],
+        "odrl:obligation": []
+      },
+      "dcat:distribution": [
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AzureStorage-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "1528fda7-cca4-490f-af92-003d886f63c3",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-5-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-5-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PULL"
+          },
+          "dcat:accessService": {
+            "@id": "1528fda7-cca4-490f-af92-003d886f63c3",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-5-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-5-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "1528fda7-cca4-490f-af92-003d886f63c3",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-5-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-5-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AmazonS3-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "1528fda7-cca4-490f-af92-003d886f63c3",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-5-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-5-controlplane.tx.test/api/v1/dsp"
+          }
+        }
+      ],
+      "name": "Recogidas playas Barcelona_v1.1 ",
+      "description": "Dataset de ciencia ciudadana generado por la app móvil Universal Plastic v7.0.0, plataforma de economía azul. Permite registrar limpiezas de plásticos costeros capturando kg totales, participantes, duración, distancia y composición (PET/HDPE/PVC/LDPE/PP/PS en %) vía IA en imágenes. Implementa un sistema de dMRV (digital Measurement, Reporting and Verification) para medición, reporte y verificación automatizada y trazable de residuos.   \n",
+      "id": "18fb392a-70e6-4769-a102-7eefe14e8f20"
+    }
+  ],
+  "dcat:catalog": [],
+  "dcat:distribution": [],
+  "dcat:service": {
+    "@id": "1528fda7-cca4-490f-af92-003d886f63c3",
+    "@type": "dcat:DataService",
+    "dcat:endpointDescription": "dspace:connector",
+    "dcat:endpointUrl": "http://dataprovider-5-controlplane.tx.test/api/v1/dsp",
+    "dcat:endpointURL": "http://dataprovider-5-controlplane.tx.test/api/v1/dsp"
+  },
+  "dspace:participantId": "BPNL000000000000005",
+  "@context": {
+    "tx": "https://w3id.org/tractusx/v0.0.1/ns/",
+    "tx-auth": "https://w3id.org/tractusx/auth/",
+    "cx-policy": "https://w3id.org/catenax/policy/",
+    "dcat": "http://www.w3.org/ns/dcat#",
+    "dct": "http://purl.org/dc/terms/",
+    "odrl": "http://www.w3.org/ns/odrl/2/",
+    "dspace": "https://w3id.org/dspace/v0.8/",
+    "@vocab": "https://w3id.org/edc/v0.0.1/ns/",
+    "edc": "https://w3id.org/edc/v0.0.1/ns/"
+  }
+}

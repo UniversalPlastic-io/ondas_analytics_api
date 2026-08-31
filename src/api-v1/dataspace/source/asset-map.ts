@@ -40,45 +40,45 @@ export interface MappedAsset {
   name: string;
 }
 
-/** Datasets, by asset id. Generated from the live catalogs on 31/08/2026. */
+/** Datasets, by asset id. Regenerate with `npm run assets:refresh -- --write`. */
 export const ASSET_MAP: Record<string, MappedAsset> = {
   // ---- bcss
-  'ede82a3c-2859-47e7-a586-45dff1de2897': {
+  '9c4e7965-4d14-4118-99d3-309126bd0bc7': {
     datasetType: 'muestras_de_peces_py_gcms',
     ocean: 'mediterraneo',
     place: 'badalona',
     providerFolder: 'bcss',
-    name: 'muestras_peces_badalona',
+    name: 'Muestras de peces Badalona_v1.1',
   },
-  '6c72fc6a-e233-49e0-8fdb-940c3e6ded21': {
+  'a3a71799-312f-43dd-8216-10977dfc006d': {
     datasetType: 'muestras_de_peces_py_gcms',
     ocean: 'catambrico',
     place: 'gijon',
     providerFolder: 'bcss',
-    name: 'muestras_peces_gijon',
+    name: 'Muestras de peces Gijón_v1.1',
   },
-  '3735082f-9ed1-4c07-b96f-518b92234bb0': {
+  '3899d574-db64-42de-a58f-4a282a487b95': {
     datasetType: 'muestras_de_peces_py_gcms',
     ocean: 'atlantico',
     place: 'tenerife',
     providerFolder: 'bcss',
-    name: 'muestras_peces_tenerife',
+    name: 'Muestras de peces Tenerife_v1.1',
   },
 
   // ---- gijon_surf_hostel
-  '7307dff0-10ee-42e2-875b-573031d3833a': {
+  '61dbcb02-3b44-410f-a26b-5a8f52d69f14': {
     datasetType: 'muestras_de_agua_py_gcms',
     ocean: 'catambrico',
     place: 'gijon',
     providerFolder: 'gijon_surf_hostel',
-    name: 'muestras_agua_gijon',
+    name: 'Muestras agua Gijón_v1.1',
   },
-  '54c625fb-285c-40dd-be28-75c6806ddd71': {
+  '18fb392a-70e6-4769-a102-7eefe14e8f20': {
     datasetType: 'recogidas_playa',
-    ocean: 'catambrico',
-    place: 'gijon',
+    ocean: 'mediterraneo',
+    place: 'barcelona',
     providerFolder: 'gijon_surf_hostel',
-    name: 'Recogidas playas Gijón',
+    name: 'Recogidas playas Barcelona_v1.1 ',
   },
 
   // ---- innoceana
@@ -89,100 +89,107 @@ export const ASSET_MAP: Record<string, MappedAsset> = {
     providerFolder: 'innoceana',
     name: 'Recogidas playas Barcelona ',
   },
-  'ddadf21b-0c4d-40c8-97d7-e5cf902a5024': {
+  'b91d0d36-d8db-4427-9b04-36a1f7a367e2': {
+    datasetType: 'recogidas_playa',
+    ocean: 'mediterraneo',
+    place: 'barcelona',
+    providerFolder: 'innoceana',
+    name: 'Recogidas playas Barcelona_v1.1',
+  },
+  'f2aec864-8a58-42d9-9231-19cad86968fc': {
     datasetType: 'recogidas_playa',
     ocean: 'atlantico',
     place: 'tenerife',
     providerFolder: 'innoceana',
-    name: 'Recogidas playas Tenerife',
+    name: 'Recogidas playas Tenerife_v1.1 ',
   },
 
   // ---- port_badalona
-  '77e49a38-4a28-4779-8021-0671c721f4fc': {
+  '8e1dd22c-f922-4a0a-b31d-3c00ad060cf0': {
     datasetType: 'boya_biomasa_slx+',
     ocean: 'mediterraneo',
     place: 'badalona',
     providerFolder: 'port_badalona',
-    name: 'Boya biomasa Badalona',
+    name: 'Boya biomasa Badalona_v1.1',
   },
-  '40d5bbbb-bf2e-4a39-892a-82bd16c893fe': {
+  '16bd8652-058f-4198-adf8-31dc86ff5527': {
     datasetType: 'boya_microplasticos_seabot',
     ocean: 'mediterraneo',
     place: 'badalona',
     providerFolder: 'port_badalona',
-    name: 'boya_microplasticos_badalona',
+    name: 'Boya microplásticos Badalona_v1.1',
   },
 
   // ---- universal_plastic
-  '32d3ac9f-cf45-4f4f-9e9a-376f49893ee6': {
+  'ec760bbd-d719-4389-ac93-1413cc7a160a': {
     datasetType: 'atmosfera_previa_evento',
     ocean: 'mediterraneo',
     place: 'badalona',
     providerFolder: 'universal_plastic',
-    name: 'Atmósfera Badalona',
+    name: 'Atmósfera Badalona_v1.1',
   },
-  '6941db2b-cd13-4bfc-9dc9-0590045db0ae': {
+  'ec33f3e1-70d2-4992-9442-796eeee58e89': {
     datasetType: 'atmosfera_previa_evento',
     ocean: 'mediterraneo',
     place: 'barcelona',
     providerFolder: 'universal_plastic',
-    name: ' Atmósfera Barcelona',
+    name: 'Atmósfera Barcelona_v1.1',
   },
-  '373b9d3d-db52-4f86-95b4-d282c975d67c': {
+  'ecd40fc6-158c-4839-b7d8-173e03a41563': {
     datasetType: 'atmosfera_previa_evento',
     ocean: 'mediterraneo',
     place: 'blanes',
     providerFolder: 'universal_plastic',
-    name: 'Atmósfera Blanes ',
+    name: 'Atmósfera Blanes_v1.1',
   },
-  'fac91e13-a073-43fe-a507-dc70e3948447': {
+  '584ff479-aa7b-4645-a841-eb7ff50895ea': {
     datasetType: 'atmosfera_previa_evento',
     ocean: 'catambrico',
     place: 'gijon',
     providerFolder: 'universal_plastic',
-    name: 'Atmósfera Gijón',
+    name: 'Atmósfera Gijón_v1.1',
   },
-  '99776ab8-b80e-48d9-a267-1c7edda59b80': {
+  'd84307ea-31fb-4862-8648-930cd9011ab6': {
     datasetType: 'atmosfera_previa_evento',
     ocean: 'atlantico',
     place: 'tenerife',
     providerFolder: 'universal_plastic',
-    name: 'Atmósfera Tenerife',
+    name: ' Atmósfera Tenerife_v1.1',
   },
-  'e81d27e4-45c6-42a3-9755-dbd7ac494d05': {
+  'fa52faf0-8c2e-4797-81a3-5b2166d48253': {
     datasetType: 'boya_biomasa_slx+',
     ocean: 'atlantico',
     place: 'cadiz',
     providerFolder: 'universal_plastic',
-    name: 'Boya biomasa Cádiz',
+    name: 'Boya biomasa Cadiz_v1.1',
   },
-  '71034599-0830-44a8-a4bd-5f7aea885536': {
+  'c8ef3fe3-c966-4e63-a003-f3615ad94c71': {
     datasetType: 'boya_biomasa_slx+',
     ocean: 'catambrico',
     place: 'gijon',
     providerFolder: 'universal_plastic',
-    name: 'Boya biomasa Gijón',
+    name: 'Boya biomasa Gijón_v1.1',
   },
-  '7f99ffc6-5672-4b51-b89f-f1a0b696555c': {
+  '42201660-011d-44c1-9c3d-8114fbf55f39': {
     datasetType: 'boya_microplasticos_seabot',
     ocean: 'atlantico',
     place: 'cadiz',
     providerFolder: 'universal_plastic',
-    name: 'Boya microplásticos Cádiz',
+    name: 'Boya microplásticos  Cádiz_v1.1',
   },
-  '0209f661-cb47-41d3-8b48-6a880f0d0e4b': {
+  '1ae34dab-5dd9-4c5f-8910-fed007781df0': {
     datasetType: 'boya_microplasticos_seabot',
     ocean: 'catambrico',
     place: 'gijon',
     providerFolder: 'universal_plastic',
-    name: 'Boya microplásticos Gijón',
+    name: 'Boya microplásticos Gijón_v.1.1',
   },
-  '8e0b990d-87d1-4f15-8fcb-f0b13e0b4aa1': {
+  '1bb20528-06a4-4c15-afee-547279f6870e': {
     datasetType: 'environmental_boya',
     ocean: 'mediterraneo',
     place: 'badalona',
     providerFolder: 'universal_plastic',
-    name: 'Contexto ambiental para boya de biomasa Badalona',
+    name: 'Contexto ambiental para boya de biomasa Badalona_V1.1',
   },
   '16e1307c-f9a9-4c2d-8468-2c6cd5dcba7e': {
     datasetType: 'environmental_boya',
@@ -191,19 +198,40 @@ export const ASSET_MAP: Record<string, MappedAsset> = {
     providerFolder: 'universal_plastic',
     name: 'Contexto ambiental para boya de biomasa Cádiz',
   },
-  '14b565a1-b566-49b5-a2cc-9e561f9d8cb3': {
+  '3d8d2868-87e0-45da-a526-6362fcc20a99': {
     datasetType: 'environmental_boya',
     ocean: 'catambrico',
     place: 'gijon',
     providerFolder: 'universal_plastic',
-    name: 'Contexto ambiental para boya de biomasa Gijón',
+    name: 'Contexto ambiental para boya de biomasa Gijón_v1.1',
   },
-  '0ff24a0e-0f1d-4377-aebd-f5e9e7c0c8b3': {
+  'ae3fad45-6a7a-475d-a283-9eadaa0cf8cb': {
+    datasetType: 'muestras_de_agua_py_gcms',
+    ocean: 'mediterraneo',
+    place: 'badalona',
+    providerFolder: 'universal_plastic',
+    name: 'Muestras agua Badalona_v1.1',
+  },
+  '22748ef0-9b87-4aa6-9352-77a445c4d129': {
+    datasetType: 'muestras_de_agua_py_gcms',
+    ocean: 'atlantico',
+    place: 'tenerife',
+    providerFolder: 'universal_plastic',
+    name: 'Muestras agua Tenerife_v1.1',
+  },
+  'da6a3168-acf3-4c36-a0a3-be806658ddf7': {
     datasetType: 'oceanografia_previa_evento',
     ocean: 'mediterraneo',
     place: 'badalona',
     providerFolder: 'universal_plastic',
-    name: 'Oceanografía Badalona',
+    name: 'Oceanografía Badalona_v1.1',
+  },
+  '36346baf-a6aa-451e-a464-f8cc7b3e6458': {
+    datasetType: 'oceanografia_previa_evento',
+    ocean: 'mediterraneo',
+    place: 'barcelona',
+    providerFolder: 'universal_plastic',
+    name: 'Oceanografía Barcelona_v1.1',
   },
   '31f505fb-c5af-48e0-9cfb-1e596bd991dd': {
     datasetType: 'oceanografia_previa_evento',
@@ -212,40 +240,33 @@ export const ASSET_MAP: Record<string, MappedAsset> = {
     providerFolder: 'universal_plastic',
     name: 'Oceanografía Barcelona',
   },
-  '4e05c0dd-9674-4c9e-8806-839587d70f7d': {
-    datasetType: 'oceanografia_previa_evento',
-    ocean: 'mediterraneo',
-    place: 'blanes',
-    providerFolder: 'universal_plastic',
-    name: 'Oceanografía Blanes',
-  },
-  '781bb53a-23e0-45a3-919f-bbd4fa50e242': {
+  'bc8910ff-face-45be-8e76-540fddeb1a45': {
     datasetType: 'oceanografia_previa_evento',
     ocean: 'catambrico',
     place: 'gijon',
     providerFolder: 'universal_plastic',
-    name: 'Oceanografía Gijón',
+    name: 'Oceanografía Gijón_v1.1',
   },
-  'a446938a-1478-446c-9ccd-c7fadad66749': {
+  'bd458468-ba6f-46ea-88b1-6a61ce7d187b': {
     datasetType: 'oceanografia_previa_evento',
     ocean: 'atlantico',
     place: 'tenerife',
     providerFolder: 'universal_plastic',
-    name: 'Oceanografía Tenerife',
+    name: 'Oceanografía Tenerife_v1.1',
   },
-  'cca73b3a-398c-4913-b474-ec27d18e5523': {
+  '4ea47a2b-f881-450e-b462-e3d61308af61': {
     datasetType: 'recogidas_playa',
     ocean: 'mediterraneo',
     place: 'badalona',
     providerFolder: 'universal_plastic',
-    name: 'Recogidas playas Badalona',
+    name: 'Recogidas playas Badalona_v1.1',
   },
-  '949274e2-d829-43ba-9877-940cceed40f0': {
+  '0aee0640-546a-436d-8dd8-23f02a9b3823': {
     datasetType: 'recogidas_playa',
     ocean: 'mediterraneo',
     place: 'blanes',
     providerFolder: 'universal_plastic',
-    name: 'Recogidas playas Blanes',
+    name: 'Recogidas playas Blanes_v1.1',
   },
 };
 
@@ -254,17 +275,7 @@ export const ASSET_MAP: Record<string, MappedAsset> = {
  * datasets and are not data: ingesting them would create assets with no
  * observations and no location.
  */
-export const NON_DATA_ASSETS: Record<string, string> = {
-  'c4d99e61-faf0-4fbe-b167-8b8a8443a3dc':
-    'esquema_datos_boya_microplasticos_seabot_v1',
-  'fbe3ecf6-6c6b-4337-970e-03cf1ad08995':
-    'esquema_datos_muestras de peces_ py_gcms_v1',
-  '4d0de6e2-8944-45a4-86c1-093eec1c3f71':
-    'esquema_datos_muestras_agua_py_gcms_v1',
-  'c958044a-893b-4f5e-b5af-66281a57835e':
-    'esquema_datos_recogidas_plastico_app_up_v700_v1',
-  'e1e523dd-7577-4174-b761-8bd58fbb4d37': 'metadatos_boya_biomasa_slx+',
-};
+export const NON_DATA_ASSETS: Record<string, string> = {};
 /** Filename/name fragment → dataset type, for suggesting an entry only. */
 const TYPE_HINTS: Array<[RegExp, DatasetType]> = [
   [/^recogidas[\s_]playas?[\s_]/i, 'recogidas_playa'],
@@ -350,7 +361,10 @@ export function providerFolderFor(providerName: string): string {
 export function classifyEntry(entry: SourceEntry): ClassificationResult {
   const id = entry.ref.id;
 
-  if (NON_DATA_ASSETS[id] || /^(esquema_datos|metadatos)/i.test(fold(entry.ref.label))) {
+  if (
+    NON_DATA_ASSETS[id] ||
+    /^(esquema_datos|metadatos)/i.test(fold(entry.ref.label))
+  ) {
     return { classified: null, warning: null, inferred: false, skipped: true };
   }
 
