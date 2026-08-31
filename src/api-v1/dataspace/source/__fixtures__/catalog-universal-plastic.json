@@ -1,12 +1,12 @@
 {
-  "@id": "6b6cf3dc-2681-4684-a519-73296d35a734",
+  "@id": "65dfcf62-e636-4b80-a0cd-350b53c77c5f",
   "@type": "dcat:Catalog",
   "dcat:dataset": [
     {
       "@id": "42201660-011d-44c1-9c3d-8114fbf55f39",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "Qm95YSBtaWNyb3Bsw6FzdGljb3MgQ8OhZGl6IHYuMS4x:NDIyMDE2NjAtMDExZC00NGMxLTljM2QtODExNGZiZjU1ZjM5:YzAyNzgyYWQtOGQ1MC00YzRmLWI2M2EtNjBhY2ZmMDBmMTlm",
+        "@id": "Qm95YSBtaWNyb3Bsw6FzdGljb3MgQ8OhZGl6IHYuMS4x:NDIyMDE2NjAtMDExZC00NGMxLTljM2QtODExNGZiZjU1ZjM5:NzIxZGEzYmYtODY4ZC00NzZlLTg4MjUtYWYzM2QxZTQ2ZDAx",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -89,7 +89,7 @@
       "@id": "4ea47a2b-f881-450e-b462-e3d61308af61",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "UmVjb2dpZGFzIHBsYXlhcyBCYWRhbG9uYV92MS4x:NGVhNDdhMmItZjg4MS00NTBlLWI0NjItZTNkNjEzMDhhZjYx:OWNkMzExYWQtYWFiOS00M2JiLWFiYmYtMTczZGJiMjA1YThi",
+        "@id": "UmVjb2dpZGFzIHBsYXlhcyBCYWRhbG9uYV92MS4x:NGVhNDdhMmItZjg4MS00NTBlLWI0NjItZTNkNjEzMDhhZjYx:ZWFjNDFmMGEtNmNlNy00NzBhLWJiNGYtOTU5ODE0ZjUxODFl",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -172,7 +172,7 @@
       "@id": "0aee0640-546a-436d-8dd8-23f02a9b3823",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "UmVjb2dpZGEgcGxheWFzIEJsYW5lc192MS4x:MGFlZTA2NDAtNTQ2YS00MzZkLThkZDgtMjNmMDJhOWIzODIz:Yzc5ZmJhOTMtYzIxZi00YmI0LWE1NTAtNjQxZWM2YTk5OGNk",
+        "@id": "UmVjb2dpZGEgcGxheWFzIEJsYW5lc192MS4x:MGFlZTA2NDAtNTQ2YS00MzZkLThkZDgtMjNmMDJhOWIzODIz:MzVmZGNhMTktNjE3OC00OTFmLWFmNzEtYmY3ZTRkMzhkYTZm",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -255,7 +255,7 @@
       "@id": "1ae34dab-5dd9-4c5f-8910-fed007781df0",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "Qm95YSBtaWNyb3Bsw6FzdGljb3MgR2lqw7NuX3YuMS4x:MWFlMzRkYWItNWRkOS00YzVmLTg5MTAtZmVkMDA3NzgxZGYw:NjFhNDlhNmItMGQzMy00M2ViLThlZjUtOGRjYjQwOTkwMzA4",
+        "@id": "Qm95YSBtaWNyb3Bsw6FzdGljb3MgR2lqw7NuX3YuMS4x:MWFlMzRkYWItNWRkOS00YzVmLTg5MTAtZmVkMDA3NzgxZGYw:Yjg2NTJhNDMtODlmZi00M2UwLWI2MmQtYjA4M2U0NWM5YTIw",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -338,7 +338,7 @@
       "@id": "c8ef3fe3-c966-4e63-a003-f3615ad94c71",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "Qm95YSBiaW9tYXNhIEdpasOzbl92MS4x:YzhlZjNmZTMtYzk2Ni00ZTYzLWEwMDMtZjM2MTVhZDk0Yzcx:NmI4YTBmNmYtOTk4ZC00NjY4LWJkNmUtNzExM2EyYWE5ZjQ1",
+        "@id": "Qm95YSBiaW9tYXNhIEdpasOzbl92MS4x:YzhlZjNmZTMtYzk2Ni00ZTYzLWEwMDMtZjM2MTVhZDk0Yzcx:NGU0ZGUxMjAtMWRkMi00ZDUwLWFiODQtYmRhZTU3MzkyZjlk",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -421,7 +421,7 @@
       "@id": "c1c71785-6da1-4d8f-a796-df566b8e4f9d",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "Qm95YV9taWNyb3BsYXN0aWNvc19yZWZlcmVuY2lh:YzFjNzE3ODUtNmRhMS00ZDhmLWE3OTYtZGY1NjZiOGU0Zjlk:YjlmZmI0Y2MtZmRjNy00YjQ5LTk4NDktMjYwMWRiZmVhOTg5",
+        "@id": "Qm95YV9taWNyb3BsYXN0aWNvc19yZWZlcmVuY2lh:YzFjNzE3ODUtNmRhMS00ZDhmLWE3OTYtZGY1NjZiOGU0Zjlk:YmU1ODM0Y2UtZmE4My00M2QyLTk0MmMtYzE3Yzc3ODlhZDA3",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -504,7 +504,7 @@
       "@id": "a69dc135-4dbc-4285-bb71-5fad09793ccf",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "TXVlc3RyYXNfZGVfYWd1YV9yZWZlcmVuY2lh:YTY5ZGMxMzUtNGRiYy00Mjg1LWJiNzEtNWZhZDA5NzkzY2Nm:YjhjMzg1M2MtNGRmMS00Nzk5LWExMGItYTk4ZjM3N2Q0OWEy",
+        "@id": "TXVlc3RyYXNfZGVfYWd1YV9yZWZlcmVuY2lh:YTY5ZGMxMzUtNGRiYy00Mjg1LWJiNzEtNWZhZDA5NzkzY2Nm:ZjNlZjgwN2UtODdmYy00NzkwLTlhZGYtY2RiMTFmMzMxM2Q0",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -587,7 +587,7 @@
       "@id": "22748ef0-9b87-4aa6-9352-77a445c4d129",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "TXVlc3RyYXMgYWd1YSBUZW5lcmlmZV92MS4x:MjI3NDhlZjAtOWI4Ny00YWE2LTkzNTItNzdhNDQ1YzRkMTI5:YWUyMDY2YjAtYzc3YS00OGIwLWIwZmEtZTdkYjVmZTgxZTkw",
+        "@id": "TXVlc3RyYXMgYWd1YSBUZW5lcmlmZV92MS4x:MjI3NDhlZjAtOWI4Ny00YWE2LTkzNTItNzdhNDQ1YzRkMTI5:NzQ3ZTkzNTUtYjY0OC00YjBiLTk3OTktZDQwMmE0YjA3YWI0",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -670,7 +670,7 @@
       "@id": "fa52faf0-8c2e-4797-81a3-5b2166d48253",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "Qm95YSBiaW9tYXNhIENhZGl6X3YxLjE=:ZmE1MmZhZjAtOGMyZS00Nzk3LTgxYTMtNWIyMTY2ZDQ4MjUz:YjQ4OWEwYWItMjYxZi00ODYxLWJjZGItYzg2YzQyNjY5MTBk",
+        "@id": "Qm95YSBiaW9tYXNhIENhZGl6X3YxLjE=:ZmE1MmZhZjAtOGMyZS00Nzk3LTgxYTMtNWIyMTY2ZDQ4MjUz:YzZjY2NkNjgtYWU5Ni00YjY4LThiMzAtY2I1YmI5YTg1NzBk",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -752,52 +752,28 @@
     {
       "@id": "ecd40fc6-158c-4839-b7d8-173e03a41563",
       "@type": "dcat:Dataset",
-      "odrl:hasPolicy": [
-        {
-          "@id": "QXRtw7NzZmVyYSBCbGFuZXNfdjEuMQ==:ZWNkNDBmYzYtMTU4Yy00ODM5LWI3ZDgtMTczZTAzYTQxNTYz:OWMyZDVjYjMtNzU2Zi00YzFhLWJmYmEtNWZmOGY2YWIwOTk5",
-          "@type": "odrl:Offer",
-          "odrl:permission": {
-            "odrl:action": {
-              "@id": "USE"
-            },
-            "odrl:constraint": {
-              "odrl:or": {
-                "odrl:leftOperand": {
-                  "@id": "BusinessPartnerNumber"
-                },
-                "odrl:operator": {
-                  "@id": "odrl:eq"
-                },
-                "odrl:rightOperand": "BPNL000000000000001"
-              }
-            }
+      "odrl:hasPolicy": {
+        "@id": "QXRtw7NzZmVyYSBCbGFuZXNfdjEuMQ==:ZWNkNDBmYzYtMTU4Yy00ODM5LWI3ZDgtMTczZTAzYTQxNTYz:MDA5NDIzZmItN2U4ZS00MWVkLTk0MzEtNDYxOGI1ZjU1NzZm",
+        "@type": "odrl:Offer",
+        "odrl:permission": {
+          "odrl:action": {
+            "@id": "USE"
           },
-          "odrl:prohibition": [],
-          "odrl:obligation": []
+          "odrl:constraint": {
+            "odrl:or": {
+              "odrl:leftOperand": {
+                "@id": "BusinessPartnerNumber"
+              },
+              "odrl:operator": {
+                "@id": "odrl:eq"
+              },
+              "odrl:rightOperand": "BPNL000000000000001"
+            }
+          }
         },
-        {
-          "@id": "T2NlYW5vZ3JhZsOtYSBCbGFuZXNfdjEuMQ==:ZWNkNDBmYzYtMTU4Yy00ODM5LWI3ZDgtMTczZTAzYTQxNTYz:NWIxOWE3YjItNzc1Yi00YmY4LWE2M2YtN2RlM2E5MWYwNTYx",
-          "@type": "odrl:Offer",
-          "odrl:permission": {
-            "odrl:action": {
-              "@id": "USE"
-            },
-            "odrl:constraint": {
-              "odrl:or": {
-                "odrl:leftOperand": {
-                  "@id": "BusinessPartnerNumber"
-                },
-                "odrl:operator": {
-                  "@id": "odrl:eq"
-                },
-                "odrl:rightOperand": "BPNL000000000000001"
-              }
-            }
-          },
-          "odrl:prohibition": [],
-          "odrl:obligation": []
-        }
-      ],
+        "odrl:prohibition": [],
+        "odrl:obligation": []
+      },
       "dcat:distribution": [
         {
           "@type": "dcat:Distribution",
@@ -860,7 +836,7 @@
       "@id": "ec33f3e1-70d2-4992-9442-796eeee58e89",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "QXRtw7NzZmVyYSBCYXJjZWxvbmFfdjEuMQ==:ZWMzM2YzZTEtNzBkMi00OTkyLTk0NDItNzk2ZWVlZTU4ZTg5:YThiYjU0ZTItZmViMS00ZWNlLTg1NzAtYjY1YzUwN2JjNjhk",
+        "@id": "QXRtw7NzZmVyYSBCYXJjZWxvbmFfdjEuMQ==:ZWMzM2YzZTEtNzBkMi00OTkyLTk0NDItNzk2ZWVlZTU4ZTg5:NmJjZmQ3ZWUtZjk5MS00MTJmLThjMjAtNTA2OTIxZTNkYzIx",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -943,7 +919,7 @@
       "@id": "36346baf-a6aa-451e-a464-f8cc7b3e6458",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "T2NlYW5vZ3JhZsOtYSBCYXJjZWxvbmFfdjEuMQ==:MzYzNDZiYWYtYTZhYS00NTFlLWE0NjQtZjhjYzdiM2U2NDU4:YzhmZjU1ZjQtYWUzMS00MjcyLWEzNmEtYjVhNmYyMjA2Yzcx",
+        "@id": "T2NlYW5vZ3JhZsOtYSBCYXJjZWxvbmFfdjEuMQ==:MzYzNDZiYWYtYTZhYS00NTFlLWE0NjQtZjhjYzdiM2U2NDU4:YTA4YzU1YjEtZDhkNS00Yjg1LTk5MjgtNGUxMTRiYmQ4NTNm",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -1026,7 +1002,7 @@
       "@id": "ae3fad45-6a7a-475d-a283-9eadaa0cf8cb",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "TXVlc3RyYXMgYWd1YSBCYWRhbG9uYV92MS4x:YWUzZmFkNDUtNmE3YS00NzVkLWEyODMtOWVhZGFhMGNmOGNi:MzIxMTFhMjctMmExOC00Y2QwLTlmYWQtNjJjYTViNmMxZDVi",
+        "@id": "TXVlc3RyYXMgYWd1YSBCYWRhbG9uYV92MS4x:YWUzZmFkNDUtNmE3YS00NzVkLWEyODMtOWVhZGFhMGNmOGNi:Nzg3OGMzM2YtOTcxZS00Yjk3LWIwMGMtNjg4NDcxOTBjZWVj",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -1109,7 +1085,7 @@
       "@id": "bd458468-ba6f-46ea-88b1-6a61ce7d187b",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "T2NlYW5vZ3JhZsOtYSBUZW5lcmlmZV92MS4x:YmQ0NTg0NjgtYmE2Zi00NmVhLTg4YjEtNmE2MWNlN2QxODdi:MTM5OGU4MzUtMTNiYi00ZDU3LTgzMzEtNGE2M2NkNDllZmU2",
+        "@id": "T2NlYW5vZ3JhZsOtYSBUZW5lcmlmZV92MS4x:YmQ0NTg0NjgtYmE2Zi00NmVhLTg4YjEtNmE2MWNlN2QxODdi:OWEyYzUzY2EtYjM4ZC00Nzk2LTliNjUtY2Y0ZTMzNDc5ODdm",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -1192,7 +1168,7 @@
       "@id": "da6a3168-acf3-4c36-a0a3-be806658ddf7",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "T2NlYW5vZ3JhZsOtYSBCYWRhbG9uYV92MS4x:ZGE2YTMxNjgtYWNmMy00YzM2LWEwYTMtYmU4MDY2NThkZGY3:NWM0MWZiOTktMTczNS00NWE4LTg4NWQtOWZkYTdjNzI2NWE5",
+        "@id": "T2NlYW5vZ3JhZsOtYSBCYWRhbG9uYV92MS4x:ZGE2YTMxNjgtYWNmMy00YzM2LWEwYTMtYmU4MDY2NThkZGY3:MTU5OGI1OGMtY2U5Yy00NTE0LWFkOTMtMmQ4YzkzNjExODRj",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -1275,7 +1251,7 @@
       "@id": "bc8910ff-face-45be-8e76-540fddeb1a45",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "T2NlYW5vZ3JhZsOtYSBHaWrDs25fdjEuMQ==:YmM4OTEwZmYtZmFjZS00NWJlLThlNzYtNTQwZmRkZWIxYTQ1:Y2ZlMzcxMzctN2VhZi00MWMyLThlYzUtMTlmNTU1ZTNlOWE4",
+        "@id": "T2NlYW5vZ3JhZsOtYSBHaWrDs25fdjEuMQ==:YmM4OTEwZmYtZmFjZS00NWJlLThlNzYtNTQwZmRkZWIxYTQ1:ZGJkNjRjNWQtMTI3NS00ZjA2LWEzMGItYjkyNWMzMThlYTY4",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -1358,7 +1334,7 @@
       "@id": "d84307ea-31fb-4862-8648-930cd9011ab6",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "QXRtw7NzZmVyYSBUZW5lcmlmZV92MS4x:ZDg0MzA3ZWEtMzFmYi00ODYyLTg2NDgtOTMwY2Q5MDExYWI2:NTBhMTEzODItYWEyOC00OGJiLThlMGUtNjE0YmM3MjA2ZWNm",
+        "@id": "QXRtw7NzZmVyYSBUZW5lcmlmZV92MS4x:ZDg0MzA3ZWEtMzFmYi00ODYyLTg2NDgtOTMwY2Q5MDExYWI2:NThmODkwMWQtNTc4NC00MGI0LTkwYjMtMTdiZjU4MDQ2YjMy",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -1441,7 +1417,7 @@
       "@id": "ec760bbd-d719-4389-ac93-1413cc7a160a",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "QXRtw7NzZmVyYSBCYWRhbG9uYV92MS4x:ZWM3NjBiYmQtZDcxOS00Mzg5LWFjOTMtMTQxM2NjN2ExNjBh:NGM5Zjg5OGQtODAxMC00Y2Y0LWFkZjktYTUyZmVjNDE3ZDVi",
+        "@id": "QXRtw7NzZmVyYSBCYWRhbG9uYV92MS4x:ZWM3NjBiYmQtZDcxOS00Mzg5LWFjOTMtMTQxM2NjN2ExNjBh:MGNjZDY1ZWItZmUwZS00ZmVjLWFkNzMtODMxYjVjODJhNGQ3",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -1524,7 +1500,7 @@
       "@id": "584ff479-aa7b-4645-a841-eb7ff50895ea",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "QXRtw7NzZmVyYSBHaWrDs25fdjEuMQ==:NTg0ZmY0NzktYWE3Yi00NjQ1LWE4NDEtZWI3ZmY1MDg5NWVh:OGFkZTJhYWQtZjZiMC00ZWIyLWI2M2QtMzQzY2RjN2RmOWI2",
+        "@id": "QXRtw7NzZmVyYSBHaWrDs25fdjEuMQ==:NTg0ZmY0NzktYWE3Yi00NjQ1LWE4NDEtZWI3ZmY1MDg5NWVh:NTYwOWJmM2ItOTMzMy00NTM2LTgzMjYtMjMzZDFhNWY1YTk2",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -1604,10 +1580,93 @@
       "id": "584ff479-aa7b-4645-a841-eb7ff50895ea"
     },
     {
+      "@id": "0ba413bc-a382-4b64-901c-b1409680d276",
+      "@type": "dcat:Dataset",
+      "odrl:hasPolicy": {
+        "@id": "T2NlYW5vZ3JhZsOtYSBCbGFuZXNfdjEuMQ==:MGJhNDEzYmMtYTM4Mi00YjY0LTkwMWMtYjE0MDk2ODBkMjc2:ZWE5ZmQxNjQtYjg5Ni00OTk3LTk3ODgtN2VjNjYwYTViNDAx",
+        "@type": "odrl:Offer",
+        "odrl:permission": {
+          "odrl:action": {
+            "@id": "USE"
+          },
+          "odrl:constraint": {
+            "odrl:or": {
+              "odrl:leftOperand": {
+                "@id": "BusinessPartnerNumber"
+              },
+              "odrl:operator": {
+                "@id": "odrl:eq"
+              },
+              "odrl:rightOperand": "BPNL000000000000001"
+            }
+          }
+        },
+        "odrl:prohibition": [],
+        "odrl:obligation": []
+      },
+      "dcat:distribution": [
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AzureStorage-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PULL"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "HttpData-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        },
+        {
+          "@type": "dcat:Distribution",
+          "dct:format": {
+            "@id": "AmazonS3-PUSH"
+          },
+          "dcat:accessService": {
+            "@id": "f04d36e1-43de-4306-be89-38f8c0a66307",
+            "@type": "dcat:DataService",
+            "dcat:endpointDescription": "dspace:connector",
+            "dcat:endpointUrl": "http://dataprovider-controlplane.tx.test/api/v1/dsp",
+            "dcat:endpointURL": "http://dataprovider-controlplane.tx.test/api/v1/dsp"
+          }
+        }
+      ],
+      "name": "Oceanografía Blanes_v1.1",
+      "description": "Condiciones oceánicas superficiales diarias para los 7 días previos a cada evento de recogida de playa, obtenidas a partir de los modelos del Servicio de Monitoreo del Océano de Copernicus (CMEMS). Las variables incluyen corrientes superficiales, temperatura y salinidad del mar, parámetros de oleaje (dirección, altura, periodo), deriva de Stokes y viento superficial. Un registro por evento de recogida y sitio. Usar event_date para cruzar con los datos de recogida de playa.\n",
+      "id": "0ba413bc-a382-4b64-901c-b1409680d276"
+    },
+    {
       "@id": "31f505fb-c5af-48e0-9cfb-1e596bd991dd",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "T2NlYW5vZ3JhZsOtYSBCYXJjZWxvbmEg:MzFmNTA1ZmItYzVhZi00OGUwLTljZmItMWU1OTZiZDk5MWRk:NDhjZWE4NzgtNDQ3MC00YjQwLWI5YzAtYWU1MjQwYTdhNTRk",
+        "@id": "T2NlYW5vZ3JhZsOtYSBCYXJjZWxvbmEg:MzFmNTA1ZmItYzVhZi00OGUwLTljZmItMWU1OTZiZDk5MWRk:ZWI3MDZiMTItZGJmMy00ZDYyLThjZDMtOWMyMjJhYzZlMmE0",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -1690,7 +1749,7 @@
       "@id": "1bb20528-06a4-4c15-afee-547279f6870e",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "Q29udGV4dG8gYW1iaWVudGFsIHBhcmEgYm95YSBkZSBiaW9tYXNhIEJhZGFsb25hX1YxLjE=:MWJiMjA1MjgtMDZhNC00YzE1LWFmZWUtNTQ3Mjc5ZjY4NzBl:M2M5NDYxY2UtZGNiNy00ZDVkLTkyMWUtYmMyMTQzNmJhNDdh",
+        "@id": "Q29udGV4dG8gYW1iaWVudGFsIHBhcmEgYm95YSBkZSBiaW9tYXNhIEJhZGFsb25hX1YxLjE=:MWJiMjA1MjgtMDZhNC00YzE1LWFmZWUtNTQ3Mjc5ZjY4NzBl:OTQwN2FkMmMtNGFlNy00ODJmLWE2OTktZDUxMjg4YTk2MDNk",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -1773,7 +1832,7 @@
       "@id": "3d8d2868-87e0-45da-a526-6362fcc20a99",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "Q29udGV4dG8gYW1iaWVudGFsIHBhcmEgYm95YSBkZSBiaW9tYXNhIEdpasOzbl92MS4x:M2Q4ZDI4NjgtODdlMC00NWRhLWE1MjYtNjM2MmZjYzIwYTk5:NWYwYjUyOTMtNmE1Ny00YjI0LWE5MjQtYjc2N2E2NTk4ZTNl",
+        "@id": "Q29udGV4dG8gYW1iaWVudGFsIHBhcmEgYm95YSBkZSBiaW9tYXNhIEdpasOzbl92MS4x:M2Q4ZDI4NjgtODdlMC00NWRhLWE1MjYtNjM2MmZjYzIwYTk5:Zjk2MzNjOWItNzQwMi00MTQ0LWI1YTEtMmJiODdiMjdmOGQ5",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -1853,10 +1912,10 @@
       "id": "3d8d2868-87e0-45da-a526-6362fcc20a99"
     },
     {
-      "@id": "16e1307c-f9a9-4c2d-8468-2c6cd5dcba7e",
+      "@id": "019ee791-f585-46c6-a21b-72e6d35957b4",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "Q29udGV4dG8gYW1iaWVudGFsIHBhcmEgYm95YSBkZSBiaW9tYXNhIEPDoWRpel92MS4x:MTZlMTMwN2MtZjlhOS00YzJkLTg0NjgtMmM2Y2Q1ZGNiYTdl:ZDM0OGI1NWUtMWY5My00ZmQ4LWI3ZWItOTRlYWVjZmE4MDIz",
+        "@id": "Q29udGV4dG8gYW1iaWVudGFsIHBhcmEgYm95YSBkZSBiaW9tYXNhIEPDoWRpel92MS4x:MDE5ZWU3OTEtZjU4NS00NmM2LWEyMWItNzJlNmQzNTk1N2I0:Y2VlYTEzYWEtZDQ5NS00OGJlLWE5M2UtMjkxZGVkYTExNmU5",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -1931,15 +1990,15 @@
           }
         }
       ],
-      "name": "Contexto ambiental para boya de biomasa Cádiz",
-      "description": "Condiciones meteorológicas y oceanográficas horarias obtenidas a partir de la API de Meteomatics. Las variables incluyen temperatura del aire y del mar, presión atmosférica, humedad, precipitación, radiación solar, viento, nubosidad, oleaje, corrientes marinas e índices climáticos (NAO, SOI). Un registro por hora y punto de monitoreo. Usar Date y Time para cruzar con los datos de boya de biomasa en \nen un puerto de Cádiz.\n",
-      "id": "16e1307c-f9a9-4c2d-8468-2c6cd5dcba7e"
+      "name": "Contexto ambiental para boya de biomasa Cádiz_v1.1",
+      "description": "\nCondiciones meteorológicas y oceanográficas horarias obtenidas a partir de la API de Meteomatics. Las variables incluyen temperatura del aire y del mar, presión atmosférica, humedad, precipitación, radiación solar, viento, nubosidad, oleaje, corrientes marinas e índices climáticos (NAO, SOI). Un registro por hora y punto de monitoreo. Usar Date y Time para cruzar con los datos de boya de biomasa en\nen un puerto de Cádiz.\n",
+      "id": "019ee791-f585-46c6-a21b-72e6d35957b4"
     },
     {
       "@id": "85add085-d1fb-4774-b8c6-d2de5bea3c1f",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "RW52aXJvbm1lbnRhbF9yZWZlcmVuY2lh:ODVhZGQwODUtZDFmYi00Nzc0LWI4YzYtZDJkZTViZWEzYzFm:ZDI5MzA2ODAtNzI0Zi00ZWYwLTk1OGQtYmJhOTFjNDU4NzAz",
+        "@id": "RW52aXJvbm1lbnRhbF9yZWZlcmVuY2lh:ODVhZGQwODUtZDFmYi00Nzc0LWI4YzYtZDJkZTViZWEzYzFm:NGJmOTM4YWEtMjYxZi00ZmMyLWJhM2MtOTg2OTllN2UxYzNk",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -2022,7 +2081,7 @@
       "@id": "fdd003f7-0ff5-402f-ba01-e7712f36f985",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "UmVjb2dpZGFzX3BsYXlhc19yZWZlcmVuY2lh:ZmRkMDAzZjctMGZmNS00MDJmLWJhMDEtZTc3MTJmMzZmOTg1:NmYzZjJkODMtNWFmMi00YmYyLWJlOTQtYTJmODFiYjUzNTk3",
+        "@id": "UmVjb2dpZGFzX3BsYXlhc19yZWZlcmVuY2lh:ZmRkMDAzZjctMGZmNS00MDJmLWJhMDEtZTc3MTJmMzZmOTg1:N2E0ZmUxYTAtNjZmYy00MjI2LWExNzgtNDI0MTQxZjkwZmNm",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -2105,7 +2164,7 @@
       "@id": "e22252f6-8099-4714-8666-fbc541818a3a",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "Qm95YV9iaW9tYXNhX3JlZmVyZW5jaWE=:ZTIyMjUyZjYtODA5OS00NzE0LTg2NjYtZmJjNTQxODE4YTNh:OTRhZjdmMGQtMmFiYi00M2Q5LWE1OTItODZlMzc5NGU4NjM3",
+        "@id": "Qm95YV9iaW9tYXNhX3JlZmVyZW5jaWE=:ZTIyMjUyZjYtODA5OS00NzE0LTg2NjYtZmJjNTQxODE4YTNh:NDE0ZGQxNjQtYzIxOS00ODA4LThiYzQtYzhhOWVhY2JlZTdj",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {

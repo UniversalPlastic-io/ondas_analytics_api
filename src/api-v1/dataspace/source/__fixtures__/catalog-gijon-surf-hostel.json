@@ -1,12 +1,12 @@
 {
-  "@id": "612af11a-a210-41e8-90ce-6c2cac3dc298",
+  "@id": "88fedbb9-6b09-4673-875d-579ebeef0e17",
   "@type": "dcat:Catalog",
   "dcat:dataset": [
     {
       "@id": "61dbcb02-3b44-410f-a26b-5a8f52d69f14",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "TXVlc3RyYXMgYWd1YSBHaWrDs25fdjEuMQ==:NjFkYmNiMDItM2I0NC00MTBmLWEyNmItNWE4ZjUyZDY5ZjE0:ZmIxOTc5N2YtZjNkYy00ZDIxLTgxNWUtZTcwZDFlMmIzNjI1",
+        "@id": "TXVlc3RyYXMgYWd1YSBHaWrDs25fdjEuMQ==:NjFkYmNiMDItM2I0NC00MTBmLWEyNmItNWE4ZjUyZDY5ZjE0:ZWU5ZGMwYWQtYzAyYS00ZmQ3LTlmZmMtMTk4NjEzNjQ2OGZi",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -86,10 +86,10 @@
       "id": "61dbcb02-3b44-410f-a26b-5a8f52d69f14"
     },
     {
-      "@id": "18fb392a-70e6-4769-a102-7eefe14e8f20",
+      "@id": "7fe0e5fb-c19b-4e6f-b414-8d05e26b661b",
       "@type": "dcat:Dataset",
       "odrl:hasPolicy": {
-        "@id": "IFJlY29naWRhcyBwbGF5YXMgQmFyY2Vsb25hX3YxLjE=:MThmYjM5MmEtNzBlNi00NzY5LWExMDItN2VlZmUxNGU4ZjIw:YjFkMDRkNGQtMDE2MS00N2NjLThjNjMtOWQ3NmI2ZDQxYzc4",
+        "@id": "UmVjb2dpZGFzIHBsYXlhcyBHaWrDs25fdjEuMQ==:N2ZlMGU1ZmItYzE5Yi00ZTZmLWI0MTQtOGQwNWUyNmI2NjFi:NTRjYjIxNzctNWU2MC00MWZlLWJmMTktMTZmMDkzNTk5OWFi",
         "@type": "odrl:Offer",
         "odrl:permission": {
           "odrl:action": {
@@ -164,9 +164,9 @@
           }
         }
       ],
-      "name": "Recogidas playas Barcelona_v1.1 ",
+      "name": "Recogidas playas Gijón_v1.1",
       "description": "Dataset de ciencia ciudadana generado por la app móvil Universal Plastic v7.0.0, plataforma de economía azul. Permite registrar limpiezas de plásticos costeros capturando kg totales, participantes, duración, distancia y composición (PET/HDPE/PVC/LDPE/PP/PS en %) vía IA en imágenes. Implementa un sistema de dMRV (digital Measurement, Reporting and Verification) para medición, reporte y verificación automatizada y trazable de residuos.   \n",
-      "id": "18fb392a-70e6-4769-a102-7eefe14e8f20"
+      "id": "7fe0e5fb-c19b-4e6f-b414-8d05e26b661b"
     }
   ],
   "dcat:catalog": [],

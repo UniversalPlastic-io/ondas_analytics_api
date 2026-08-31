@@ -6,6 +6,7 @@ import { DspacerSource } from '../src/api-v1/dataspace/source/dspacer.source';
 import {
   ASSET_MAP,
   REFERENCE_ASSETS,
+  isNonDataName,
   providerFolderFor,
   suggestMapping,
 } from '../src/api-v1/dataspace/source/asset-map';
@@ -176,7 +177,7 @@ async function main(): Promise<void> {
 
   for (const entry of entries) {
     const name = entry.ref.label;
-    if (/^(esquema_datos|metadatos)/i.test(name.trim().toLowerCase())) {
+    if (isNonDataName(name)) {
       nonData.push({ id: entry.ref.id, name });
       continue;
     }

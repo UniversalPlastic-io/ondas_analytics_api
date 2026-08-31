@@ -5,6 +5,7 @@ import {
   NON_DATA_ASSETS,
   REFERENCE_ASSETS,
   classifyEntry,
+  isNonDataName,
   suggestMapping,
 } from './asset-map';
 import {
@@ -145,6 +146,81 @@ describe('classifyEntry against the live catalogs', () => {
     expect(
       offered.filter((e) => /esquema|metadatos/i.test(e.ref.label)),
     ).toEqual([]);
+  });
+});
+
+describe('isNonDataName', () => {
+  it('recognises the prefix form the providers have used so far', () => {
+    for (const name of [
+      'esquema_datos_recogidas_plastico_app_up_v700_v1',
+      'esquema_datos_muestras de peces_ py_gcms_v1',
+      'metadatos_boya_biomasa_slx+',
+      'Metadatos Boya microplásticos Gijón_v1.1',
+      'Esquema de datos Boya biomasa',
+    ]) {
+      expect(isNonDataName(name)).toBe(true);
+    }
+  });
+
+  it('recognises the suffix form, which the prefix rule would have ingested', () => {
+    // The dangerous shape: "Boya biomasa Gijón_metadatos" matches the biomass
+    // type hint, so under a prefix-only rule it was classified as a biomass
+    // dataset at Gijón and ingested. Container validation would reject it — a
+    // DCAT document has no `dataset` block — but as a failed asset, turning the
+    // whole sync run `partial` instead of skipping it cleanly.
+    for (const name of [
+      'Boya biomasa Gijón_metadatos',
+      'Boya biomasa Gijón metadatos_v1.1',
+      'Recogidas playas Blanes - DCAT',
+      'Muestras agua Tenerife_dcat_v1.1',
+      'Atmósfera Gijón json-ld',
+      'Oceanografía Badalona_esquema',
+    ]) {
+      expect(isNonDataName(name)).toBe(true);
+    }
+  });
+
+  it('does not fire on any dataset name the space actually offers', () => {
+    // The other half of the rule: broadening it must not start swallowing real
+    // datasets, which would empty a category out of the read model in silence.
+    const swallowed: string[] = [];
+    let checked = 0;
+    for (const file of [
+      'catalog-innoceana.json',
+      'catalog-bcss.json',
+      'catalog-universal-plastic.json',
+      'catalog-port-badalona.json',
+      'catalog-gijon-surf-hostel.json',
+    ] as const) {
+      const provider = file
+        .replace('catalog-', '')
+        .replace('.json', '')
+        .replace(/-/g, ' ');
+      const name = providers.find(
+        (p) => p.name.toLowerCase().replace(/\s+/g, ' ') === provider,
+      )?.name;
+      expect(name).toBeDefined();
+      for (const entry of entriesFrom(file, name!)) {
+        checked += 1;
+        if (isNonDataName(entry.ref.label)) swallowed.push(entry.ref.label);
+      }
+    }
+    // Asserted on the count too: a fixture rename would otherwise make this
+    // test pass by iterating over nothing.
+    expect(checked).toBeGreaterThanOrEqual(30);
+    expect(swallowed).toEqual([]);
+  });
+
+  it('leaves a plain dataset name alone', () => {
+    for (const name of [
+      'Recogidas playas Gijón_v1.1',
+      'Boya biomasa Cadiz_v1.1',
+      'Contexto ambiental para boya de biomasa Badalona_V1.1',
+      'Muestras de peces Tenerife_v1.1',
+      'Boya_biomasa_referencia',
+    ]) {
+      expect(isNonDataName(name)).toBe(false);
+    }
   });
 });
 

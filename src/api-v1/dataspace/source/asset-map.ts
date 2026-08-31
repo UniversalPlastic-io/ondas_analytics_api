@@ -75,12 +75,12 @@ export const ASSET_MAP: Record<string, MappedAsset> = {
     providerFolder: 'gijon_surf_hostel',
     name: 'Muestras agua Gijón_v1.1',
   },
-  '18fb392a-70e6-4769-a102-7eefe14e8f20': {
+  '7fe0e5fb-c19b-4e6f-b414-8d05e26b661b': {
     datasetType: 'recogidas_playa',
-    ocean: 'mediterraneo',
-    place: 'barcelona',
+    ocean: 'catambrico',
+    place: 'gijon',
     providerFolder: 'gijon_surf_hostel',
-    name: 'Recogidas playas Barcelona_v1.1 ',
+    name: 'Recogidas playas Gijón_v1.1',
   },
 
   // ---- innoceana
@@ -193,12 +193,12 @@ export const ASSET_MAP: Record<string, MappedAsset> = {
     providerFolder: 'universal_plastic',
     name: 'Contexto ambiental para boya de biomasa Badalona_V1.1',
   },
-  '16e1307c-f9a9-4c2d-8468-2c6cd5dcba7e': {
+  '019ee791-f585-46c6-a21b-72e6d35957b4': {
     datasetType: 'environmental_boya',
     ocean: 'atlantico',
     place: 'cadiz',
     providerFolder: 'universal_plastic',
-    name: 'Contexto ambiental para boya de biomasa Cádiz',
+    name: 'Contexto ambiental para boya de biomasa Cádiz_v1.1',
   },
   '3d8d2868-87e0-45da-a526-6362fcc20a99': {
     datasetType: 'environmental_boya',
@@ -241,6 +241,13 @@ export const ASSET_MAP: Record<string, MappedAsset> = {
     place: 'barcelona',
     providerFolder: 'universal_plastic',
     name: 'Oceanografía Barcelona',
+  },
+  '0ba413bc-a382-4b64-901c-b1409680d276': {
+    datasetType: 'oceanografia_previa_evento',
+    ocean: 'mediterraneo',
+    place: 'blanes',
+    providerFolder: 'universal_plastic',
+    name: 'Oceanografía Blanes_v1.1',
   },
   'bc8910ff-face-45be-8e76-540fddeb1a45': {
     datasetType: 'oceanografia_previa_evento',
@@ -340,6 +347,29 @@ export function fold(name: string): string {
     .trim();
 }
 
+/**
+ * Names that mark an asset as a schema or metadata document rather than data.
+ *
+ * Matched anywhere in the name, not only as a prefix. The providers publish one
+ * DCAT document per dataset, and the two rounds seen so far named them by prefix
+ * (`esquema_datos_…`, `metadatos_…`) — but a suffix form like
+ * "Boya biomasa Gijón_metadatos" would otherwise match the biomass type hint and
+ * be classified as a biomass dataset at Gijón. Container validation would still
+ * reject it, since a DCAT document has no `dataset` block, but as a *failed*
+ * asset that turns the whole sync run `partial` rather than as one cleanly
+ * skipped.
+ *
+ * Separators are alternatives to a word boundary because `\b` does not fire
+ * between an underscore and a letter.
+ */
+const NON_DATA_NAME =
+  /(^|[\s_-])(esquemas?([\s_-]de)?([\s_-]datos?)?|metadatos?|dcat|json-?ld)([\s_-]|$)/i;
+
+/** True for a schema or metadata document, by its published name. */
+export function isNonDataName(label: string): boolean {
+  return NON_DATA_NAME.test(fold(label));
+}
+
 export interface Suggestion {
   datasetType: DatasetType | null;
   place: string | null;
@@ -388,10 +418,7 @@ export function providerFolderFor(providerName: string): string {
 export function classifyEntry(entry: SourceEntry): ClassificationResult {
   const id = entry.ref.id;
 
-  if (
-    NON_DATA_ASSETS[id] ||
-    /^(esquema_datos|metadatos)/i.test(fold(entry.ref.label))
-  ) {
+  if (NON_DATA_ASSETS[id] || isNonDataName(entry.ref.label)) {
     return { classified: null, warning: null, inferred: false, skipped: true };
   }
 

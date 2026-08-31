@@ -404,15 +404,14 @@ answers **400** rather than serving figures from the least-distant sea.
 | **Blanes** · mediterránea | Badalona (53 km) | Blanes | Badalona (53 km) | Badalona (53 km) | Badalona (53 km) |
 | **Cádiz** · atlántica | Cádiz | Tenerife (1 345 km) | Cádiz | Cádiz | Tenerife (1 345 km) |
 | **Tenerife** · atlántica | Cádiz (1 345 km) | Tenerife | Cádiz (1 345 km) | Cádiz (1 345 km) | Tenerife |
-| **Gijón** · cantábrica | Gijón | **calibración** | Gijón | Gijón | Gijón |
+| **Gijón** · cantábrica | Gijón | Gijón | Gijón | Gijón | Gijón |
 
-Two things to read off it. The Cantabrian coast has no `recogidas_playa` at all —
-`Recogidas playas Gijón_v1.1` was never republished — so a cleanup request at
-Gijón is answered by the calibration series and says so, instead of quietly
-taking Badalona's figures from another sea. And the Atlantic coast spans the
-mainland and the Canaries, so Cádiz and Tenerife answer for each other across
-1 345 km: same water body, but the distance is worth knowing when reading the
-result.
+Every coast now holds a dataset of all eight categories, so no request falls back
+to the calibration series for want of coverage. What the table still shows is
+distance: the Atlantic coast spans the mainland and the Canaries, so Cádiz and
+Tenerife answer for each other across 1 345 km for the categories only one of
+them publishes. Same water body, but worth knowing when reading a result — which
+is why `meta.datasetsUsed` reports what was actually used.
 
 Galicia is on the Cantabrian coast, which is a decision rather than a fact of
 geography: it faces the Atlantic, but it is one continuous northern coast and
@@ -452,6 +451,25 @@ folder is `sin-ubicar`, never a real basin guessed by default.
 
 ---
 
+## Duplicates still published
+
+`Oceanografía Barcelona` and `Recogidas playas Barcelona ` are the pre-incident
+assets, offered next to their `_v1.1` replacements. Both pairs sit at the same
+station coordinates, so `nearest()` — which orders by distance — picks between
+them arbitrarily.
+
+That matters more than it looks. If the old asset is the one whose content was
+lost, a Barcelona request for that category transfers an asset with no
+observations, the loader returns null, and the category falls back to the
+calibration series **even though a good `_v1.1` asset exists**. The result is
+correct-looking and silently substituted.
+
+The fix is to unpublish the two old assets. Doing it in code instead would mean
+trying more than one observed asset before falling back, which changes what
+"nearest" means for every category.
+
+---
+
 ## Calibration series
 
 Five assets in UP's catalog are not measurements of anywhere. One per category,
@@ -482,20 +500,22 @@ response says which categories were answered with observed data in
 
 ## Known Gaps
 
-- **Water samples** (`muestras_de_agua_py_gcms`) and **fish samples**
-  (`muestras_de_peces_py_gcms`) are both published for Badalona, Gijón and
-  Tenerife. The engine reads the water series; the fish series is not wired into
-  any indicator yet (`meta.datasetsUsed.fish_samples` is hard-coded to 0).
-- **Microplastics buoy** (`boya_microplasticos_seabot`) now covers Badalona, Cádiz and Gijón; the Canaries have none.
+- **Fish samples** (`muestras_de_peces_py_gcms`) are published for Badalona, Gijón
+  and Tenerife but are not wired into any indicator yet
+  (`meta.datasetsUsed.fish_samples` is hard-coded to 0).
+- Coverage is complete by coast, not by place: `boya_biomasa_slx+`,
+  `boya_microplasticos_seabot` and `environmental_boya` exist at Badalona, Cádiz
+  and Gijón, and `muestras_de_agua_py_gcms` / `muestras_de_peces_py_gcms` at
+  Badalona, Gijón and Tenerife. Every coast has one of each; no single place has
+  all eight.
 - **BCSS** is a participant in the space and its connector answers, but it offers no dataset to us.
-- Cádiz has no atmospheric or oceanographic data, and **no location on the Atlantic
-  or Cantabrian coast has a cleanup dataset any more**: `recogidas_playa` covers
-  Badalona, Barcelona, Blanes and Tenerife only.
-- **Blanes has no `oceanografia_previa_evento`.** The asset was not republished;
-  its contract offer is attached to the *Atmósfera Blanes* asset instead, which
-  therefore carries two offers. Consuming the second would return atmospheric data
-  under an oceanographic name.
-- The **schema assets** (`esquema_datos*`, `metadatos*`) were not restored in the
-  republication round. The sync still recognises and skips them by name.
+- Cádiz has no atmospheric or oceanographic dataset; the Atlantic coast is covered
+  for both by Tenerife.
+- Two pre-incident assets are still offered alongside their `_v1.1` replacement:
+  `Oceanografía Barcelona` (`31f505fb`) and `Recogidas playas Barcelona `
+  (`0ac35a36`, Innoceana). Both should be unpublished — see below.
+- The **schema and metadata assets** are being republished, one DCAT document per
+  dataset. The sync recognises them by name and skips them: ingesting one would
+  create an asset with no observations and no location.
 - `atmosfera_previa_evento` and `oceanografia_previa_evento` contain very few events per location (1–8 cleanup events); they are event-relative snapshots, not continuous time series.
 - The `environmental_boya` files are the only true continuous time-series covering months of hourly data and combining both atmospheric and oceanographic variables.
