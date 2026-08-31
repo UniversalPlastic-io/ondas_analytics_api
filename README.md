@@ -8,15 +8,27 @@ API de analíticas del **espacio de datos ONDAs**. Expone los indicadores, el
 cuadro de mando, el mapa y los informes de residuos marinos a partir de los
 conjuntos de datos que cada participante publica en el espacio de datos.
 
-Es el componente desarrollado en la **actividad A2.2 (API-ficación)** y la
-evolución productiva del prototipo de notebooks de indicadores: los cálculos que
-allí se hacían de forma manual aquí son endpoints HTTP versionados,
+Es la evolución productiva del prototipo de notebooks de indicadores: los
+cálculos que allí se hacían de forma manual aquí son endpoints HTTP versionados,
 autenticados y documentados con OpenAPI.
 
 - **Documentación interactiva (OpenAPI / Swagger):** `GET /docs`
 - **Prefijo de todas las rutas:** `/v1`
 - **Especificación descargable:** [docs/openapi.json](docs/openapi.json) · colección
   Postman en [docs/ONDAs_Analytics_API.postman_collection.json](docs/ONDAs_Analytics_API.postman_collection.json)
+
+### Marco del proyecto
+
+**ONDAs** — *Ocean Notarised Digital Asset space* — es el espacio de datos del
+océano en el que se integra este componente. Expediente **TSI-100121-2024-99**.
+
+Dentro del proyecto, este repositorio cubre tres actividades:
+
+| Actividad | Qué aporta este repositorio |
+|---|---|
+| **A2.2 — API-ficación de servicios y conjuntos de datos** | Los indicadores dejan de ser cuadernos ejecutados a mano y pasan a ser una API HTTP versionada, autenticada y documentada con OpenAPI, sobre los activos que los participantes comparten en el espacio |
+| **A4.2 — Análisis de valor añadido de los datos** | Los índices e indicadores de contaminación, microplásticos, riesgo ecológico y transferencia trófica que el API calcula, documentados con su fórmula en `GET /v1/analyses/indices` |
+| **A4.3 — Explotación y compartición efectiva de datos** | El API consume del espacio los activos sobre los que UP tiene contrato y **devuelve al espacio** cada análisis que genera, como activo propio ofrecido a todos los participantes |
 
 ### Alcance de este repositorio
 
