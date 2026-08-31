@@ -64,15 +64,15 @@ describe('reportIdentity', () => {
     expect(
       reportIdentity({
         ...BASE,
-        generatedAt: new Date('2026-08-31T23:59:59.000Z'),
+        generatedAt: new Date('2026-08-30T23:59:59.000Z'),
       }).name,
-    ).toContain('2026-08-31');
+    ).toContain('2026-08-30');
     expect(
       reportIdentity({
         ...BASE,
-        generatedAt: new Date('2026-09-01T00:00:01.000Z'),
+        generatedAt: new Date('2026-08-31T00:00:01.000Z'),
       }).name,
-    ).toContain('2026-09-01');
+    ).toContain('2026-08-31');
   });
 
   it('refuses a coordinate that is not a number', () => {

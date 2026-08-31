@@ -37,7 +37,7 @@ export class DspacerSource implements DataspaceSource {
       /**
        * Extra attempts for a transfer whose endpoint data reference never
        * arrived. Four attempts total by default, which is what the measurement
-       * of 2026-09-01 needed to recover six of seven: one asset came back on the
+       * of 2026-08-31 needed to recover six of seven: one asset came back on the
        * second attempt, one on the third, one on the fourth.
        */
       transferRetries?: number;

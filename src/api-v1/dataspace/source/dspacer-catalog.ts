@@ -330,7 +330,7 @@ export function explainTransferFailure(body: unknown): string {
   ) {
     return (
       `${message}. The negotiation produced no endpoint data reference in time. ` +
-      `Measured transient: on 2026-09-01 six of seven assets that failed this way ` +
+      `Measured transient: on 2026-08-31 six of seven assets that failed this way ` +
       `succeeded on a retry, and every failure took 18-20 s against 5-6 s for every ` +
       `success — the connector gives up polling rather than the provider refusing. ` +
       `Retried automatically; this is what it looks like when the retries run out.`

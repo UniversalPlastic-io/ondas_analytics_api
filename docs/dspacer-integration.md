@@ -222,7 +222,7 @@ antes de iniciar un escaneo.
 
 | # | Asunto | Impacto |
 |---|---|---|
-| ✅ | ~~La transferencia no resuelve~~ | **Resuelto el 01/09/2026.** Ver abajo |
+| ✅ | ~~La transferencia no resuelve~~ | **Resuelto el 31/08/2026.** Ver abajo |
 | 2 | Especificación del `login-service` | El login se implementa contra el comportamiento observado |
 | 3 | Las operaciones del middleware declaran `schema: {}` | Las formas de respuesta se derivan de la observación, no del contrato |
 | 4 | Qué motor aplica las obligaciones y prohibiciones ODRL | No afecta al consumo; sí a las condiciones de uso |
@@ -236,7 +236,7 @@ de forma explícita lo contrastado de lo pendiente.
 ### La transferencia sí resuelve: era un temporizador, no un activo roto
 
 Durante meses `POST /transfer/request` se dio por inservible, y con él la carga
-del modelo de lectura. La medición del **01/09/2026** dice otra cosa.
+del modelo de lectura. La medición del **31/08/2026** dice otra cosa.
 
 Los tiempos separan los dos desenlaces sin solaparse: **todo éxito llega en 5-6 s
 y todo fallo en 18-20 s**. Ese fallo es el conector dejando de esperar la

@@ -253,7 +253,7 @@ nuestro. No entra en este diseño.
 
 | # | Qué | Por qué bloquea |
 |---|---|---|
-| 1 | ~~Un análisis publicado podría no recuperarse~~ | **Menos grave de lo que parecía.** El 01/09/2026 se midió que la transferencia sí resuelve: el fallo era el conector dejando de esperar la *endpoint data reference*, y un reintento lo recupera. Queda por comprobar con **una** publicación real si un activo que subamos se descarga igual |
+| 1 | ~~Un análisis publicado podría no recuperarse~~ | **Menos grave de lo que parecía.** El 31/08/2026 se midió que la transferencia sí resuelve: el fallo era el conector dejando de esperar la *endpoint data reference*, y un reintento lo recupera. Queda por comprobar con **una** publicación real si un activo que subamos se descarga igual |
 | 2 | La especificación del *middleware* declara las respuestas de las tres operaciones de escritura como `schema: {}` | Los nombres de campo de la respuesta no están documentados. La forma del activo se conoce por `POST /data/all`, que devuelve `@id` y `properties`. `parseUploadedAsset` acepta varias grafías del identificador en vez de apostar por una, y falla explícitamente si no encuentra ninguna: sin id no hay contrato que crear, así que no es un éxito |
 | 3 | Semántica real de `no_restriction` | ¿Cualquier BPN del espacio, o público de verdad? Decide si «compartido con todo el mundo» es exacto. A confirmar con SQS |
 | 4 | Crecimiento del catálogo | Ver §6 |

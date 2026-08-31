@@ -190,7 +190,7 @@ describe('DspacerSource.get', () => {
   });
 
   it('retries a negotiation whose endpoint data reference never arrived', async () => {
-    // Measured on 2026-09-01: a transfer resolves in about five seconds or fails
+    // Measured on 2026-08-31: a transfer resolves in about five seconds or fails
     // at eighteen, and the eighteen is the connector giving up on polling. Six of
     // seven assets that failed this way came back on a retry. Reading it as a
     // permanent failure is what left the read model unpopulated for months.

@@ -5,7 +5,7 @@ Versionado según [SemVer](https://semver.org/lang/es/).
 
 ---
 
-## [1.1.0] — 2026-09-01
+## [1.1.0] — 2026-08-31
 
 El cambio de fondo de esta versión es que **la fuente de datos pasa a ser el
 espacio de datos** y no un bucket de objetos, y con él llegan las tres
@@ -96,7 +96,7 @@ precisión, que es la evidencia con la que se mide el criterio R4.1.
 
 - **La negociación que se queda sin referencia de datos se reintenta.** La
   transferencia se daba por inservible, y con ella la carga del modelo de
-  lectura. La medición del 01/09/2026 separa los dos desenlaces sin solaparse:
+  lectura. La medición del 31/08/2026 separa los dos desenlaces sin solaparse:
   todo éxito llega en 5-6 s y todo fallo en 18-20 s. Ese fallo es el conector
   dejando de esperar la *endpoint data reference* tras una negociación correcta
   —no el proveedor negándose ni el activo estando vacío— y no es propiedad del
