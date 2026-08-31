@@ -7,11 +7,13 @@ Versionado según [SemVer](https://semver.org/lang/es/).
 
 ## [Sin publicar]
 
-Dieciocho commits desde `v1.1.0`. El cambio de fondo es que **la fuente de datos
+Veinticuatro commits desde `v1.1.0`. El cambio de fondo es que **la fuente de datos
 pasa a ser el espacio de datos** y no un bucket de objetos, y con él llegan las
 tres consecuencias que ocupan el resto de esta sección: cómo se eligen los
 datasets que responden una consulta, de dónde sale el esquema con que se validan,
-y que el API deja de ser sólo consumidor.
+y que el API deja de ser sólo consumidor. Y por debajo de las tres, la condición
+que les faltaba: la transferencia del espacio, que se daba por inservible, sí
+resuelve — había que reintentar la negociación, no arreglar el activo.
 
 ### Cambios que rompen
 
@@ -62,9 +64,42 @@ y que el API deja de ser sólo consumidor.
 - **`npm run fixtures:refresh`**, que recaptura los catálogos reales sobre los que
   corren las pruebas de `dataspace/source`, sustituyendo BPN y anfitriones por
   marcadores.
+- **El informe de `assets:refresh` señala renombrados y reclasificados.** Contar
+  ids nuevos e ids retirados pierde el caso intermedio: un activo que conserva su
+  id y cambia de nombre no aparecía en ninguna de las dos cuentas, y la tabla se
+  reescribía sin decir nada. Ahora son dos bloques distintos, porque no son la
+  misma gravedad: el bloque `~ renamed` informa, y el bloque `! reclassified` —el
+  id se queda y el significado se mueve— termina con código distinto de cero,
+  igual que ya hacía un activo que no sabe colocar. Que la heurística lea del
+  nombre un tipo de dataset o un emplazamiento distintos de los que la tabla
+  registra significa que ese activo dejó de ser lo que decíamos que era, y
+  escribirlo sin mirar es cómo un indicador acaba contaminado en silencio.
 
 ### Corregido
 
+- **La negociación que se queda sin referencia de datos se reintenta.** La
+  transferencia se daba por inservible, y con ella la carga del modelo de
+  lectura. La medición del 01/09/2026 separa los dos desenlaces sin solaparse:
+  todo éxito llega en 5-6 s y todo fallo en 18-20 s. Ese fallo es el conector
+  dejando de esperar la *endpoint data reference* tras una negociación correcta
+  —no el proveedor negándose ni el activo estando vacío— y no es propiedad del
+  activo: el mismo activo falla y minutos después funciona. De siete fallos así,
+  seis se recuperaron reintentando. `DspacerSource.get()` hace ahora cuatro
+  intentos, y sólo sobre ese fallo: un 403 por contrato y un 404 del backend del
+  proveedor son deterministas, y reintentarlos cargaría el conector de un socio
+  para llegar a la misma respuesta. Comprobado contra el espacio real: los ocho
+  esquemas DCAT se descargan. El mensaje de error afirmaba lo contrario —«the
+  provider never opened a transfer»— y esa frase es parte de por qué el fallo se
+  leyó como permanente; ahora dice que es transitorio, con la medición dentro.
+- **Las tablas de activos apuntaban a cinco identificadores que ya no existen.**
+  Las cinco series de calibración se republicaron con sufijo `_v1.1` e id nuevo,
+  así que `REFERENCE_ASSETS` quedó huérfana entera. El efecto habría sido
+  silencioso: el siguiente escaneo las marca `missing`, el nivel de referencia se
+  vacía, y una categoría sin dataset en su costa deja de tener a qué caer. Las
+  tablas se rehacen sobre el catálogo actual, 43 activos: los 30 datasets
+  observados sin moverse, las 5 series recuperadas y los 8 esquemas DCAT, que
+  entran en la tabla por primera vez y son lo que hace utilizable la validación
+  contra el esquema del proveedor.
 - **Un activo sustituido por una versión posterior se ignora.** Tras la
   republicación `_v1.1` quedaron pares del mismo dataset en las mismas
   coordenadas, y el más antiguo —vaciado por el incidente— ganaba la mitad de las
@@ -73,9 +108,33 @@ y que el API deja de ser sólo consumidor.
 - **La cuenca bajo la que se archiva una salida la decide el punto**, no el activo
   observado que casualmente estuviera más cerca.
 - **La consulta de campañas iba contra un campo que ya no existe.**
+- **`assets:refresh` no veía dos cambios que sí importan.** La detección de una
+  serie de calibración se hacía sobre el nombre crudo y anclada al final, así que
+  el sufijo `_v1.1` desconectó las cinco a la vez y salieron como «no sé
+  colocarlo»; se hace ahora sobre el nombre plegado, que es lo que quita el
+  sufijo de versión. Y las bajas sólo se comprobaban contra `ASSET_MAP`, de modo
+  que el informe decía «0 ids ya no ofrecidos» mientras el nivel de referencia
+  entero se quedaba sin activos.
+- **La rejilla del informe de precisión queda fijada contra la línea de costa.**
+  Desde que la costa decide qué datasets responden una consulta, un punto fuera
+  de las costas cubiertas recibe un 400 y el informe falla entero — y esos seis
+  puntos son la evidencia que E4.1 aporta para R4.1. «Mediterráneo abierto» queda
+  a 98,7 km de la costa mediterránea, 1,3 km por dentro de la tolerancia de
+  100 km: `MAX_OFFSHORE_KM` no se puede estrechar sin mover el punto, y un
+  vértice retocado lo dejaría fuera sin que nadie lo notara. Una prueba lo afirma
+  ahora.
 
 ### Documentación
 
+- **El README abre por el marco del proyecto.** ONDAs es el *Ocean Notarised
+  Digital Asset space*, expediente TSI-100121-2024-99, y este repositorio cubre
+  tres actividades: A2.2 API-ficación de servicios y conjuntos de datos, A4.2
+  análisis de valor añadido de los datos y A4.3 explotación y compartición
+  efectiva de datos. La tabla dice qué aporta el repositorio a cada una en lugar
+  de repetir el nombre de la actividad, que es lo que un evaluador necesita
+  comprobar; A4.3 es la que cambia de sentido con el trabajo reciente, porque ya
+  no es sólo consumir del espacio los activos con contrato, sino devolverle cada
+  análisis generado como activo propio.
 - Retirada la documentación que describía la lectura del bucket y los diseños
   previos al espacio de datos: describía un sistema que ya no es este.
 
